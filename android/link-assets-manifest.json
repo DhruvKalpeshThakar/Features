@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "Src/assets/Fonts/DancingScript-VariableFont_wght.ttf",
+      "sha1": "80f13e7575ec59a51b7fdc42bb0b9d7a34439123"
+    },
+    {
+      "path": "Src/assets/Fonts/YoungSerif-Regular.ttf",
+      "sha1": "42abd3af5eba4ecdc77ea1ff885ce4a4e941f1ae"
+    }
+  ]
+}
