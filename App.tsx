@@ -31,12 +31,12 @@ class App extends Component<{}, {}> {
       <NativeBaseProvider>
         <StatusBar hidden />
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="SplashScreen">
+          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="SplashScreen">
 
-            <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Bottomtabs" component={Bottomtabs} options={{ headerShown: false }} />
+            <Stack.Screen name="SplashScreen" component={SplashScreen} />
+            <Stack.Screen name="Signup" component={Signup} />
+            <Stack.Screen name="Bottomtabs" component={Bottomtabs} />
 
-            {/* <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} /> */}
             {/* <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} /> */}
           </Stack.Navigator>
         </NavigationContainer>

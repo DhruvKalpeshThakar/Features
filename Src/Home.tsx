@@ -1,6 +1,6 @@
 import { Modal } from 'native-base';
 import React, { Component } from 'react';
-import { Button, Dimensions, FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Dimensions, FlatList, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -122,70 +122,75 @@ class Home extends Component<{ route: any }, Pageone>{
 
 
         return (
-            <LinearGradient colors={["#ffff", "#0080ff", "#ffff"]} style={{ flex: 1 }}>
-                <View style={{ flex: 1, }}>
-                    <SafeAreaView style={{ flex: 1 }}>
-                        <Image source={require('../Src/assets/iccfull.png')} style={styles.logo} />
-                        <Carousel
-                            layout='stack'
-                            data={this.state.data}
-                            renderItem={this.renderItem}
-                            sliderWidth={this.state.sliderWidth}
-                            itemWidth={this.state.itemWidth}
-                        />
+            
+                <LinearGradient colors={["#ffff", "#0080ff", "#ffff"]} style={{  }}>
 
-                        <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '22%' }]} />
+                    <View style={{  }}>
 
-                        <TouchableOpacity style={{ alignItems: 'center', marginBottom: 15 }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
-                            <Text style={{ borderBottomColor: '#000', borderBottomWidth: 1, color: '#000', fontSize: 20, fontWeight: 'bold' }}>Have any Queries?</Text>
-                        </TouchableOpacity>
-                    </SafeAreaView>
+                        <SafeAreaView style={{ }}>
+                            <Image source={require('../Src/assets/iccfull.png')} style={styles.logo} />
+                            <Carousel
+                                layout='stack'
+                                data={this.state.data}
+                                renderItem={this.renderItem}
+                                sliderWidth={this.state.sliderWidth}
+                                itemWidth={this.state.itemWidth}
+                            />
+
+                            <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '18%',width:'55%' }]} />
+
+                            <TouchableOpacity style={{ alignItems: 'center', marginBottom: 15 }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
+                                <Text style={{ borderBottomColor: '#000', borderBottomWidth: 1, color: '#000', fontSize: 20, fontWeight: 'bold' }}>Have any Queries?</Text>
+                            </TouchableOpacity>
+                        </SafeAreaView>
 
 
-
-                    <Modal isOpen={this.state.isshowModal} onClose={() => this.setState({ isshowModal: false })}>
-                        <Modal.Content maxWidth="400px">
-                            <Modal.CloseButton />
-                            <Modal.Header style={{ alignItems: 'center', }}>Contact Us</Modal.Header>
-                            <Modal.Body>
-                                <View>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={[styles.contacttext]}>Email Id :</Text>
-                                        <TouchableOpacity onPress={() => { Linking.openURL('mailto:hellodemo123@gmail.com') }}>
-                                            <Text style={[styles.contacttext, { color: '#2259ea' }]}>hellodemo123@gmail.com</Text>
-                                        </TouchableOpacity>
+                        <Modal isOpen={this.state.isshowModal} onClose={() => this.setState({ isshowModal: false })}>
+                            <Modal.Content maxWidth="400px">
+                                <Modal.CloseButton />
+                                <Modal.Header style={{ alignItems: 'center', }}>Contact Us</Modal.Header>
+                                <Modal.Body>
+                                    <View>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={[styles.contacttext]}>Email Id :</Text>
+                                            <TouchableOpacity onPress={() => { Linking.openURL('mailto:hellodemo123@gmail.com') }}>
+                                                <Text style={[styles.contacttext, { color: '#2259ea' }]}>hellodemo123@gmail.com</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={styles.contacttext}>Address  :</Text>
+                                            {/* <WebView source={{ uri: 'https://maps.app.goo.gl/XQSrKsEeivAjZeBm8' }} style={{ flex: 1 }} /> */}
+                                            <Text style={styles.contacttext}>Science City,Sola,Ahnmedabad</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={[styles.contacttext]}>Contact :</Text>
+                                            <TouchableOpacity onPress={() => { Linking.openURL('tel:1234567899') }} >
+                                                <Text style={[styles.contacttext, { color: '#2259ea' }]}>1234567899</Text>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={styles.contacttext}>Address  :</Text>
-                                        {/* <WebView source={{ uri: 'https://maps.app.goo.gl/XQSrKsEeivAjZeBm8' }} style={{ flex: 1 }} /> */}
-                                        <Text style={styles.contacttext}>Science City,Sola,Ahnmedabad</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={[styles.contacttext]}>Contact :</Text>
-                                        <TouchableOpacity onPress={() => { Linking.openURL('tel:1234567899') }} >
-                                            <Text style={[styles.contacttext, { color: '#2259ea' }]}>1234567899</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </Modal.Body>
-                            <Modal.Footer style={{}}>
-                                <Button
-                                    title="OK"
-                                    color="#f194ff"
-                                    onPress={() => this.setState({ isshowModal: false })}
-                                />
-                                {/* <Button
+                                </Modal.Body>
+                                <Modal.Footer style={{}}>
+                                    <Button
+                                        title="OK"
+                                        color="#f194ff"
+                                        onPress={() => this.setState({ isshowModal: false })}
+                                    />
+                                    {/* <Button
                                 title="Save"
                                 color="#f194ff"
                                 onPress={() => this.setState({ isshowModal: false })}
                             /> */}
 
-                            </Modal.Footer>
-                        </Modal.Content>
-                    </Modal>
+                                </Modal.Footer>
+                            </Modal.Content>
+                        </Modal>
 
-                </View >
-            </LinearGradient>
+                    </View >
+
+
+                </LinearGradient>
+            
         )
     }
 
@@ -280,7 +285,7 @@ const styles = StyleSheet.create({
     logo: {
         alignSelf: 'center',
         width: '90%',
-        height: '25%'
+        height: '20%'
 
     }
 })

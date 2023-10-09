@@ -13,7 +13,7 @@ class SplashScreen extends React.Component<{ navigation: any }, {}> {
 
     componentDidMount(): void {
         setTimeout(() => {
-            this.props.navigation.replace('Bottomtabs');
+            this.props.navigation.replace('Signup');
         }, 2000);
     }
 

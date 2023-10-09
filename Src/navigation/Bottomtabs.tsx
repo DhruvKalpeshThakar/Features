@@ -6,6 +6,7 @@ import Feed from "../Screens/Feed";
 import Post from "../Screens/Post";
 import Search from "../Screens/Search";
 import Settings from "../Screens/Settings";
+import Home from "../Home";
 
 
 const Tab = createBottomTabNavigator();
@@ -17,7 +18,7 @@ class Bottomtabs extends Component<{}, {}>{
         this.state = {
 
         }
-        
+
     }
 
 
@@ -36,7 +37,7 @@ class Bottomtabs extends Component<{}, {}>{
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     position: 'absolute',
-                    bottom: 25,
+                    bottom: 20,
                     left: 20,
                     right: 20,
                     backgroundColor: '#ffff',
@@ -45,7 +46,7 @@ class Bottomtabs extends Component<{}, {}>{
                     ...styles.shadow
                 }
             }}  >
-                <Tab.Screen name="Feed" component={Feed} options={{
+                <Tab.Screen name="Home" component={Home} options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
                             <Image source={require('../assets/feed.png')}
@@ -58,7 +59,7 @@ class Bottomtabs extends Component<{}, {}>{
                             />
                             <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Feed</Text>
                         </View>
-                    )
+                    ), headerShown: false
                 }} />
                 <Tab.Screen name="Chat" component={Chat} options={{
                     tabBarIcon: ({ focused }) => (
@@ -77,7 +78,7 @@ class Bottomtabs extends Component<{}, {}>{
                 }} />
                 <Tab.Screen name="Post" component={Post} options={{
                     tabBarIcon: ({ focused }) => (
-                        <View style={{ alignItems: 'center', justifyContent: 'center',  }}>
+                        <View style={{ alignItems: 'center', justifyContent: 'center', }}>
                             <Image source={require('../assets/plus.png')}
                                 resizeMode="contain"
                                 style={{
@@ -90,7 +91,7 @@ class Bottomtabs extends Component<{}, {}>{
                     ),
                     tabBarButton: (props) => (
                         <this.CustomTabBarButton {...props} />
-                )
+                    )
                 }} />
                 <Tab.Screen name="Search" component={Search} options={{
                     tabBarIcon: ({ focused }) => (

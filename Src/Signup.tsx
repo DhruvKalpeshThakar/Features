@@ -77,7 +77,7 @@ class Signup extends React.Component<{navigation:any}, State> {
             
         //     if (this.state.email === this.state.cemail) {
         //         if (this.state.pass === this.state.cpass) {
-        //             this.props.navigation.navigate('Home',{
+        //             this.props.navigation.navigate('Bottomtabs',{
         //                 email: this.state.email,
         //                 cemail: this.state.cemail,
         //                 pass: this.state.pass,
@@ -111,7 +111,7 @@ class Signup extends React.Component<{navigation:any}, State> {
         //       ]);
         // }
 
-        this.props.navigation.navigate('Home')
+        this.props.navigation.navigate('Bottomtabs')
         
         // console.log("called after navigation");
     };
