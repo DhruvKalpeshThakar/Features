@@ -45,7 +45,7 @@ class Bottomtabs extends Component<{}, {}>{
                     borderRadius: 15,
                     height: 90,
                     ...styles.shadow
-                }
+                }, headerShown: false
             }}  >
                 <Tab.Screen name="Home" component={Home} options={{
                     tabBarIcon: ({ focused }) => (
@@ -60,7 +60,7 @@ class Bottomtabs extends Component<{}, {}>{
                             />
                             <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Feed</Text>
                         </View>
-                    ), headerShown: false
+                    ), 
                 }} />
                 <Tab.Screen name="Chat" component={Chat} options={{
                     tabBarIcon: ({ focused }) => (
@@ -75,7 +75,7 @@ class Bottomtabs extends Component<{}, {}>{
                             />
                             <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Chat</Text>
                         </View>
-                    ), headerShown: false
+                    ), 
                 }} />
                 <Tab.Screen name="Post" component={Post} options={{
                     tabBarIcon: ({ focused }) => (
@@ -107,7 +107,7 @@ class Bottomtabs extends Component<{}, {}>{
                             />
                             <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Media</Text>
                         </View>
-                    ), headerShown: false
+                    ), 
                 }} />
                 <Tab.Screen name="Settings" component={Settings} options={{
                     tabBarIcon: ({ focused }) => (

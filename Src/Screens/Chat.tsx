@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Alert, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
 
 
 class Chat extends Component<{}, {}>{
@@ -32,14 +34,29 @@ class Chat extends Component<{}, {}>{
         }
     };
 
+    options ={
+        saveToPhotos: true,
+        mediaType:'photo',
+    }
+
+    opencamera =async () => {
+        const result =await launchCamera(options)
+    }
+
+
+ 
 
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text style={{ fontSize: 25, color: '#000' }}> React Native Share</Text>
                 <TouchableOpacity onPress={() => { this.onShare() }} style={{ backgroundColor: '#1b71af', marginTop: 20 }}>
                     <Text style={{ padding: 10, color: '#fff' }}>Share Button</Text>
                 </TouchableOpacity>
+
+                <View style={{ backgroundColor: '#080', marginVertical: '30%' }}>
+                
+                </View>
             </View>
         )
     }
