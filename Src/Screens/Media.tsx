@@ -62,20 +62,27 @@ class Media extends Component<{}, MediaState> {
         };
         const track5: Track = {
             id: 'trackId5',
-            url: require('../song/Chaleya Jawan 128 Kbps.mp3'), // Replace with your track's file path
+            url: require('../song/chaleya.mp3'), // Replace with your track's file path
             title: 'Track Title',
             artist: 'Track Artist',
             artwork: require('../assets/music.jpg'), // Replace with your track's artwork file path
         };
         const track6: Track = {
             id: 'trackId6',
-            url: require('../song/Kesariyo Rang(PagalWorld.com.se).mp3'), // Replace with your track's file path
+            url: require('../song/kesariyo.mp3'), // Replace with your track's file path
+            title: 'Track Title',
+            artist: 'Track Artist',
+            artwork: require('../assets/music.jpg'), // Replace with your track's artwork file path
+        };
+        const track7: Track = {
+            id: 'trackId7',
+            url: require('../song/Heeriye.mp3'), // Replace with your track's file path
             title: 'Track Title',
             artist: 'Track Artist',
             artwork: require('../assets/music.jpg'), // Replace with your track's artwork file path
         };
 
-        await TrackPlayer.add([track, track1, track2, track3, track4, track5, track6]);
+        await TrackPlayer.add([track, track1, track2, track3, track4, track5, track6, track7]);
 
         // Start playing it
         // await TrackPlayer.play();
