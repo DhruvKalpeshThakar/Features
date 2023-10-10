@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { Button, Dimensions, FlatList, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 interface Item {
     title: string;
@@ -34,12 +36,12 @@ class Home extends Component<{ route: any }, Pageone>{
             data: [
                 {
                     title: 'Shikhar Dhawan',
-                    body: " Shikhar Dhawan (born 5 December 1985) is an Indian cricketer. A left-handed opening batsman At the 2013 Champions Trophy and 2017 Champions Trophy, Dhawan was the leading run-scorer and was awarded the 'Golden Bat' in both the tournaments.",
+                    body: " Shikhar Dhawan (born 5 December 1985) is an Indian cricketer. A left-handed opening batsman At the 2013 Champions Trophy and 2017 Champions Trophy, Dhawan was the leading run-scorer and was awarded the 'Golden Bat' in both the tournaments.Dhawan made his One Day International (ODI) debut against Australia in October 2010 at Visakhapatnam. His Test debut came against the same opposition in March 2013 at Mohali, where he scored the fastest century by any batsman on Test debut and ended his innings with 187 runs from 174 balls.",
                     imgurl: 'https://img.cricketnmore.com/uploads/2022/07/dhawan-after-india-wins-series-.jpg',
                 },
                 {
                     title: 'Rishabh Pant',
-                    body: "Rishabh Rajendra Pant (born 4 October 1997) is an Indian international cricketer who plays for the Indian cricket team as a wicket-keeper batter. Having played all formats for India, he is best known for his consistency to score runs in Test cricket. ",
+                    body: "Rishabh Rajendra Pant (born 4 October 1997) is an Indian international cricketer who plays for the Indian cricket team as a wicket-keeper batter. Having played all formats for India, he is best known for his consistency to score runs in Test cricket.He made his Twenty20 International (T20I) debut for India in January 2017, his Test debut in August 2018, and his One Day International (ODI) debut in October 2018. In January 2019, Pant was named the ICC Men's Emerging Cricketer of the Year at the 2018 ICC Awards.[5] In February 2021, Pant was named the Men's Player of the Month in the first edition of the ICC Player of the Month Awards. ",
                     imgurl: 'https://cricketaddictor.com/wp-content/uploads/2023/06/Rishabh-Pant-Getty-Images-1200x821.jpg',
                 },
                 {
@@ -76,6 +78,8 @@ class Home extends Component<{ route: any }, Pageone>{
         // console.log(
         //     "Email :", this.props.route.params.email, ",",
         //     "Password : ", this.props.route.params.pass,);
+
+
         const sliderWidth = this.state.screenWidth;
         const itemWidth = this.state.screenWidth * 0.8;
 
@@ -103,12 +107,14 @@ class Home extends Component<{ route: any }, Pageone>{
         return (
             // <View style={[styles.itemContainer,]}>
             <LinearGradient colors={['#ff8040', "#ffff", "#3cce11"]} style={styles.itemContainer} >
-
+                
                 <Image source={{ uri: item.imgurl }} style={[styles.itemImg, { position: 'relative' }]} />
                 <Image source={require('../Src/assets/bcci.png')} style={{ width: 40, height: 40, position: 'absolute', top: 10, left: 10 }} />
                 <Image source={require('../Src/assets/icc.png')} style={{ width: 40, height: 40, position: 'absolute', top: 10, right: 10 }} />
                 <Text style={styles.itemTitle}>{item.title}</Text>
-                <Text style={styles.itemBody}>{item.body}</Text>
+                <ScrollView showsVerticalScrollIndicator={false} >
+                    <Text style={styles.itemBody}>{item.body}</Text>
+                </ScrollView>
             </LinearGradient>
             // </View>
         );
@@ -116,81 +122,78 @@ class Home extends Component<{ route: any }, Pageone>{
 
 
     render() {
-        // const { screenWidth } = this.state;
-        // const { sliderWidth } = this.state.screenWidth;
-        // const { itemWidth } = this.state.screenWidth * 8;
-
 
         return (
-            
-                <LinearGradient colors={["#ffff", "#0080ff", "#ffff"]} style={{  }}>
 
-                    <View style={{  }}>
+            <LinearGradient colors={["#ffff", "#0080ff", "#ffff"]} style={{}}>
 
-                        <SafeAreaView style={{ }}>
-                            <Image source={require('../Src/assets/iccfull.png')} style={styles.logo} />
-                            <Carousel
-                                layout='stack'
-                                data={this.state.data}
-                                renderItem={this.renderItem}
-                                sliderWidth={this.state.sliderWidth}
-                                itemWidth={this.state.itemWidth}
-                            />
+                <View style={{}}>
 
-                            <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '18%',width:'55%' }]} />
+                    <SafeAreaView style={{}}>
+                        <Image source={require('../Src/assets/iccfull.png')} style={styles.logo} />
+                        <Carousel
+                            layout='stack'
+                            data={this.state.data}
+                            renderItem={this.renderItem}
+                            sliderWidth={this.state.sliderWidth}
+                            itemWidth={this.state.itemWidth}
+                        />
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginBottom: 15 }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
-                                <Text style={{ borderBottomColor: '#000', borderBottomWidth: 1, color: '#000', fontSize: 20, fontWeight: 'bold' }}>Have any Queries?</Text>
-                            </TouchableOpacity>
-                        </SafeAreaView>
+                        <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '18%', width: '60%' }]} />
+
+                        <TouchableOpacity style={{ alignItems: 'center', marginBottom: 15 }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
+                            <Text style={{ borderBottomColor: '#000', borderBottomWidth: 1, color: '#000', fontSize: 20, fontWeight: 'bold' }}>Have any Queries?</Text>
+                        </TouchableOpacity>
+                    </SafeAreaView>
 
 
-                        <Modal isOpen={this.state.isshowModal} onClose={() => this.setState({ isshowModal: false })}>
-                            <Modal.Content maxWidth="400px">
-                                <Modal.CloseButton />
-                                <Modal.Header style={{ alignItems: 'center', }}>Contact Us</Modal.Header>
-                                <Modal.Body>
-                                    <View>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={[styles.contacttext]}>Email Id :</Text>
-                                            <TouchableOpacity onPress={() => { Linking.openURL('mailto:hellodemo123@gmail.com') }}>
-                                                <Text style={[styles.contacttext, { color: '#2259ea' }]}>hellodemo123@gmail.com</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={styles.contacttext}>Address  :</Text>
-                                            {/* <WebView source={{ uri: 'https://maps.app.goo.gl/XQSrKsEeivAjZeBm8' }} style={{ flex: 1 }} /> */}
-                                            <Text style={styles.contacttext}>Science City,Sola,Ahnmedabad</Text>
-                                        </View>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={[styles.contacttext]}>Contact :</Text>
-                                            <TouchableOpacity onPress={() => { Linking.openURL('tel:1234567899') }} >
-                                                <Text style={[styles.contacttext, { color: '#2259ea' }]}>1234567899</Text>
-                                            </TouchableOpacity>
-                                        </View>
+                    <Modal isOpen={this.state.isshowModal} onClose={() => this.setState({ isshowModal: false })}>
+                        <Modal.Content width={screenWidth / 1.1} >
+                            <Modal.CloseButton />
+                            <Modal.Header style={{ alignItems: 'center', }}><Text style={{ fontSize: 25, color: '#000', fontFamily: 'YoungSerif-Regular' }}>Contact Us</Text></Modal.Header>
+                            <Modal.Body style={{ backgroundColor: '#00abc4' }}>
+                                <View>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={[styles.contacttext]}>Email : </Text>
+                                        <TouchableOpacity onPress={() => { Linking.openURL('mailto:hellodemo123@gmail.com') }}>
+                                            <Text style={[styles.contacttext, { color: '#fff', fontSize: 17, borderBottomColor: '#000', borderBottomWidth: 1 }]}>hellodemo123@gmail.com</Text>
+                                        </TouchableOpacity>
                                     </View>
-                                </Modal.Body>
-                                <Modal.Footer style={{}}>
-                                    <Button
-                                        title="OK"
-                                        color="#f194ff"
-                                        onPress={() => this.setState({ isshowModal: false })}
-                                    />
-                                    {/* <Button
-                                title="Save"
-                                color="#f194ff"
-                                onPress={() => this.setState({ isshowModal: false })}
-                            /> */}
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={[styles.contacttext, { fontFamily: 'YoungSerif-Regular' }]}>Address : </Text>
+                                        <TouchableOpacity onPress={() => { Linking.openURL('https://maps.app.goo.gl/6ZR57KHRi4Vgt8WE6') }}>
+                                            {/* <WebView source={{ uri: 'https://maps.app.goo.gl/XQSrKsEeivAjZeBm8' }} style={{ flex: 1 }} /> */}
+                                            <Text style={[styles.contacttext, { color: '#fff', fontSize: 17, borderBottomColor: '#000', borderBottomWidth: 1 }]}>Sola,Ahmedabad</Text>
+                                        </TouchableOpacity>
+                                    </View>
 
-                                </Modal.Footer>
-                            </Modal.Content>
-                        </Modal>
+                                </View>
+                            </Modal.Body>
+                            <Modal.Footer style={{ alignSelf: 'center' }}>
+                                <Button
 
-                    </View >
+                                    title="Connect with us"
+                                    color="#f194ff"
+
+                                    onPress={() => {
+                                        Linking.openURL('tel:9874598754')
+                                        this.setState({ isshowModal: false })
+                                    }}
 
 
-                </LinearGradient>
-            
+                                />
+                                {/* <Button
+                                    title="OK"
+                                    color="#f194ff"
+                                    onPress={() => this.setState({ isshowModal: false })}
+                                /> */}
+
+                            </Modal.Footer>
+                        </Modal.Content>
+                    </Modal>
+                </View >
+            </LinearGradient >
+
         )
     }
 
@@ -242,7 +245,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#2196F3',
     },
     contacttext: {
-        color: '#000'
+        color: '#000',
+        fontSize: 18,
+        fontFamily: 'YoungSerif-Regular'
     },
     item: {
         width: '100%',
@@ -263,13 +268,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
-        height: 350,
+        height: screenHeight * 0.43,
 
     },
     itemImg: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
+        width: '40%',
+        height: '40%',
+        borderRadius: 70,
         marginBottom: 10
     },
     itemTitle: {
@@ -280,11 +285,12 @@ const styles = StyleSheet.create({
     },
     itemBody: {
         color: '#000',
-        fontFamily: 'YoungSerif-Regular'
+        fontFamily: 'YoungSerif-Regular',
+        textAlign: 'justify'
     },
     logo: {
         alignSelf: 'center',
-        width: '90%',
+        width: '80%',
         height: '20%'
 
     }

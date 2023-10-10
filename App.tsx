@@ -13,6 +13,7 @@ import Home from "./Src/Home";
 import { StatusBar } from "react-native";
 import SplashScreen from "./Src/SplashScreen";
 import Bottomtabs from "./Src/navigation/Bottomtabs";
+import CustomAlert from "./Src/Components/CustomAlert";
 
 
 
@@ -36,6 +37,7 @@ class App extends Component<{}, {}> {
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
             <Stack.Screen name="Signup" component={Signup} />
             <Stack.Screen name="Bottomtabs" component={Bottomtabs} />
+            <Stack.Screen name="CustomAlert" component={CustomAlert} />
 
             {/* <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} /> */}
           </Stack.Navigator>

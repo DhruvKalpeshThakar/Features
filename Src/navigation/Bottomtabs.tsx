@@ -4,9 +4,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Chat from "../Screens/Chat";
 import Feed from "../Screens/Feed";
 import Post from "../Screens/Post";
-import Search from "../Screens/Search";
+import Search from "../Screens/Media";
 import Settings from "../Screens/Settings";
 import Home from "../Home";
+import Media from "../Screens/Media";
 
 
 const Tab = createBottomTabNavigator();
@@ -74,7 +75,7 @@ class Bottomtabs extends Component<{}, {}>{
                             />
                             <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Chat</Text>
                         </View>
-                    )
+                    ), headerShown: false
                 }} />
                 <Tab.Screen name="Post" component={Post} options={{
                     tabBarIcon: ({ focused }) => (
@@ -93,10 +94,10 @@ class Bottomtabs extends Component<{}, {}>{
                         <this.CustomTabBarButton {...props} />
                     )
                 }} />
-                <Tab.Screen name="Search" component={Search} options={{
+                <Tab.Screen name="Media" component={Media} options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
-                            <Image source={require('../assets/search.png')}
+                            <Image source={require('../assets/media.png')}
                                 resizeMode="contain"
                                 style={{
                                     width: 25,
@@ -104,9 +105,9 @@ class Bottomtabs extends Component<{}, {}>{
                                     tintColor: focused ? "#e32f45" : "#748c94"
                                 }}
                             />
-                            <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Search</Text>
+                            <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Media</Text>
                         </View>
-                    )
+                    ), headerShown: false
                 }} />
                 <Tab.Screen name="Settings" component={Settings} options={{
                     tabBarIcon: ({ focused }) => (
