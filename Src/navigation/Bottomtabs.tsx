@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Chat from "../Screens/Chat";
 import Feed from "../Screens/Feed";
 import Post from "../Screens/Post";
@@ -16,7 +17,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Tab = createBottomTabNavigator();
 
 
-class Bottomtabs extends Component<{}, {}>{
+class Bottomtabs extends Component<{ navigation: any }, {}>{
     constructor(props: any) {
         super(props);
         this.state = {
@@ -115,7 +116,13 @@ class Bottomtabs extends Component<{}, {}>{
                     borderRadius: 15,
                     height: 90,
                     ...styles.shadow
-                }, headerShown: true
+                }, headerShown: true,
+                headerRight: ({ }) => (
+                    <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} activeOpacity={0.8}>
+                        <Image source={require('../assets/userprofile.jpg')} style={{ height: 30, width: 30, marginRight: 15, borderRadius: 25 }} />
+                    </TouchableOpacity>
+                ),
+                headerStyle: { borderBottomColor: '#b9b9b9', borderBottomWidth: 1 }
             }}  >
                 <Tab.Screen name="Home" component={Home} options={{
                     tabBarIcon: ({ focused }) => (
