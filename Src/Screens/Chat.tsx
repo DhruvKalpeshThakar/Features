@@ -5,7 +5,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 
 interface Gallery {
     capturedCameraImage: any,
-    capturedGalleryImage: any
+    capturedGalleryImage: string[] | null
 }
 
 class Chat extends Component<{}, Gallery>{
@@ -52,14 +52,12 @@ class Chat extends Component<{}, Gallery>{
 
     opengallery = () => {
         console.log("called in gallery");
-
         ImagePicker.openPicker({
-            width: 800,
-            height: 800,
-            cropping: true,
-        }).then((image) => {
-            console.log(image);
-            this.setState({ capturedGalleryImage: image.path });
+            multiple: true
+        }).then(images => {
+            console.log(images);
+            const imagePaths = images.map(image => image.path);
+            this.setState({ capturedGalleryImage: imagePaths });
         });
     }
 
@@ -68,13 +66,30 @@ class Chat extends Component<{}, Gallery>{
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <ImageBackground source={require('../assets/chatscreen.jpg')} style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 25, color: '#fff', textAlign: 'center' }}> React Native Share</Text>
-                    <TouchableOpacity onPress={() => { this.onShare() }} style={{ backgroundColor: '#d81244', marginTop: 25, alignItems: 'center', }} activeOpacity={0.8}>
-                        <Text style={{ padding: 10, color: '#fff' }}>Share Button</Text>
-                    </TouchableOpacity>
 
-                    <View style={{ marginTop: 15, backgroundColor: '#080', flex: 1 }}>
-                        {/* <ScrollView style={{ flex: 1 }}> */}
+
+                    <View style={{ flex: 1 }}>
+
+
+                        <TouchableOpacity style={styles.button} onPress={() => this.opengallery()} activeOpacity={0.8}>
+                            <Text style={styles.buttonText}>Open Gallery</Text>
+                        </TouchableOpacity>
+                        {this.state.capturedGalleryImage ?
+                            <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+                                {this.state.capturedGalleryImage.map((imagePath, index) => (
+                                    <Image
+                                        key={index}
+                                        source={{ uri: imagePath }}
+                                        style={{ width: '100%', height: 200 }}
+                                    />
+                                ))}
+                            </ScrollView>
+                            :
+                            <View style={{ backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center', height: '40%' }}>
+                                <Text>No Image Selected Yet!!!!</Text>
+                            </View>
+                        }
+
                         <TouchableOpacity style={styles.button} onPress={this.openImagePicker} activeOpacity={0.8}>
                             <Text style={styles.buttonText}>Open Camera</Text>
                         </TouchableOpacity>
@@ -85,26 +100,17 @@ class Chat extends Component<{}, Gallery>{
                                 style={{ width: '100%', height: '50%' }}
                             />
                             :
-                            <View style={{ backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center', height: '50%' }}>
-                                <Text>NO Image Selected Yet!!!!</Text>
+                            <View style={{ backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center', height: '40%' }}>
+                                <Text>No Image Selected Yet!!!!</Text>
                             </View>
 
                         }
 
-
-                        <TouchableOpacity style={styles.button} onPress={() => this.opengallery()} activeOpacity={0.8}>
-                            <Text style={styles.buttonText}>Open Gallery</Text>
-                        </TouchableOpacity>
-                        {this.state.capturedGalleryImage && (
-                            // <ScrollView>
-                                <Image
-                                    source={{ uri: this.state.capturedGalleryImage }}
-                                    style={{ width: '100%', height: '50%' }}
-                                />
-                            // </ScrollView>
-                        )}
-                        {/* </ScrollView> */}
                     </View>
+                    {/* <Text style={{ fontSize: 25, color: '#fff', textAlign: 'center' }}> React Native Share</Text>
+                    <TouchableOpacity onPress={() => { this.ks() }} style={{ backgroundColor: '#d81244', marginTop: 25, alignItems: 'center', }} activeOpacity={0.8}>
+                        <Text style={{ padding: 10, color: '#fff' }}>Share Button</Text>
+                    </TouchableOpacity> */}
                 </ImageBackground>
             </SafeAreaView>
         )
@@ -123,7 +129,10 @@ const styles = StyleSheet.create({
         padding: 20
     },
     buttonText: {
-        color: '#fff'
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 15,
+        fontFamily: 'YoungSerif-Regular'
     },
 
 })

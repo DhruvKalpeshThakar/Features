@@ -107,7 +107,7 @@ class Home extends Component<{ route: any }, Pageone>{
         return (
             // <View style={[styles.itemContainer,]}>
             <LinearGradient colors={['#ff8040', "#ffff", "#3cce11"]} style={styles.itemContainer} >
-                
+
                 <Image source={{ uri: item.imgurl }} style={[styles.itemImg, { position: 'relative' }]} />
                 <Image source={require('../Src/assets/bcci.png')} style={{ width: 40, height: 40, position: 'absolute', top: 10, left: 10 }} />
                 <Image source={require('../Src/assets/icc.png')} style={{ width: 40, height: 40, position: 'absolute', top: 10, right: 10 }} />
@@ -125,7 +125,7 @@ class Home extends Component<{ route: any }, Pageone>{
 
         return (
 
-            <LinearGradient colors={["#ffff", "#0080ff", "#ffff"]} style={{}}>
+            <LinearGradient colors={["#ffff", "#0080ff", "#ffff"]} style={{ flex: 1 }}>
 
                 <View style={{}}>
 
@@ -141,7 +141,7 @@ class Home extends Component<{ route: any }, Pageone>{
 
                         <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '18%', width: '60%' }]} />
 
-                        <TouchableOpacity style={{ alignItems: 'center', marginBottom: 15 }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
+                        <TouchableOpacity style={{ alignItems: 'center', marginTop:15 }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
                             <Text style={{ borderBottomColor: '#000', borderBottomWidth: 1, color: '#000', fontSize: 20, fontWeight: 'bold' }}>Have any Queries?</Text>
                         </TouchableOpacity>
                     </SafeAreaView>

@@ -14,6 +14,7 @@ import { StatusBar } from "react-native";
 import SplashScreen from "./Src/SplashScreen";
 import Bottomtabs from "./Src/navigation/Bottomtabs";
 import CustomAlert from "./Src/Components/CustomAlert";
+import WelcomeScreen from "./Src/Screens/WelcomeScreen";
 
 
 
@@ -35,6 +36,7 @@ class App extends Component<{}, {}> {
           <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="SplashScreen">
 
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
             <Stack.Screen name="Signup" component={Signup} />
             <Stack.Screen name="Bottomtabs" component={Bottomtabs} />
             <Stack.Screen name="CustomAlert" component={CustomAlert} />
