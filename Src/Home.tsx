@@ -147,7 +147,7 @@ class Home extends Component<{ route: any }, Pageone>{
                     </SafeAreaView>
 
 
-                    <Modal isOpen={this.state.isshowModal} onClose={() => this.setState({ isshowModal: false })}>
+                    <Modal isOpen={this.state.isshowModal} onClose={() => this.setState({ isshowModal: false })} >
                         <Modal.Content width={screenWidth / 1.1} >
                             <Modal.CloseButton />
                             <Modal.Header style={{ alignItems: 'center', }}><Text style={{ fontSize: 25, color: '#000', fontFamily: 'YoungSerif-Regular' }}>Contact Us</Text></Modal.Header>

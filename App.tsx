@@ -3,17 +3,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 
+import { NativeBaseProvider } from 'native-base';
 import React, { Component } from "react";
 import {
+  StatusBar,
   StyleSheet
 } from "react-native";
-import { NativeBaseProvider } from 'native-base';
-import Signup from "./Src/Signup";
-import Home from "./Src/Home";
-import { StatusBar } from "react-native";
+import AuthStack from "./Src/navigation/AuthStack";
 import SplashScreen from "./Src/SplashScreen";
-import Bottomtabs from "./Src/navigation/Bottomtabs";
-import CustomAlert from "./Src/Components/CustomAlert";
+import AppStack from "./Src/navigation/AppStack";
 import WelcomeScreen from "./Src/Screens/WelcomeScreen";
 
 
@@ -33,16 +31,10 @@ class App extends Component<{}, {}> {
       <NativeBaseProvider>
         <StatusBar hidden />
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="SplashScreen">
-
-            <Stack.Screen name="SplashScreen" component={SplashScreen} />
-            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-            <Stack.Screen name="Signup" component={Signup} />
-            <Stack.Screen name="Bottomtabs" component={Bottomtabs} />
-            <Stack.Screen name="CustomAlert" component={CustomAlert} />
-
-            {/* <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} /> */}
-          </Stack.Navigator>
+          <Stack.Screen name="SplashScreen" component={SplashScreen} />
+          <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+          <AppStack />
+          {/* <AuthStack /> */}
         </NavigationContainer>
       </NativeBaseProvider>
     );

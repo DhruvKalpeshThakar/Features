@@ -20,9 +20,9 @@ class WelcomeScreen extends Component<{ navigation: any }, {}> {
 
                 </View>
                 <View style={{ flex: 1 / 10, backgroundColor: '#d2610d', marginBottom: 20, marginHorizontal: 20, borderRadius: 10, }}>
-                    <TouchableOpacity style={{ justifyContent: 'space-between', flexDirection: 'row' }} onPress={() => { this.props.navigation.navigate('Signup') }}>
-                        <Text style={{ fontFamily: 'YoungSerif-Regular', fontSize: 30, marginTop: 7, color: '#000', marginLeft: 20 }}>Let's Begin</Text>
-                        <Entypo name="chevron-right" size={35} style={{ marginTop: '5%', color: '#000', marginRight: 20 }} />
+                    <TouchableOpacity style={{ justifyContent: 'space-between', flexDirection: 'row' }} onPress={() => { this.props.navigation.navigate('Bottomtabs') }}>
+                        <Text style={{ fontFamily: 'YoungSerif-Regular', fontSize: 30, marginTop: 7, color: '#fff', marginLeft: 20, }}>Let's Begin</Text>
+                        <Entypo name="chevron-right" size={35} style={{ marginTop: '5%', color: '#fff', marginRight: 20 }} />
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>

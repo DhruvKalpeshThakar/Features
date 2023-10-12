@@ -24,7 +24,7 @@ class Settings extends Component<{ navigation: any }, setting> {
         // setTimeout(() => {
         //     console.log("callerddd////////////////////////", this.state.showAlert);
         // }, 500);
-        this.props.navigation.navigate('WelcomeScreen')
+        // this.props.navigation.navigate('WelcomeScreen')
     };
 
     onShare = async () => {
@@ -60,7 +60,7 @@ class Settings extends Component<{ navigation: any }, setting> {
                         <Text style={{ padding: 10, color: '#fff' }}>Share Button</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={{ backgroundColor: '#cccc', alignSelf: 'flex-end',marginTop:50,marginRight:10 }}
                         onPress={() => this.showCustomAlert()}
                     >
@@ -73,7 +73,7 @@ class Settings extends Component<{ navigation: any }, setting> {
                         >
                             Logout
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <CustomAlert isVisible={this.state.showAlert} />
                 </ImageBackground>
             </SafeAreaView>
