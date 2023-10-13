@@ -18,7 +18,7 @@ import WelcomeScreen from "./Src/Screens/WelcomeScreen";
 //   theme: any
 // }
 
-class App extends Component<{},{} > {
+class App extends Component<{}, {}> {
 
   constructor(props: {}) {
     super(props);
@@ -43,7 +43,6 @@ class App extends Component<{},{} > {
 
     return (
       <NativeBaseProvider>
-        <StatusBar hidden />
         <NavigationContainer>
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
