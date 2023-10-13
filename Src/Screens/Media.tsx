@@ -3,6 +3,7 @@ import { View, Button, Image, Text, ImageBackground, StyleSheet, SafeAreaView } 
 import TrackPlayer, { Track } from 'react-native-track-player';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Foundation from 'react-native-vector-icons/Foundation'
+import { COLORS } from '../constants/color';
 
 
 
@@ -103,14 +104,14 @@ class Media extends Component<{}, MediaState> {
         return (
             <SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
                 <ImageBackground source={{ uri: 'https://i.pinimg.com/originals/70/ae/13/70ae137a8af329f6d2e9dc4e2cd47d92.jpg' }} style={styles.image}>
-                    <Text style={{ color: '#fff', textAlign: 'center', marginBottom: '20%', fontFamily: 'YoungSerif-Regular', fontSize: 30, marginTop: '5%' }}>"Music is the Strongest Form of Magic"</Text>
+                    <Text style={{ color: COLORS.white, textAlign: 'center', marginBottom: '20%', fontFamily: 'YoungSerif-Regular', fontSize: 30, marginTop: '5%' }}>"Music is the Strongest Form of Magic"</Text>
                     <Text style={{ fontFamily: 'YoungSerif-Regular', fontSize: 30, textAlign: 'center', color: '#ff0000' }}>Music Player</Text>
                     {/* You can add any UI components here */}
                     <Image source={require('../assets/music.jpg')} style={{ borderRadius: 50, height: '30%', width: '60%', alignSelf: 'center', marginTop: '5%', marginBottom: '5%' }} />
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <Foundation name='previous' onPress={this.prevTrack} size={35} color={'#fff'} />
-                        <AntDesign name={this.state.isPlaying ? 'pausecircle' : 'play'} onPress={this.togglePlayback} size={35} color={'#fff'} />
-                        <Foundation name='next' onPress={this.nextTrack} size={35} color={'#fff'} />
+                        <Foundation name='previous' onPress={this.prevTrack} size={35} color={COLORS.white} />
+                        <AntDesign name={this.state.isPlaying ? 'pausecircle' : 'play'} onPress={this.togglePlayback} size={35} color={COLORS.white} />
+                        <Foundation name='next' onPress={this.nextTrack} size={35} color={COLORS.white} />
 
                         {/* <Button title="Play" onPress={this.playTrack} />
                     <Button title="Next" onPress={this.nextTrack} />

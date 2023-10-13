@@ -4,6 +4,7 @@ import CustomAlert from "../Components/CustomAlert";
 import { ToastAndroid } from "react-native";
 import { Share } from "react-native";
 import { Alert } from "react-native";
+import { COLORS } from "../constants/color";
 
 interface setting {
     showAlert: boolean;
@@ -55,9 +56,9 @@ class Settings extends Component<{ navigation: any }, setting> {
                 <ImageBackground source={require('../assets/settings.jpg')} style={styles.image}>
 
 
-                    <Text style={{ fontSize: 25, color: '#fff', textAlign: 'center' }}> React Native Share</Text>
+                    <Text style={{ fontSize: 25, color: COLORS.white, textAlign: 'center' }}> React Native Share</Text>
                     <TouchableOpacity onPress={() => { this.onShare() }} style={{ backgroundColor: '#d81244', marginTop: 25, alignItems: 'center', }} activeOpacity={0.8}>
-                        <Text style={{ padding: 10, color: '#fff' }}>Share Button</Text>
+                        <Text style={{ padding: 10, color: COLORS.white }}>Share Button</Text>
                     </TouchableOpacity>
 
                     {/* <TouchableOpacity
@@ -67,7 +68,7 @@ class Settings extends Component<{ navigation: any }, setting> {
                         <Text
                             style={{
                                 fontWeight: 'bold',
-                                color: "#000",
+                                color: COLORS.black,
                                 fontSize: 27,
                             }}
                         >

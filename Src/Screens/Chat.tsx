@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Alert, ImageBackground, SafeAreaView, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, PermissionsAndroid, Image } from "react-native";
 // import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
+import { COLORS } from "../constants/color";
 
 interface Gallery {
     capturedCameraImage: any,
@@ -75,7 +76,7 @@ class Chat extends Component<{}, Gallery>{
                             <Text style={styles.buttonText}>Open Gallery</Text>
                         </TouchableOpacity>
                         {this.state.capturedGalleryImage ?
-                            <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+                            <ScrollView style={{ flex: 1, backgroundColor: COLORS.white }}>
                                 {this.state.capturedGalleryImage.map((imagePath, index) => (
                                     <Image
                                         key={index}
@@ -86,7 +87,7 @@ class Chat extends Component<{}, Gallery>{
                             </ScrollView>
                             :
                             <View style={{ backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center', height: '40%' }}>
-                                <Text>No Image Selected Yet!!!!</Text>
+                                <Text style={{ color: '#000' }}>No Image Selected Yet!!!!</Text>
                             </View>
                         }
 
@@ -101,15 +102,15 @@ class Chat extends Component<{}, Gallery>{
                             />
                             :
                             <View style={{ backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center', height: '40%' }}>
-                                <Text>No Image Selected Yet!!!!</Text>
+                                <Text style={{ color: '#000' }}>No Image Selected Yet!!!!</Text>
                             </View>
 
                         }
 
                     </View>
-                    {/* <Text style={{ fontSize: 25, color: '#fff', textAlign: 'center' }}> React Native Share</Text>
+                    {/* <Text style={{ fontSize: 25, color: COLORS.white, textAlign: 'center' }}> React Native Share</Text>
                     <TouchableOpacity onPress={() => { this.ks() }} style={{ backgroundColor: '#d81244', marginTop: 25, alignItems: 'center', }} activeOpacity={0.8}>
-                        <Text style={{ padding: 10, color: '#fff' }}>Share Button</Text>
+                        <Text style={{ padding: 10, color: COLORS.white }}>Share Button</Text>
                     </TouchableOpacity> */}
                 </ImageBackground>
             </SafeAreaView>
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
         padding: 20
     },
     buttonText: {
-        color: '#fff',
+        color: COLORS.white,
         textAlign: 'center',
         fontSize: 15,
         fontFamily: 'YoungSerif-Regular'

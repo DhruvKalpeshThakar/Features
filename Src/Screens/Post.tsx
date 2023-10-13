@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Image, Modal, Alert, Pressable } from "react-native";
 import { BlurView } from "@react-native-community/blur";
+import { COLORS } from "../constants/color";
 
 
 interface ModalInterface {
@@ -30,15 +31,8 @@ class Post extends Component<{}, ModalInterface>{
                     source={{ uri: 'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_640.jpg' }}
                     style={styles.absolute}
                 />
-                <Text style={[styles.absolute, { fontSize: 100 }]}>Hi, I am some blurred text</Text>
-                {/* in terms of positioning and zIndex-ing everything before the BlurView will be blurred */}
-                {/* <BlurView
-                    style={styles.absolute}
-                    blurType="light"
-                    blurAmount={10}
-                    reducedTransparencyFallbackColor="white"
-                /> */}
-                {/* <Text>I'm the non blurred text because I got rendered on top of the BlurView</Text> */}
+                <Text style={[styles.absolute, { fontSize: 100 }]}>Hello</Text>
+
                 <View style={styles.centeredView}>
                     <Modal
                         animationType="fade"
@@ -106,7 +100,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 35,
         alignItems: 'center',
-        shadowColor: '#000',
+        shadowColor: COLORS.black,
         shadowOffset: {
             width: 0,
             height: 2,

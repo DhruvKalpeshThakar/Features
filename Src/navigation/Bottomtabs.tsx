@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, Appearance } from "react-native";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -12,16 +12,17 @@ import Settings from "../Screens/Settings";
 import Home from "../Home";
 import Media from "../Screens/Media";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { COLORS } from "../constants/color";
 
 
 const Tab = createBottomTabNavigator();
 
 
-class Bottomtabs extends Component<{ navigation: any }, {}>{
+class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
     constructor(props: any) {
         super(props);
         this.state = {
-
+            colorTheme: Appearance.getColorScheme(),
         }
 
     }
@@ -37,6 +38,7 @@ class Bottomtabs extends Component<{ navigation: any }, {}>{
         </TouchableOpacity>
     );
     render() {
+        const { colorTheme } = this.state;
         return (
 
             // <Tab.Navigator
@@ -112,7 +114,7 @@ class Bottomtabs extends Component<{ navigation: any }, {}>{
                     bottom: 10,
                     left: 20,
                     right: 20,
-                    backgroundColor: '#ffff',
+                    backgroundColor: colorTheme == 'dark' ? COLORS.black : COLORS.white,
                     borderRadius: 15,
                     height: 90,
                     ...styles.shadow
@@ -122,7 +124,7 @@ class Bottomtabs extends Component<{ navigation: any }, {}>{
                         <Image source={require('../assets/userprofile.jpg')} style={{ height: 30, width: 30, marginRight: 15, borderRadius: 25 }} />
                     </TouchableOpacity>
                 ),
-                headerStyle: { borderBottomColor: '#b9b9b9', borderBottomWidth: 1 }
+                headerStyle: { borderBottomColor: '#b9b9b9', borderBottomWidth: 1, }
             }}  >
                 <Tab.Screen name="Home" component={Home} options={{
                     tabBarIcon: ({ focused }) => (
@@ -137,7 +139,7 @@ class Bottomtabs extends Component<{ navigation: any }, {}>{
                             />
                             <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Feed</Text>
                         </View>
-                    ),
+                    ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
                 <Tab.Screen name="Chat" component={Chat} options={{
                     tabBarIcon: ({ focused }) => (
@@ -152,7 +154,7 @@ class Bottomtabs extends Component<{ navigation: any }, {}>{
                             />
                             <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Chat</Text>
                         </View>
-                    ),
+                    ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
                 <Tab.Screen name="Post" component={Post} options={{
                     tabBarIcon: ({ focused }) => (
@@ -162,14 +164,14 @@ class Bottomtabs extends Component<{ navigation: any }, {}>{
                                 style={{
                                     width: 30,
                                     height: 30,
-                                    tintColor: "#fff"
+                                    tintColor: COLORS.white
                                 }}
                             />
                         </View>
                     ),
                     tabBarButton: (props) => (
                         <this.CustomTabBarButton {...props} />
-                    )
+                    ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
                 <Tab.Screen name="Media" component={Media} options={{
                     tabBarIcon: ({ focused }) => (
@@ -184,7 +186,7 @@ class Bottomtabs extends Component<{ navigation: any }, {}>{
                             />
                             <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Media</Text>
                         </View>
-                    ),
+                    ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
                 <Tab.Screen name="Settings" component={Settings} options={{
                     tabBarIcon: ({ focused }) => (
@@ -199,7 +201,7 @@ class Bottomtabs extends Component<{ navigation: any }, {}>{
                             />
                             <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Settings</Text>
                         </View>
-                    )
+                    ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
             </Tab.Navigator>
         )
@@ -222,6 +224,18 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.5,
         elevation: 5
+    },
+    darktheme: {
+        backgroundColor: COLORS.black,
+        borderBottomColor: '#fff',
+        borderBottomWidth: 1
+
+    },
+    lighttheme: {
+        backgroundColor: COLORS.white,
+        borderBottomColor: '#000',
+        borderBottomWidth: 1
+
     }
 })
 

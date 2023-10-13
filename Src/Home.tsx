@@ -4,6 +4,7 @@ import { Button, Dimensions, FlatList, Image, Linking, SafeAreaView, ScrollView,
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { COLORS } from './constants/color';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -142,7 +143,7 @@ class Home extends Component<{ route: any }, Pageone>{
                         <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '18%', width: '60%' }]} />
 
                         <TouchableOpacity style={{ alignItems: 'center', marginTop:15 }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
-                            <Text style={{ borderBottomColor: '#000', borderBottomWidth: 1, color: '#000', fontSize: 20, fontWeight: 'bold' }}>Have any Queries?</Text>
+                            <Text style={{ borderBottomColor: COLORS.black, borderBottomWidth: 1, color: COLORS.black, fontSize: 20, fontWeight: 'bold' }}>Have any Queries?</Text>
                         </TouchableOpacity>
                     </SafeAreaView>
 
@@ -150,20 +151,20 @@ class Home extends Component<{ route: any }, Pageone>{
                     <Modal isOpen={this.state.isshowModal} onClose={() => this.setState({ isshowModal: false })} >
                         <Modal.Content width={screenWidth / 1.1} >
                             <Modal.CloseButton />
-                            <Modal.Header style={{ alignItems: 'center', }}><Text style={{ fontSize: 25, color: '#000', fontFamily: 'YoungSerif-Regular' }}>Contact Us</Text></Modal.Header>
+                            <Modal.Header style={{ alignItems: 'center', }}><Text style={{ fontSize: 25, color: COLORS.black, fontFamily: 'YoungSerif-Regular' }}>Contact Us</Text></Modal.Header>
                             <Modal.Body style={{ backgroundColor: '#00abc4' }}>
                                 <View>
                                     <View style={{ flexDirection: 'row' }}>
                                         <Text style={[styles.contacttext]}>Email : </Text>
                                         <TouchableOpacity onPress={() => { Linking.openURL('mailto:hellodemo123@gmail.com') }}>
-                                            <Text style={[styles.contacttext, { color: '#fff', fontSize: 17, borderBottomColor: '#000', borderBottomWidth: 1 }]}>hellodemo123@gmail.com</Text>
+                                            <Text style={[styles.contacttext, { color: COLORS.white, fontSize: 17, borderBottomColor: COLORS.black, borderBottomWidth: 1 }]}>hellodemo123@gmail.com</Text>
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ flexDirection: 'row' }}>
                                         <Text style={[styles.contacttext, { fontFamily: 'YoungSerif-Regular' }]}>Address : </Text>
                                         <TouchableOpacity onPress={() => { Linking.openURL('https://maps.app.goo.gl/6ZR57KHRi4Vgt8WE6') }}>
                                             {/* <WebView source={{ uri: 'https://maps.app.goo.gl/XQSrKsEeivAjZeBm8' }} style={{ flex: 1 }} /> */}
-                                            <Text style={[styles.contacttext, { color: '#fff', fontSize: 17, borderBottomColor: '#000', borderBottomWidth: 1 }]}>Sola,Ahmedabad</Text>
+                                            <Text style={[styles.contacttext, { color: COLORS.white, fontSize: 17, borderBottomColor: COLORS.black, borderBottomWidth: 1 }]}>Sola,Ahmedabad</Text>
                                         </TouchableOpacity>
                                     </View>
 
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 35,
         alignItems: 'center',
-        shadowColor: '#000',
+        shadowColor: COLORS.black,
         shadowOffset: {
             width: 0,
             height: 2,
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
     itemContainer: {
         padding: 20,
         marginTop: 20,
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.white,
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
@@ -281,10 +282,10 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 5,
-        color: '#000'
+        color: COLORS.black
     },
     itemBody: {
-        color: '#000',
+        color: COLORS.black,
         fontFamily: 'YoungSerif-Regular',
         textAlign: 'justify'
     },

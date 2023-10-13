@@ -7,20 +7,34 @@ import { NativeBaseProvider } from 'native-base';
 import React, { Component } from "react";
 import {
   StatusBar,
-  StyleSheet
+  StyleSheet, Appearance
 } from "react-native";
 import AuthStack from "./Src/navigation/AuthStack";
 import SplashScreen from "./Src/SplashScreen";
 import AppStack from "./Src/navigation/AppStack";
 import WelcomeScreen from "./Src/Screens/WelcomeScreen";
 
+interface Theme {
+  theme: any
+}
 
-
-class App extends Component<{}, {}> {
+class App extends Component<{}, Theme> {
 
   constructor(props: {}) {
     super(props);
-    this.state = {};
+    this.state = {
+      theme: 'LIGHT'
+    };
+  }
+
+  componentDidMount(): void {
+    const colorTheme = Appearance.getColorScheme();
+    console.log(colorTheme);
+    if (this.state.theme === 'LIGHT') {
+      this.setState({ theme: 'LIGHT' })
+    } else {
+      this.setState({ theme: 'DARK' })
+    }
   }
 
 

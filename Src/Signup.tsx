@@ -2,6 +2,7 @@ import React from "react";
 import { LogBox,Alert, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, } from "react-native";
 import Entypo from 'react-native-vector-icons/Entypo';
 import { ImageBackground } from "react-native";
+import { COLORS } from "./constants/color";
 // import localimage from "..Src\assets\bg.jpg";
 
 
@@ -134,7 +135,7 @@ class Signup extends React.Component<{navigation:any}, State> {
                                 onChangeText={(email) => this.setState({ email })}
                                 value={this.state.email}
                                 keyboardType="email-address"
-                                placeholderTextColor={"#000"}
+                                placeholderTextColor={COLORS.black}
                                 placeholder="Enter your email" />
 
                         </View>
@@ -145,7 +146,7 @@ class Signup extends React.Component<{navigation:any}, State> {
                                 onChangeText={(cemail) =>this.setState({ cemail })}  
                                 value={this.state.cemail}
                                 keyboardType="email-address"
-                                placeholderTextColor={"#000"}
+                                placeholderTextColor={COLORS.black}
                                 placeholder="Confirm your email" />
 
                         </View>
@@ -157,12 +158,12 @@ class Signup extends React.Component<{navigation:any}, State> {
                                 value={this.state.pass}
                                 secureTextEntry={!this.state.showPassword}
                                 maxLength={8}
-                                placeholderTextColor={"#000"}
+                                placeholderTextColor={COLORS.black}
                                 placeholder="Enter Password" />
                             <TouchableOpacity    
                                 style={[styles.toggleButton,{position:'absolute',right:10}]}
                                 onPress={this.togglePasswordVisibility}>
-                                         <Entypo size={25} color={'#000'} name={this.state.showPassword ? 'eye' : 'eye-with-line'} />                               
+                                         <Entypo size={25} color={COLORS.black} name={this.state.showPassword ? 'eye' : 'eye-with-line'} />                               
                             </TouchableOpacity>
                           
                         </View>
@@ -174,12 +175,12 @@ class Signup extends React.Component<{navigation:any}, State> {
                                 value={this.state.cpass} 
                                 secureTextEntry={!this.state.showCPassword}
                                 maxLength={8}
-                                placeholderTextColor={"#000"}
+                                placeholderTextColor={COLORS.black}
                                 placeholder="Confirm Password" />
                             <TouchableOpacity    
                                 style={[styles.toggleButton,{position:'absolute',right:10}]}
                                 onPress={this.toggleRePasswordVisibility}>
-                                         <Entypo size={25} color={'#000'} name={this.state.showCPassword ? 'eye' : 'eye-with-line'} />                               
+                                         <Entypo size={25} color={COLORS.black} name={this.state.showCPassword ? 'eye' : 'eye-with-line'} />                               
                             </TouchableOpacity>
 
                         </View>
@@ -198,20 +199,20 @@ class Signup extends React.Component<{navigation:any}, State> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // backgroundColor: '#fff'
+        // backgroundColor: COLORS.white
     },
       image: {
         flex: 1,
         justifyContent: 'center',
   },
     textinput: {
-        borderColor: '#000',
+        borderColor: COLORS.black,
         borderWidth: 1,
         borderRadius: 5,
         paddingLeft: 10,
         marginHorizontal: 20,
         width: '70%',
-        backgroundColor: '#fff'
+        backgroundColor: COLORS.white
     },
     inputcontainer:
     {
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         width: "80%",
-        shadowColor: "#000",
+        shadowColor: COLORS.black,
         shadowOffset: {
             width: 0,
             height: 3,
@@ -238,29 +239,29 @@ const styles = StyleSheet.create({
         shadowRadius: 4.65,
         elevation: 6,
         borderWidth:1,
-        borderColor:'#fff'
+        borderColor:COLORS.white
     },
     submitstyle: {
         marginTop:10,
         width: '100%',
         borderRadius: 5,
-        backgroundColor: '#000',
+        backgroundColor: COLORS.black,
     },
     buttontext: {
         fontSize: 25,
         fontWeight: 'bold',
-        color: '#fff',
+        color: COLORS.white,
         textAlign: 'center'
     },
     formtext:{ 
         width: '25%', 
-        color: '#fff', 
+        color: COLORS.white, 
         fontSize: 16, 
         // fontFamily:'DancingScript-VariableFont_wght'
         fontWeight: 'bold' 
     },
     cardtitle:{
-        color: '#ffff',
+        color: COLORS.white,
         fontSize:27,
         fontFamily: 'YoungSerif-Regular',
         textAlign:'center',
