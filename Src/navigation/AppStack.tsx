@@ -13,7 +13,7 @@ import { COLORS } from '../constants/color';
 
 const Drawer = createDrawerNavigator()
 
-class AppStack extends Component<{ navigation: any }, { colorTheme: any }>{
+class AppStack extends Component<{  }, { colorTheme: any }>{
     constructor(props: any) {
 
         super(props);

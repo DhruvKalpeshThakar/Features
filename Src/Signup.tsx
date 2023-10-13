@@ -188,6 +188,15 @@ class Signup extends React.Component<{navigation:any}, State> {
                             <Text style={styles.buttontext}>Submit</Text>
                         </TouchableOpacity>
                     </View>
+                    <View style={{backgroundColor:'#fff',marginTop:25,paddingHorizontal:30,borderRadius:20}}>
+                        <View style={{flexDirection:'row',}}>
+                        <Text style={{fontSize:20,color:'#000'}}>Already a User?</Text>
+                            <TouchableOpacity style={{marginLeft:10}} onPress={() =>{this.props.navigation.navigate('LoginScreen')}}>
+                                <Text style={{fontSize:20,color:'#008',fontWeight:'bold'}}>Login</Text>
+                            </TouchableOpacity>
+                        </View>
+                        
+                    </View>
                 </View>
                 </KeyboardAvoidingView>
                 </ImageBackground>

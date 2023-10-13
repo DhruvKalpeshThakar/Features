@@ -14,28 +14,28 @@ import SplashScreen from "./Src/SplashScreen";
 import AppStack from "./Src/navigation/AppStack";
 import WelcomeScreen from "./Src/Screens/WelcomeScreen";
 
-interface Theme {
-  theme: any
-}
+// interface Theme {
+//   theme: any
+// }
 
-class App extends Component<{}, Theme> {
+class App extends Component<{},{} > {
 
   constructor(props: {}) {
     super(props);
     this.state = {
-      theme: 'LIGHT'
+      // theme: 'LIGHT'
     };
   }
 
-  componentDidMount(): void {
-    const colorTheme = Appearance.getColorScheme();
-    console.log(colorTheme);
-    if (this.state.theme === 'LIGHT') {
-      this.setState({ theme: 'LIGHT' })
-    } else {
-      this.setState({ theme: 'DARK' })
-    }
-  }
+  // componentDidMount(): void {
+  //   const colorTheme = Appearance.getColorScheme();
+  //   console.log(colorTheme);
+  //   if (this.state.theme === 'LIGHT') {
+  //     this.setState({ theme: 'LIGHT' })
+  //   } else {
+  //     this.setState({ theme: 'DARK' })
+  //   }
+  // }
 
 
   render() {
@@ -47,8 +47,8 @@ class App extends Component<{}, Theme> {
         <NavigationContainer>
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-          <AppStack />
-          {/* <AuthStack /> */}
+          {/* <AppStack /> */}
+          <AuthStack />
         </NavigationContainer>
       </NativeBaseProvider>
     );
