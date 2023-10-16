@@ -1,90 +1,84 @@
-import React, { Component } from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { COLORS } from '../constants/color';
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+import React, { Component } from "react";
+import { Modal, Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-interface Alert {
-    isVisible: boolean;
+interface CustomAlertProps {
+    visible: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    onCancel: () => void;
 }
 
 
-export default class CustomAlert extends Component<Alert, Alert>{
-    constructor(props: any) {
-        super(props);
-    }
-
+class CustomAlert extends Component<CustomAlertProps> {
     render() {
-        console.log(this.props.isVisible, 'this.state.isVisible--------------------------');
+        const { visible, title, message, onConfirm, onCancel } = this.props;
 
         return (
-            <View style={styles.container}>
-                {this.props.isVisible &&
-                    <View style={styles.modal}>
-                        <View style={styles.body}>
-                            <Image source={{ uri: "https://static.vecteezy.com/system/resources/thumbnails/011/858/556/small/green-check-mark-icon-with-circle-tick-box-check-list-circle-frame-checkbox-symbol-sign-png.png" }} style={{ width: '30%', height: '30%', alignSelf: 'center', marginTop: 15 }} />
-                            <Text style={styles.alerttitle}>Success</Text>
-                            <Text style={styles.alertmessage}>Are you sure You want to Proceed?</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 17 }}>
-                                <TouchableOpacity style={{ backgroundColor: COLORS.grey, width: '35%' }}
-                                    onPress={() => { }} activeOpacity={0.7}>
-                                    <Text style={styles.button}>CANCEL</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{ backgroundColor: '#007788', width: '35%' }} onPress={() => { this.setState({ isVisible: false }) }} activeOpacity={0.7}>
-                                    <Text style={styles.button}>OK</Text>
-                                </TouchableOpacity>
-
-                            </View>
+            <Modal
+                transparent={true}
+                animationType="slide"
+                visible={visible}
+                onRequestClose={onCancel}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <MaterialIcons name="warning" size={48} color={'#b69d14'} />
+                        <Text style={styles.title}>{title}</Text>
+                        <Text style={styles.message}>{message}</Text>
+                        <View style={styles.buttonContainer}>
+                            {/* <TouchableOpacity onPress={onCancel} style={styles.button}>
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableOpacity> */}
+                            <TouchableOpacity onPress={onConfirm} style={styles.button}>
+                                <Text style={styles.buttonText}>OK</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                }
-
-
-
-                {/* <Button title='Open Dialog' onPress={() => { this.setState({ isshowAlert: true }) }} /> */}
-            </View>
-        )
+                </View>
+            </Modal>
+        );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
+    modalContainer: {
         flex: 1,
-        justifyContent: 'flex-end'
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
-    modal: {
-        flex: 1,
-        // backgroundColor: 'rgba(50,50,50,0.1)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        elevation: 5
+    modalContent: {
+        backgroundColor: "white",
+        padding: 20,
+        borderRadius: 10,
+        alignItems: "center",
     },
-    body: {
-        borderRadius: 25,
-        backgroundColor: COLORS.white,
-        width: '75%',
-        height: '35%',
-        justifyContent: 'flex-start',
+    title: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginTop: 10,
+        color: '#000',
+    },
+    message: {
+        fontSize: 16,
+        marginVertical: 10,
+    },
+    buttonContainer: {
+        flexDirection: "row",
+        // justifyContent: "space-around",
+        width: "100%",
 
-    },
-    alerttitle: {
-        fontWeight: 'bold',
-        fontSize: 30,
-        color: COLORS.black,
-        textAlign: 'center',
-        marginTop: 15
-    },
-    alertmessage:
-    {
-        fontSize: 17,
-        color: COLORS.black,
-        textAlign: 'center',
-        marginTop: 15
     },
     button: {
-        fontSize: 17,
-        color: COLORS.black,
-        textAlign: 'center',
-        marginTop: 15
-    }
+        padding: 10,
+    },
+    buttonText: {
+        fontSize: 16,
+        color: "blue",
+        fontWeight: 'bold',
+    },
+});
 
-})
+export default CustomAlert;

@@ -5,6 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import Foundation from 'react-native-vector-icons/Foundation'
 import { COLORS } from '../constants/color';
 import notifee, { AndroidStyle } from '@notifee/react-native';
+import { LogBox } from 'react-native';
 
 
 
@@ -23,6 +24,7 @@ class Media extends Component<{}, MediaState> {
 
 
     async componentDidMount() {
+        LogBox.ignoreLogs(['No task registered for key TrackPlayer']);
         // Set up the player
         await TrackPlayer.setupPlayer();
 

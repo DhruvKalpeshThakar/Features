@@ -1,8 +1,9 @@
 import { Modal } from 'native-base';
 import React, { Component } from 'react';
-import { Button, Dimensions, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { Button, Dimensions, FlatList, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
+import LinearGradient from 'react-native-linear-gradient';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { COLORS } from './constants/color';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -141,8 +142,8 @@ class Home extends Component<{ route: any }, Pageone>{
 
                         <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '18%', width: '60%' }]} />
 
-                        <TouchableOpacity style={{ alignItems: 'center', marginTop: 15 }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
-                            <Text style={styles.querytext}>Have any Queries?</Text>
+                        <TouchableOpacity style={{ alignItems: 'center', }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
+                            <Text style={{ borderBottomColor: COLORS.black, borderBottomWidth: 1, color: COLORS.black, fontSize: 18, fontWeight: 'bold' }}>Have any Queries?</Text>
                         </TouchableOpacity>
                     </SafeAreaView>
 
@@ -150,7 +151,7 @@ class Home extends Component<{ route: any }, Pageone>{
                     <Modal isOpen={this.state.isshowModal} onClose={() => this.setState({ isshowModal: false })} >
                         <Modal.Content width={screenWidth / 1.1} >
                             <Modal.CloseButton />
-                            <Modal.Header style={{ alignItems: 'center', }}><Text style={styles.contactstyle}>Contact Us</Text></Modal.Header>
+                            <Modal.Header style={{ alignItems: 'center', }}><Text style={{ fontSize: 25, color: COLORS.black, fontFamily: 'YoungSerif-Regular' }}>Contact Us</Text></Modal.Header>
                             <Modal.Body style={{ backgroundColor: '#00abc4' }}>
                                 <View>
                                     <View style={{ flexDirection: 'row' }}>
@@ -171,8 +172,9 @@ class Home extends Component<{ route: any }, Pageone>{
                             </Modal.Body>
                             <Modal.Footer style={{ alignSelf: 'center' }}>
                                 <Button
+
                                     title="Connect with us"
-                                    color={COLORS.pink}
+                                    color="#f194ff"
 
                                     onPress={() => {
                                         Linking.openURL('tel:9874598754')
@@ -183,7 +185,7 @@ class Home extends Component<{ route: any }, Pageone>{
                                 />
                                 {/* <Button
                                     title="OK"
-                                    color={COLORS.pink}
+                                    color="#f194ff"
                                     onPress={() => this.setState({ isshowModal: false })}
                                 /> */}
 
@@ -206,7 +208,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 22,
     },
-    contactstyle: { width: 40, height: 40, position: 'absolute', top: 10, left: 10 },
     modalView: {
         margin: 20,
         backgroundColor: 'white',
@@ -242,17 +243,17 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     buttonClose: {
-        backgroundColor: COLORS.blue,
+        backgroundColor: '#2196F3',
     },
     contacttext: {
-        color: COLORS.black,
+        color: '#000',
         fontSize: 18,
         fontFamily: 'YoungSerif-Regular'
     },
     item: {
         width: '100%',
         height: '30%',
-        backgroundColor: COLORS.lightpink,
+        backgroundColor: '#f9c2ff',
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
@@ -290,18 +291,10 @@ const styles = StyleSheet.create({
     },
     logo: {
         alignSelf: 'center',
-        width: '80%',
-        height: '20%'
+        width: '70%',
+        height: '18%'
 
-    },
-    querytext: {
-        width: 40,
-        height: 40,
-        position: 'absolute',
-        top: 10,
-        left: 10
     }
-
 })
 
 

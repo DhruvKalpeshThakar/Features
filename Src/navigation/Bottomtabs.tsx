@@ -1,21 +1,17 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity, Appearance } from "react-native";
+import { Appearance, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import Chat from "../Screens/Chat";
-import Feed from "../Screens/Feed";
-import Post from "../Screens/Post";
-import Search from "../Screens/Media";
-import Settings from "../Screens/Settings";
-import Home from "../Home";
-import Media from "../Screens/Media";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Home from "../Home";
+import Chat from "../Screens/Chat";
+import Media from "../Screens/Media";
+import Post from "../Screens/Post";
+import Settings from "../Screens/Settings";
 import { COLORS } from "../constants/color";
 
 
 const Tab = createBottomTabNavigator();
+
 
 
 class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
@@ -201,7 +197,7 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                             />
                             <Text style={{ color: focused ? COLORS.red : COLORS.cyan, fontSize: 12 }}>Settings</Text>
                         </View>
-                    ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
+                    ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black, headerShown: false
                 }} />
             </Tab.Navigator>
         )

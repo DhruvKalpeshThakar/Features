@@ -6,16 +6,105 @@ import { Share } from "react-native";
 import { Alert } from "react-native";
 import { COLORS } from "../constants/color";
 import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Linking } from "react-native";
 
 
 
-class Settings extends Component<{ navigation: any }, { colorTheme: any }> {
+
+class Settings extends Component<{ navigation: any }, { colorTheme: any, Developing: boolean }> {
     constructor(props: any) {
         super(props);
         this.state = {
             colorTheme: Appearance.getColorScheme(),
+            Developing: false
         };
     }
+
+    navigateToEditProfile = () => {
+        this.setState({ Developing: true });
+    }
+    navigateToSecurity = () => {
+        this.setState({ Developing: true });
+    }
+    navigateToNotifications = () => {
+        this.setState({ Developing: true });
+    }
+    navigateToPrivacy = () => {
+        this.setState({ Developing: true });
+    }
+    navigateToSubscription = () => {
+        this.setState({ Developing: true });
+    }
+    navigateToSupport = () => {
+        this.setState({ Developing: true });
+    }
+    navigateToTermsnPolicies = () => {
+        this.setState({ Developing: true });
+    }
+    navigateToFreeSpace = () => {
+        this.setState({ Developing: true });
+    }
+    navigatetoDataSaver = () => {
+        this.setState({ Developing: true });
+    }
+    navigateToReportProblem = () => {
+        Alert.alert('Confirmation', 'Report a Problem?', [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            { text: 'OK', onPress: () => { Linking.openURL('mailto:admin@feature.com') } },
+        ]);
+    }
+    navigateToAddAccount = () => {
+        this.setState({ Developing: true });
+    }
+    navigateTologout = () => {
+        // this.props.navigation.navigate('SignUp')
+        this.setState({ Developing: true });
+    }
+
+
+
+
+
+    accountItems = [
+        { icon: "person-outline", text: 'Edit Profile', action: this.navigateToEditProfile },
+        { icon: "security", text: 'Security', action: this.navigateToSecurity },
+        { icon: "notifications-none", text: 'Notifications', action: this.navigateToNotifications },
+        { icon: "lock-outline", text: 'Privacy', action: this.navigateToPrivacy },
+    ];
+
+    supportItems = [
+        { icon: "credit-card", text: 'My Subscription', action: this.navigateToSubscription },
+        { icon: "help-outline", text: 'Help & Support', action: this.navigateToSupport },
+        { icon: "info-outline", text: 'Terms & Policies', action: this.navigateToTermsnPolicies },
+
+    ];
+
+    cacheandcellularItems = [
+        { icon: "delete-outline", text: 'Free Up Space', action: this.navigateToFreeSpace },
+        { icon: "save-alt", text: 'Data Saver', action: this.navigatetoDataSaver },
+    ];
+
+    actionItems = [
+        { icon: "outlined-flag", text: 'Report a Problem', action: this.navigateToReportProblem },
+        { icon: "people-outline", text: 'Add a Account', action: this.navigateToAddAccount },
+        { icon: "logout", text: 'Log out', action: this.navigateTologout },
+
+    ]
+
+
+    renderSettingsItem = ({ icon, text, action }: { icon: string, text: string, action: () => void }) => (
+        <TouchableOpacity onPress={action} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8, paddingLeft: 12 }}>
+            <MaterialIcons name={icon} size={24} color={'black'} />
+            <Text style={{ marginLeft: 36, fontWeight: '600', fontSize: 16 }}>{text}</Text>
+        </TouchableOpacity>
+    );
+
+
+
 
     showCustomAlert = () => {
         // console.log("callerddd", this.state.showAlert);
@@ -51,26 +140,137 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any }> {
 
 
     render() {
+
         const PROFILE_PICTURE = 'https://img.freepik.com/premium-vector/glitch-social-media-user-profile-icon_97886-10045.jpg'
         const { colorTheme } = this.state;
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                {/* <ImageBackground source={require('../assets/settings.jpg')} style={styles.image}> */}
-                <ScrollView contentContainerStyle={styles.container}>
-                    <View style={styles.profile}>
-                        <TouchableOpacity onPress={() => { }}>
-                            <View style={styles.profileAvatarWrapper}>
-                                <Image source={{ uri: PROFILE_PICTURE }} style={styles.profileAvatar} />
+            // <SafeAreaView style={{ flex: 1 }}>
+            //     {/* <ImageBackground source={require('../assets/settings.jpg')} style={styles.image}> */}
+            //     <ScrollView contentContainerStyle={styles.container}>
+            //         <View style={styles.profile}>
+            //             <TouchableOpacity onPress={() => { }}>
+            //                 <View style={styles.profileAvatarWrapper}>
+            //                     <Image source={{ uri: PROFILE_PICTURE }} style={styles.profileAvatar} />
+            //                 </View>
+            //             </TouchableOpacity>
+
+
+            //             <Text style={{ color: COLORS.black }}>Jason Roy</Text>
+            //             <Text style={{ color: COLORS.black }}>456 Apple Street,London,PA,18080</Text>
+            //         </View>
+
+            //     </ScrollView>
+            //     {/* </ImageBackground> */}
+            // </SafeAreaView>
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+                <View style={{
+                    marginHorizontal: 13,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+
+                }}>
+                    <TouchableOpacity onPress={() => { this.props.navigation.goBack() }} style={{ position: 'absolute', left: 0 }}>
+                        <MaterialIcons name="keyboard-arrow-left" size={26} color={COLORS.black} />
+                    </TouchableOpacity>
+                    <Text style={{ fontSize: 22, color: COLORS.black, textAlign: 'center' }}>Settings</Text>
+                </View>
+
+                {/* Account Settings */}
+
+                <View style={{ marginBottom: 12 }}>
+                    <Text style={{ marginVertical: 10 }}> Account</Text>
+
+                    <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
+                        {
+                            this.accountItems.map((item, index) => (
+                                <React.Fragment key={index}>
+                                    {this.renderSettingsItem(item)}
+                                </React.Fragment>
+                            ))
+                        }
+                    </View>
+                </View>
+
+                {/* Support and About Settings */}
+                <View style={{ marginBottom: 12 }}>
+                    <Text style={{ marginVertical: 10 }}> Support and About</Text>
+
+                    <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
+                        {
+                            this.supportItems.map((item, index) => (
+                                <React.Fragment key={index}>
+                                    {this.renderSettingsItem(item)}
+                                </React.Fragment>
+                            ))
+                        }
+                    </View>
+                </View>
+
+                {/* Cache and Cellular */}
+
+                <View style={{ marginBottom: 12 }}>
+                    <Text style={{ marginVertical: 10 }}> Cache and Cellular</Text>
+
+                    <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
+                        {
+                            this.cacheandcellularItems.map((item, index) => (
+                                <React.Fragment key={index}>
+                                    {this.renderSettingsItem(item)}
+                                </React.Fragment>
+                            ))
+                        }
+                    </View>
+                </View>
+
+                {/* Action Settings */}
+                <View style={{ marginBottom: 12 }}>
+                    <Text style={{ marginVertical: 10 }}> Actions</Text>
+
+                    <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
+                        {
+                            this.actionItems.map((item, index) => (
+                                <React.Fragment key={index}>
+                                    {this.renderSettingsItem(item)}
+                                </React.Fragment>
+                            ))
+                        }
+                    </View>
+                </View>
+
+                {/* {this.state.Developing &&
+                    <View style={styles.modal}>
+                        <View style={styles.body}>
+                            <Image source={{ uri: "https://static.vecteezy.com/system/resources/thumbnails/011/858/556/small/green-check-mark-icon-with-circle-tick-box-check-list-circle-frame-checkbox-symbol-sign-png.png" }} style={{ width: '30%', height: '30%', alignSelf: 'center', marginTop: 15 }} />
+                            <Text style={styles.alerttitle}>Success</Text>
+                            <Text style={styles.alertmessage}>Are you sure You want to Proceed?</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 17 }}>
+                                <TouchableOpacity style={{ backgroundColor: COLORS.grey, width: '35%' }}
+                                    onPress={() => { }} activeOpacity={0.7}>
+                                    <Text style={styles.button}>CANCEL</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{ backgroundColor: '#007788', width: '35%' }} onPress={() => { this.setState({ Developing: false }) }} activeOpacity={0.7}>
+                                    <Text style={styles.button}>OK</Text>
+                                </TouchableOpacity>
+
                             </View>
-                        </TouchableOpacity>
-
-
-                        <Text style={{ color: COLORS.black }}>Jason Roy</Text>
-                        <Text style={{ color: COLORS.black }}>456 Apple Street,London,PA,18080</Text>
+                        </View>
                     </View>
 
-                </ScrollView>
-                {/* </ImageBackground> */}
+                } */}
+                <CustomAlert
+                    visible={this.state.Developing}
+                    title="Warning"
+                    message="This Module is Under Development"
+                    onConfirm={() => {
+                        // Add any code you want to execute when the user confirms the alert
+                        this.setState({ Developing: false });
+                    }}
+                // onCancel={() => {
+                //     this.setState({ Developing: false });
+                // }}
+                />
+
             </SafeAreaView>
         );
     }
@@ -110,6 +310,42 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
 
+    },
+    modal: {
+        flex: 1,
+        // backgroundColor: 'rgba(50,50,50,0.1)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5
+    },
+    body: {
+        borderRadius: 25,
+        backgroundColor: COLORS.white,
+        width: '75%',
+        height: '35%',
+        justifyContent: 'flex-start',
+
+    },
+
+    alerttitle: {
+        fontWeight: 'bold',
+        fontSize: 30,
+        color: COLORS.black,
+        textAlign: 'center',
+        marginTop: 15
+    },
+    alertmessage:
+    {
+        fontSize: 17,
+        color: COLORS.black,
+        textAlign: 'center',
+        marginTop: 15
+    },
+    button: {
+        fontSize: 17,
+        color: COLORS.black,
+        textAlign: 'center',
+        marginTop: 15
     }
 
 

@@ -17,8 +17,6 @@ class WelcomeScreen extends Component<{ navigation: any }, {}> {
                 <View style={{ flex: 1, alignItems: 'center' }}>
                     {/* <Text style={{ fontFamily: 'YoungSerif-Regular', marginTop: 20, fontSize: 45, color: COLORS.white }}> Welcome </Text> */}
                     <Image source={require('../assets/Welcome_Back.png')} style={{ height: '20%', width: '90%', marginTop: '30%' }} />
-
-
                 </View>
                 <View style={styles.beginview}>
                     <TouchableOpacity style={{ justifyContent: 'space-between', flexDirection: 'row' }} onPress={() => { this.props.navigation.navigate('Bottomtabs') }}>
