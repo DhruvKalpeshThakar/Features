@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Appearance, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { COLORS } from "../constants/color";
 
 class Profile extends Component<{}, { colorTheme: any }>{
     constructor(props: any) {
@@ -25,10 +26,10 @@ class Profile extends Component<{}, { colorTheme: any }>{
 
 const styles = StyleSheet.create({
     darktheme: {
-        color: '#000'
+        color: COLORS.black
     },
     lightheme: {
-        color: '#000'
+        color: COLORS.black
     }
 })
 

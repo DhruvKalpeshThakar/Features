@@ -151,42 +151,20 @@ class LoginScreen extends React.Component<{ navigation: any }, State> {
                         </Text>
 
                         <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                marginBottom: 30,
-                            }}>
+                            style={styles.svgview}>
                             <TouchableOpacity
                                 onPress={() => { }}
-                                style={{
-                                    borderColor: '#ddd',
-                                    borderWidth: 2,
-                                    borderRadius: 10,
-                                    paddingHorizontal: 30,
-                                    paddingVertical: 10,
-                                }}>
+                                style={styles.svg}>
                                 <Google height={24} width={24} />
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => { }}
-                                style={{
-                                    borderColor: '#ddd',
-                                    borderWidth: 2,
-                                    borderRadius: 10,
-                                    paddingHorizontal: 30,
-                                    paddingVertical: 10,
-                                }}>
+                                style={styles.svg}>
                                 <Facebook height={24} width={24} />
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => { }}
-                                style={{
-                                    borderColor: '#ddd',
-                                    borderWidth: 2,
-                                    borderRadius: 10,
-                                    paddingHorizontal: 30,
-                                    paddingVertical: 10,
-                                }}>
+                                style={styles.svg}>
                                 <Twitter height={24} width={24} />
                             </TouchableOpacity>
                         </View>
@@ -199,15 +177,15 @@ class LoginScreen extends React.Component<{ navigation: any }, State> {
                             }}>
                             <Text style={{ color: COLORS.black }}>New to the app?</Text>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('Signup')}>
-                                <Text style={{ color: '#0080ff', fontWeight: '700' }}> Register</Text>
+                                <Text style={{ color: COLORS.blue, fontWeight: '700' }}> Register</Text>
                             </TouchableOpacity>
                         </View>
 
                         {/* <View style={{ backgroundColor: '#fff', marginTop: 25, paddingHorizontal: 30, borderRadius: 20 }}>
                                 <View style={{ flexDirection: 'row', }}>
-                                    <Text style={{ fontSize: 20, color: '#000' }}>New User?</Text>
+                                    <Text style={{ fontSize: 20, color: COLORS.black }}>New User?</Text>
                                     <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => { this.props.navigation.navigate('Signup') }}>
-                                        <Text style={{ fontSize: 20, color: '#008', fontWeight: 'bold' }}>Sign-Up</Text>
+                                        <Text style={{ fontSize: 20, color: COLORS.blue, fontWeight: 'bold' }}>Sign-Up</Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -250,7 +228,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     card: {
-        backgroundColor: '#0080ff',
+        backgroundColor: COLORS.blue,
         borderRadius: 8,
         padding: 10,
         width: "80%",
@@ -305,6 +283,18 @@ const styles = StyleSheet.create({
     toggleButtonText: {
         fontWeight: 'bold',
     },
+    svg: {
+        borderColor: '#ddd',
+        borderWidth: 2,
+        borderRadius: 10,
+        paddingHorizontal: 30,
+        paddingVertical: 10,
+    },
+    svgview: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 30,
+    }
 
 })
 

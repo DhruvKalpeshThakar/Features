@@ -18,20 +18,19 @@ export default class CustomAlert extends Component<Alert, Alert>{
 
         return (
             <View style={styles.container}>
-                {
-                    this.props.isVisible &&
+                {this.props.isVisible &&
                     <View style={styles.modal}>
                         <View style={styles.body}>
                             <Image source={{ uri: "https://static.vecteezy.com/system/resources/thumbnails/011/858/556/small/green-check-mark-icon-with-circle-tick-box-check-list-circle-frame-checkbox-symbol-sign-png.png" }} style={{ width: '30%', height: '30%', alignSelf: 'center', marginTop: 15 }} />
-                            <Text style={{ fontWeight: 'bold', fontSize: 30, color: COLORS.black, textAlign: 'center', marginTop: 15 }}>Success</Text>
-                            <Text style={{ fontSize: 17, color: COLORS.black, textAlign: 'center', marginTop: 15 }}>Are you sure You want to Proceed?</Text>
+                            <Text style={styles.alerttitle}>Success</Text>
+                            <Text style={styles.alertmessage}>Are you sure You want to Proceed?</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 17 }}>
-                                <TouchableOpacity style={{ backgroundColor: '#7f7f7f', width: '35%' }}
+                                <TouchableOpacity style={{ backgroundColor: COLORS.grey, width: '35%' }}
                                     onPress={() => { }} activeOpacity={0.7}>
-                                    <Text style={{ color: COLORS.white, textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>CANCEL</Text>
+                                    <Text style={styles.button}>CANCEL</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{ backgroundColor: '#007788', width: '35%' }} onPress={() => { this.setState({ isVisible: false }) }} activeOpacity={0.7}>
-                                    <Text style={{ color: COLORS.white, textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>OK</Text>
+                                    <Text style={styles.button}>OK</Text>
                                 </TouchableOpacity>
 
                             </View>
@@ -66,5 +65,26 @@ const styles = StyleSheet.create({
         height: '35%',
         justifyContent: 'flex-start',
 
+    },
+    alerttitle: {
+        fontWeight: 'bold',
+        fontSize: 30,
+        color: COLORS.black,
+        textAlign: 'center',
+        marginTop: 15
+    },
+    alertmessage:
+    {
+        fontSize: 17,
+        color: COLORS.black,
+        textAlign: 'center',
+        marginTop: 15
+    },
+    button: {
+        fontSize: 17,
+        color: COLORS.black,
+        textAlign: 'center',
+        marginTop: 15
     }
+
 })

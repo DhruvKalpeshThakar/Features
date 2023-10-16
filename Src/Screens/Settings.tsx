@@ -1,20 +1,19 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, ImageBackground, SafeAreaView } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, ImageBackground, SafeAreaView, ScrollView, Appearance, Image } from "react-native";
 import CustomAlert from "../Components/CustomAlert";
 import { ToastAndroid } from "react-native";
 import { Share } from "react-native";
 import { Alert } from "react-native";
 import { COLORS } from "../constants/color";
+import Feather from 'react-native-vector-icons/Feather';
 
-interface setting {
-    showAlert: boolean;
-}
 
-class Settings extends Component<{ navigation: any }, setting> {
+
+class Settings extends Component<{ navigation: any }, { colorTheme: any }> {
     constructor(props: any) {
         super(props);
         this.state = {
-            showAlert: false,
+            colorTheme: Appearance.getColorScheme(),
         };
     }
 
@@ -50,33 +49,28 @@ class Settings extends Component<{ navigation: any }, setting> {
         }
     };
 
+
     render() {
+        const PROFILE_PICTURE = 'https://img.freepik.com/premium-vector/glitch-social-media-user-profile-icon_97886-10045.jpg'
+        const { colorTheme } = this.state;
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <ImageBackground source={require('../assets/settings.jpg')} style={styles.image}>
+                {/* <ImageBackground source={require('../assets/settings.jpg')} style={styles.image}> */}
+                <ScrollView contentContainerStyle={styles.container}>
+                    <View style={styles.profile}>
+                        <TouchableOpacity onPress={() => { }}>
+                            <View style={styles.profileAvatarWrapper}>
+                                <Image source={{ uri: PROFILE_PICTURE }} style={styles.profileAvatar} />
+                            </View>
+                        </TouchableOpacity>
 
 
-                    <Text style={{ fontSize: 25, color: COLORS.white, textAlign: 'center' }}> React Native Share</Text>
-                    <TouchableOpacity onPress={() => { this.onShare() }} style={{ backgroundColor: '#d81244', marginTop: 25, alignItems: 'center', }} activeOpacity={0.8}>
-                        <Text style={{ padding: 10, color: COLORS.white }}>Share Button</Text>
-                    </TouchableOpacity>
+                        <Text style={{ color: COLORS.black }}>Jason Roy</Text>
+                        <Text style={{ color: COLORS.black }}>456 Apple Street,London,PA,18080</Text>
+                    </View>
 
-                    {/* <TouchableOpacity
-                        style={{ backgroundColor: '#cccc', alignSelf: 'flex-end',marginTop:50,marginRight:10 }}
-                        onPress={() => this.showCustomAlert()}
-                    >
-                        <Text
-                            style={{
-                                fontWeight: 'bold',
-                                color: COLORS.black,
-                                fontSize: 27,
-                            }}
-                        >
-                            Logout
-                        </Text>
-                    </TouchableOpacity> */}
-                    <CustomAlert isVisible={this.state.showAlert} />
-                </ImageBackground>
+                </ScrollView>
+                {/* </ImageBackground> */}
             </SafeAreaView>
         );
     }
@@ -88,6 +82,37 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 
     },
+    container: {
+        paddingVertical: 24
+    },
+    profile: {
+        padding: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontFamily: 'YoungSerif-Regular'
+    },
+    profileAvatar: {
+        width: 72,
+        height: 72,
+        borderRadius: 9999
+    },
+    profileAvatarWrapper: {
+        position: 'relative'
+    },
+    profileAction: {
+        width: 28,
+        height: 28,
+        borderRadius: 9999,
+        backgroundColor: COLORS.blue,
+        position: 'absolute',
+        right: -4,
+        bottom: -10,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    }
+
+
 });
 
 export default Settings;

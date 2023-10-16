@@ -20,9 +20,9 @@ class WelcomeScreen extends Component<{ navigation: any }, {}> {
 
 
                 </View>
-                <View style={{ flex: 1 / 10, backgroundColor: '#d2610d', marginBottom: 20, marginHorizontal: 20, borderRadius: 10, }}>
+                <View style={styles.beginview}>
                     <TouchableOpacity style={{ justifyContent: 'space-between', flexDirection: 'row' }} onPress={() => { this.props.navigation.navigate('Bottomtabs') }}>
-                        <Text style={{ fontFamily: 'YoungSerif-Regular', fontSize: 30, marginTop: 7, color: COLORS.white, marginLeft: 20, }}>Let's Begin</Text>
+                        <Text style={styles.begintext}>Let's Begin</Text>
                         <Entypo name="chevron-right" size={35} style={{ marginTop: '5%', color: COLORS.white, marginRight: 20 }} />
                     </TouchableOpacity>
                 </View>
@@ -33,6 +33,23 @@ class WelcomeScreen extends Component<{ navigation: any }, {}> {
 }
 
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    beginview: {
+        flex: 1 / 10,
+        backgroundColor: COLORS.Orange,
+        marginBottom: 20,
+        marginHorizontal: 20,
+        borderRadius: 10,
+    },
+    begintext:
+    {
+        fontFamily: 'YoungSerif-Regular',
+        fontSize: 30,
+        marginTop: 7,
+        color: COLORS.white,
+        marginLeft: 20,
+    }
+
+})
 
 export default WelcomeScreen

@@ -34,7 +34,7 @@ class AppStack extends Component<{  }, { colorTheme: any }>{
                         marginLeft: -25,
                         flex: 1
                     },
-                    drawerActiveBackgroundColor: '#ca95ff',
+                    drawerActiveBackgroundColor: COLORS.lightpurple,
                     drawerActiveTintColor: COLORS.white,
                     drawerInactiveTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} >

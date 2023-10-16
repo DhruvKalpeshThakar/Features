@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, ImageBackground, SafeAreaView, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View, PermissionsAndroid, Image } from "react-native";
+import { Alert, Image, ImageBackground, SafeAreaView, ScrollView, Share, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 // import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import { COLORS } from "../constants/color";
@@ -86,8 +86,8 @@ class Chat extends Component<{}, Gallery>{
                                 ))}
                             </ScrollView>
                             :
-                            <View style={{ backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center', height: '40%' }}>
-                                <Text style={{ color: '#000' }}>No Image Selected Yet!!!!</Text>
+                            <View style={styles.imageview}>
+                                <Text style={{ color: COLORS.black }}>No Image Selected Yet!!!!</Text>
                             </View>
                         }
 
@@ -101,8 +101,8 @@ class Chat extends Component<{}, Gallery>{
                                 style={{ width: '100%', height: '50%' }}
                             />
                             :
-                            <View style={{ backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center', height: '40%' }}>
-                                <Text style={{ color: '#000' }}>No Image Selected Yet!!!!</Text>
+                            <View style={styles.imageview}>
+                                <Text style={{ color: COLORS.black }}>No Image Selected Yet!!!!</Text>
                             </View>
 
                         }
@@ -135,6 +135,12 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'YoungSerif-Regular'
     },
+    imageview: {
+        backgroundColor: COLORS.grey,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '40%'
+    }
 
 })
 

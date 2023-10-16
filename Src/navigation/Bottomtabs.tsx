@@ -32,7 +32,7 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
 
     CustomTabBarButton = ({ children, onPress }: any) => (
         <TouchableOpacity style={{ top: -30, justifyContent: 'center', alignItems: 'center', ...styles.shadow }} onPress={onPress}>
-            <View style={{ width: 70, height: 70, borderRadius: 35, backgroundColor: '#e32f45' }}>
+            <View style={{ width: 70, height: 70, borderRadius: 35, backgroundColor: COLORS.red }}>
                 {children}
             </View>
         </TouchableOpacity>
@@ -134,10 +134,10 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                                 style={{
                                     width: 25,
                                     height: 25,
-                                    tintColor: focused ? "#e32f45" : "#748c94",
+                                    tintColor: focused ? COLORS.red : COLORS.cyan,
                                 }}
                             />
-                            <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Feed</Text>
+                            <Text style={{ color: focused ? COLORS.red : COLORS.cyan, fontSize: 12 }}>Feed</Text>
                         </View>
                     ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
@@ -149,10 +149,10 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                                 style={{
                                     width: 25,
                                     height: 25,
-                                    tintColor: focused ? "#e32f45" : "#748c94"
+                                    tintColor: focused ? COLORS.red : COLORS.cyan
                                 }}
                             />
-                            <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Chat</Text>
+                            <Text style={{ color: focused ? COLORS.red : COLORS.cyan, fontSize: 12 }}>Chat</Text>
                         </View>
                     ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
@@ -181,10 +181,10 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                                 style={{
                                     width: 25,
                                     height: 25,
-                                    tintColor: focused ? "#e32f45" : "#748c94"
+                                    tintColor: focused ? COLORS.red : COLORS.cyan
                                 }}
                             />
-                            <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Media</Text>
+                            <Text style={{ color: focused ? COLORS.red : COLORS.cyan, fontSize: 12 }}>Media</Text>
                         </View>
                     ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
@@ -196,10 +196,10 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                                 style={{
                                     width: 25,
                                     height: 25,
-                                    tintColor: focused ? "#e32f45" : "#748c94"
+                                    tintColor: focused ? COLORS.red : COLORS.cyan
                                 }}
                             />
-                            <Text style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}>Settings</Text>
+                            <Text style={{ color: focused ? COLORS.red : COLORS.cyan, fontSize: 12 }}>Settings</Text>
                         </View>
                     ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
@@ -227,13 +227,13 @@ const styles = StyleSheet.create({
     },
     darktheme: {
         backgroundColor: COLORS.black,
-        borderBottomColor: '#fff',
+        borderBottomColor: COLORS.white,
         borderBottomWidth: 1
 
     },
     lighttheme: {
         backgroundColor: COLORS.white,
-        borderBottomColor: '#000',
+        borderBottomColor: COLORS.black,
         borderBottomWidth: 1
 
     }

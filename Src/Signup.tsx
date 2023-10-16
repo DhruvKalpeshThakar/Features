@@ -1,11 +1,11 @@
 import React from "react";
-import { LogBox, Alert, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Appearance, } from "react-native";
+import { Appearance, Image, KeyboardAvoidingView, LogBox, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Entypo from 'react-native-vector-icons/Entypo';
-import { ImageBackground } from "react-native";
-import { COLORS } from "./constants/color";
-import Google from '../Src/assets/misc/google.svg';
 import Facebook from '../Src/assets/misc/facebook.svg';
-import Twitter from '../Src/assets/misc/twitter.svg'
+import Google from '../Src/assets/misc/google.svg';
+import Twitter from '../Src/assets/misc/twitter.svg';
+import { COLORS } from "./constants/color";
+// import auth from '@react-native-firebase/auth';
 
 
 
@@ -39,6 +39,24 @@ class Signup extends React.Component<{ navigation: any }, State> {
     }
 
 
+    // createUser = () => {
+    //     auth()
+    //         .createUserWithEmailAndPassword(this.state.email, this.state.pass)
+    //         .then(() => {
+    //             console.log('User account created & signed in!');
+    //         })
+    //         .catch(error => {
+    //             if (error.code === 'auth/email-already-in-use') {
+    //                 console.log('That email address is already in use!');
+    //             }
+
+    //             if (error.code === 'auth/invalid-email') {
+    //                 console.log('That email address is invalid!');
+    //             }
+
+    //             console.error(error);
+    //         });
+    // }
 
     componentDidMount(): void {
         LogBox.ignoreLogs(['In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.']);
@@ -105,8 +123,8 @@ class Signup extends React.Component<{ navigation: any }, State> {
         return (
             <SafeAreaView style={styles.container}>
                 {/* <ImageBackground source={require('../assets/bg.jpg')} style={styles.image} > */}
-                <Image source={require('../Src/assets/login.png')} style={{ height: 350, width: 370, marginLeft:'2%' }} />
                 <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={50}>
+                    <Image source={require('../Src/assets/login.png')} style={{ height: 350, width: 370, marginLeft: '2%' }} />
                     <View style={styles.cardoutside}>
 
                         <View style={styles.card}>
@@ -141,7 +159,7 @@ class Signup extends React.Component<{ navigation: any }, State> {
 
                             </View>
 
-                            <TouchableOpacity onPress={() => this.submithandler()} style={styles.submitstyle}>
+                            <TouchableOpacity onPress={() => { }} style={styles.submitstyle}>
                                 <Text style={styles.buttontext}>Register</Text>
                             </TouchableOpacity>
                         </View>
@@ -157,35 +175,17 @@ class Signup extends React.Component<{ navigation: any }, State> {
                             }}>
                             <TouchableOpacity
                                 onPress={() => { }}
-                                style={{
-                                    borderColor: '#ddd',
-                                    borderWidth: 2,
-                                    borderRadius: 10,
-                                    paddingHorizontal: 30,
-                                    paddingVertical: 10,
-                                }}>
+                                style={styles.svg}>
                                 <Google height={24} width={24} />
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => { }}
-                                style={{
-                                    borderColor: '#ddd',
-                                    borderWidth: 2,
-                                    borderRadius: 10,
-                                    paddingHorizontal: 30,
-                                    paddingVertical: 10,
-                                }}>
+                                style={styles.svg}>
                                 <Facebook height={24} width={24} />
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => { }}
-                                style={{
-                                    borderColor: '#ddd',
-                                    borderWidth: 2,
-                                    borderRadius: 10,
-                                    paddingHorizontal: 30,
-                                    paddingVertical: 10,
-                                }}>
+                                style={styles.svg}>
                                 <Twitter height={24} width={24} />
                             </TouchableOpacity>
                         </View>
@@ -198,15 +198,15 @@ class Signup extends React.Component<{ navigation: any }, State> {
                             }}>
                             <Text style={{ color: COLORS.black }}>Already a User?</Text>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('LoginScreen')}>
-                                <Text style={{ color: '#0080ff', fontWeight: '700' }}> Login</Text>
+                                <Text style={{ color: COLORS.blue, fontWeight: '700' }}> Login</Text>
                             </TouchableOpacity>
                         </View>
 
-                        {/* <View style={{ backgroundColor: '#fff', marginTop: 25, paddingHorizontal: 30, borderRadius: 20 }}>
+                        {/* <View style={{ backgroundColor: COLORS.white, marginTop: 25, paddingHorizontal: 30, borderRadius: 20 }}>
                                 <View style={{ flexDirection: 'row', }}>
-                                    <Text style={{ fontSize: 20, color: '#000' }}>New User?</Text>
+                                    <Text style={{ fontSize: 20, color: COLORS.black }}>New User?</Text>
                                     <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => { this.props.navigation.navigate('Signup') }}>
-                                        <Text style={{ fontSize: 20, color: '#008', fontWeight: 'bold' }}>Sign-Up</Text>
+                                        <Text style={{ fontSize: 20, color: COLORS.blue, fontWeight: 'bold' }}>Sign-Up</Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -237,6 +237,15 @@ const styles = StyleSheet.create({
         width: '70%',
         backgroundColor: COLORS.white
     },
+    svg:
+    {
+        borderColor: COLORS.grey,
+        borderWidth: 2,
+        borderRadius: 10,
+        paddingHorizontal: 30,
+        paddingVertical: 10,
+    },
+
     inputcontainer:
     {
         flexDirection: 'row',
@@ -249,7 +258,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     card: {
-        backgroundColor: '#0080ff',
+        backgroundColor: COLORS.blue,
         borderRadius: 8,
         padding: 10,
         width: "80%",
@@ -299,7 +308,7 @@ const styles = StyleSheet.create({
     },
     toggleButton: {
         // padding: 10,
-        // backgroundColor: '#008',
+        // backgroundColor: COLORS.blue,
     },
     toggleButtonText: {
         fontWeight: 'bold',

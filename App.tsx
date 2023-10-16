@@ -46,8 +46,8 @@ class App extends Component<{}, {}> {
         <NavigationContainer>
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-          {/* <AppStack /> */}
-          <AuthStack />
+          <AppStack />
+          {/* <AuthStack /> */}
         </NavigationContainer>
       </NativeBaseProvider>
     );
