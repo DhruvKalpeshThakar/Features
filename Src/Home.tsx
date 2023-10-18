@@ -5,6 +5,7 @@ import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { COLORS } from './constants/color';
+import { Switch } from 'react-native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -23,6 +24,8 @@ interface Pageone {
     sliderWidth: number;
     itemWidth: number;
     data: Item[];
+    isEnabled: boolean,
+    text: string
 }
 
 class Home extends Component<{ route: any }, Pageone>{
@@ -34,6 +37,8 @@ class Home extends Component<{ route: any }, Pageone>{
             screenWidth: Dimensions.get('window').width,
             sliderWidth: 1,
             itemWidth: 1,
+            isEnabled: false,
+            text: 'Cricket Mode Off',
             data: [
                 {
                     title: 'Shikhar Dhawan',
@@ -88,10 +93,24 @@ class Home extends Component<{ route: any }, Pageone>{
         this.setState({ sliderWidth, itemWidth });
     }
 
+
+
+
+
+
     fetchData(): any {
         // Implement your data fetching logic here
         return "Hello";
         // You can use this.setState to update the component's state
+    }
+
+    toggleswitch = () => {
+        if (this.state.isEnabled) {
+            this.setState({ text: 'Cricket mode off' })
+        } else {
+            this.setState({ text: 'Cricket mode on' })
+        }
+        this.setState({ isEnabled: !this.state.isEnabled })
     }
 
 
@@ -127,25 +146,47 @@ class Home extends Component<{ route: any }, Pageone>{
         return (
 
             <LinearGradient colors={["#ffff", "#0080ff", "#ffff"]} style={{ flex: 1 }}>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
 
-                <View style={{}}>
+                }}>
+                    <Text style={{ fontWeight: 'bold', margin: 20, color: COLORS.black }}>{this.state.text}</Text>
+                    <Switch
+                        trackColor={{ false: COLORS.grey, true: COLORS.blue }}
+                        thumbColor={this.state.isEnabled ? COLORS.white : COLORS.white}
+                        onValueChange={this.toggleswitch}
+                        value={this.state.isEnabled}
 
-                    <SafeAreaView style={{}}>
-                        <Image source={require('../Src/assets/iccfull.png')} style={styles.logo} />
-                        <Carousel
-                            layout='stack'
-                            data={this.state.data}
-                            renderItem={this.renderItem}
-                            sliderWidth={this.state.sliderWidth}
-                            itemWidth={this.state.itemWidth}
-                        />
+                    />
+                </View>
+                {this.state.isEnabled ?
 
-                        <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '18%', width: '60%' }]} />
+                    <View style={{}}>
+
+                        <SafeAreaView style={{}}>
+
+                            <Image source={require('../Src/assets/iccfull.png')} style={styles.logo} />
+                            <Carousel
+                                layout='stack'
+                                data={this.state.data}
+                                renderItem={this.renderItem}
+                                sliderWidth={this.state.sliderWidth}
+                                itemWidth={this.state.itemWidth}
+                            />
+
+                            <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '15%', width: '50%' }]} />
 
 
-                    </SafeAreaView>
+                        </SafeAreaView>
 
-                </View >
+                    </View >
+                    :
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 25, color: COLORS.black }}>Toggle Mode Off</Text>
+
+                    </View>
+                }
             </LinearGradient >
 
         )

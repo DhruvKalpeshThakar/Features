@@ -31,6 +31,11 @@ class App extends Component<{}, ConnectionCheck> {
       showOnline: false,
     };
   }
+
+
+
+
+  
   componentDidMount() {
     const unsubscribe = NetInfo.addEventListener((state) => {
       console.log("Connect Type:", state.type);

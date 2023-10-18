@@ -11,6 +11,7 @@ import Ratings from "../Screens/settings/Ratings";
 import { COLORS } from "../constants/color";
 import { createStackNavigator } from "@react-navigation/stack";
 import Termpolicies from "../Screens/settings/TermPolicies";
+import Map from "../Map";
 
 
 const Tab = createBottomTabNavigator();
@@ -146,6 +147,7 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                             <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
                             <Stack.Screen name="Ratings" component={Ratings} options={{ headerShown: false }} />
                             <Stack.Screen name="Termpolicies" component={Termpolicies} options={{ headerShown: false }} />
+                            <Stack.Screen name="Map" component={Map} options={{ headerShown: false }} />
                             {/* Add other screens for Settings here */}
                         </Stack.Navigator>
                     )}

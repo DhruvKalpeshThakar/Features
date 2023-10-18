@@ -65,6 +65,9 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
         // this.props.navigation.navigate('SignUp')
         this.setState({ Developing: true });
     }
+    navigatetoMap = () => {
+        this.props.navigation.navigate('Map')
+    }
 
 
 
@@ -86,6 +89,7 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
 
     ratingandreviews = [
         { icon: "star", text: 'Rate us', action: this.navigatetoRating },
+        { icon: "map", text: 'Find us', action: this.navigatetoMap },
 
     ];
 
