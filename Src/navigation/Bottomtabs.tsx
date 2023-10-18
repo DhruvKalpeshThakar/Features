@@ -7,10 +7,14 @@ import Chat from "../Screens/Chat";
 import Media from "../Screens/Media";
 import Post from "../Screens/Post";
 import Settings from "../Screens/Settings";
+import Ratings from "../Screens/settings/Ratings";
 import { COLORS } from "../constants/color";
+import { createStackNavigator } from "@react-navigation/stack";
+import Termpolicies from "../Screens/settings/TermPolicies";
 
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 
 
@@ -33,75 +37,13 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
             </View>
         </TouchableOpacity>
     );
+
+
+
     render() {
         const { colorTheme } = this.state;
         return (
 
-            // <Tab.Navigator
-            //     initialRouteName="Home"
-            //     activeColor="#e91e63"
-
-            //     // barStyle={{ backgroundColor: 'tomato' }}
-            // >
-            //     <Tab.Screen
-            //         name="Home"
-            //         component={Home}
-
-            //         options={{
-
-            //             tabBarLabel: 'Home',
-            //             tabBarColor:'#0080ff',
-            //             tabBarIcon: ({ color }) => (
-            //                 <MaterialCommunityIcons name="home" color={color} size={26} />
-            //             ),
-            //         }}
-            //     />
-            //     <Tab.Screen
-            //         name="Chat"
-            //         component={Chat}
-            //         options={{
-            //             tabBarLabel: 'Chat',
-            //             tabBarColor:'#d81244',
-            //             tabBarIcon: ({ color }) => (
-            //                 <MaterialCommunityIcons name="bell" color={color} size={26} />
-            //             ),
-
-            //         }}
-            //     />
-            //     <Tab.Screen
-            //         name="Post"
-            //         component={Post}
-            //         options={{
-            //             tabBarLabel: "Post",
-            //             tabBarColor:'#11794d',
-            //             tabBarIcon: ({ color }) => (
-            //                 <MaterialCommunityIcons name="post" color={color} size={26} />
-            //             ),
-            //         }}
-            //     />
-            //     <Tab.Screen
-            //         name="Media"
-            //         component={Media}
-            //         options={{
-            //             tabBarLabel: 'Media',
-            //             tabBarColor:'#ff0000',
-            //             tabBarIcon: ({ color }) => (
-            //                 <MaterialCommunityIcons name="video-vintage" color={color} size={26} />
-            //             ),
-            //         }}
-            //     />
-            //     <Tab.Screen
-            //         name="Settings"
-            //         component={Settings}
-            //         options={{
-            //             tabBarLabel: 'Settings',
-            //             tabBarColor:'#5d5d',
-            //             tabBarIcon: ({ color }) => (
-            //                 <MaterialCommunityIcons name="account-settings" color={color} size={26} />
-            //             ),
-            //         }}
-            //     />
-            // </Tab.Navigator>
 
             <Tab.Navigator screenOptions={{
                 tabBarShowLabel: false,
@@ -184,7 +126,7 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                         </View>
                     ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
-                <Tab.Screen name="Settings" component={Settings} options={{
+                <Tab.Screen name="Settings" options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
                             <Image source={require('../assets/settings.png')}
@@ -198,7 +140,16 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                             <Text style={{ color: focused ? COLORS.red : COLORS.cyan, fontSize: 12 }}>Settings</Text>
                         </View>
                     ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black, headerShown: false
-                }} />
+                }}>
+                    {() => (
+                        <Stack.Navigator>
+                            <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+                            <Stack.Screen name="Ratings" component={Ratings} options={{ headerShown: false }} />
+                            <Stack.Screen name="Termpolicies" component={Termpolicies} options={{ headerShown: false }} />
+                            {/* Add other screens for Settings here */}
+                        </Stack.Navigator>
+                    )}
+                </Tab.Screen>
             </Tab.Navigator>
         )
     }
@@ -236,3 +187,68 @@ const styles = StyleSheet.create({
 })
 
 export default Bottomtabs
+// <Tab.Navigator
+//     initialRouteName="Home"
+//     activeColor="#e91e63"
+
+//     // barStyle={{ backgroundColor: 'tomato' }}
+// >
+//     <Tab.Screen
+//         name="Home"
+//         component={Home}
+
+//         options={{
+
+//             tabBarLabel: 'Home',
+//             tabBarColor:'#0080ff',
+//             tabBarIcon: ({ color }) => (
+//                 <MaterialCommunityIcons name="home" color={color} size={26} />
+//             ),
+//         }}
+//     />
+//     <Tab.Screen
+//         name="Chat"
+//         component={Chat}
+//         options={{
+//             tabBarLabel: 'Chat',
+//             tabBarColor:'#d81244',
+//             tabBarIcon: ({ color }) => (
+//                 <MaterialCommunityIcons name="bell" color={color} size={26} />
+//             ),
+
+//         }}
+//     />
+//     <Tab.Screen
+//         name="Post"
+//         component={Post}
+//         options={{
+//             tabBarLabel: "Post",
+//             tabBarColor:'#11794d',
+//             tabBarIcon: ({ color }) => (
+//                 <MaterialCommunityIcons name="post" color={color} size={26} />
+//             ),
+//         }}
+//     />
+//     <Tab.Screen
+//         name="Media"
+//         component={Media}
+//         options={{
+//             tabBarLabel: 'Media',
+//             tabBarColor:'#ff0000',
+//             tabBarIcon: ({ color }) => (
+//                 <MaterialCommunityIcons name="video-vintage" color={color} size={26} />
+//             ),
+//         }}
+//     />
+//     <Tab.Screen
+//         name="Settings"
+//         component={Settings}
+//         options={{
+//             tabBarLabel: 'Settings',
+//             tabBarColor:'#5d5d',
+//             tabBarIcon: ({ color }) => (
+//                 <MaterialCommunityIcons name="account-settings" color={color} size={26} />
+//             ),
+//         }}
+//     />
+// </Tab.Navigator>

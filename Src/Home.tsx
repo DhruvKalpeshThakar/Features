@@ -142,56 +142,9 @@ class Home extends Component<{ route: any }, Pageone>{
 
                         <Image source={require('../Src/assets/bcci1.png')} style={[styles.logo, { height: '18%', width: '60%' }]} />
 
-                        <TouchableOpacity style={{ alignItems: 'center', }} activeOpacity={0.5} onPress={() => { this.setState({ isshowModal: true }) }}>
-                            <Text style={{ borderBottomColor: COLORS.black, borderBottomWidth: 1, color: COLORS.black, fontSize: 18, fontWeight: 'bold' }}>Have any Queries?</Text>
-                        </TouchableOpacity>
+
                     </SafeAreaView>
 
-
-                    <Modal isOpen={this.state.isshowModal} onClose={() => this.setState({ isshowModal: false })} >
-                        <Modal.Content width={screenWidth / 1.1} >
-                            <Modal.CloseButton />
-                            <Modal.Header style={{ alignItems: 'center', }}><Text style={{ fontSize: 25, color: COLORS.black, fontFamily: 'YoungSerif-Regular' }}>Contact Us</Text></Modal.Header>
-                            <Modal.Body style={{ backgroundColor: '#00abc4' }}>
-                                <View>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={[styles.contacttext]}>Email : </Text>
-                                        <TouchableOpacity onPress={() => { Linking.openURL('mailto:hellodemo123@gmail.com') }}>
-                                            <Text style={[styles.contacttext, { color: COLORS.white, fontSize: 17, borderBottomColor: COLORS.black, borderBottomWidth: 1 }]}>hellodemo123@gmail.com</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={[styles.contacttext, { fontFamily: 'YoungSerif-Regular' }]}>Address : </Text>
-                                        <TouchableOpacity onPress={() => { Linking.openURL('https://maps.app.goo.gl/6ZR57KHRi4Vgt8WE6') }}>
-                                            {/* <WebView source={{ uri: 'https://maps.app.goo.gl/XQSrKsEeivAjZeBm8' }} style={{ flex: 1 }} /> */}
-                                            <Text style={[styles.contacttext, { color: COLORS.white, fontSize: 17, borderBottomColor: COLORS.black, borderBottomWidth: 1 }]}>Sola,Ahmedabad</Text>
-                                        </TouchableOpacity>
-                                    </View>
-
-                                </View>
-                            </Modal.Body>
-                            <Modal.Footer style={{ alignSelf: 'center' }}>
-                                <Button
-
-                                    title="Connect with us"
-                                    color="#f194ff"
-
-                                    onPress={() => {
-                                        Linking.openURL('tel:9874598754')
-                                        this.setState({ isshowModal: false })
-                                    }}
-
-
-                                />
-                                {/* <Button
-                                    title="OK"
-                                    color="#f194ff"
-                                    onPress={() => this.setState({ isshowModal: false })}
-                                /> */}
-
-                            </Modal.Footer>
-                        </Modal.Content>
-                    </Modal>
                 </View >
             </LinearGradient >
 
@@ -244,11 +197,6 @@ const styles = StyleSheet.create({
     },
     buttonClose: {
         backgroundColor: '#2196F3',
-    },
-    contacttext: {
-        color: '#000',
-        fontSize: 18,
-        fontFamily: 'YoungSerif-Regular'
     },
     item: {
         width: '100%',

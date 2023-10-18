@@ -7,7 +7,7 @@ import { NativeBaseProvider } from 'native-base';
 import React, { Component } from "react";
 import {
   StatusBar,
-  StyleSheet, Appearance
+  StyleSheet, Appearance, LogBox
 } from "react-native";
 import AuthStack from "./Src/navigation/AuthStack";
 import SplashScreen from "./Src/SplashScreen";
@@ -15,6 +15,7 @@ import AppStack from "./Src/navigation/AppStack";
 import WelcomeScreen from "./Src/Screens/WelcomeScreen";
 import { View } from "react-native";
 import { Text } from "react-native";
+import Ratings from "./Src/Screens/settings/Ratings";
 
 interface ConnectionCheck {
   isConnected: boolean;
@@ -43,6 +44,8 @@ class App extends Component<{}, ConnectionCheck> {
           this.setState({ showOnline: false });
         }, 3000); // 3000 milliseconds (3 seconds)
       }
+
+      LogBox.ignoreLogs(['In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.']);
     });
 
     // Unsubscribe
@@ -61,9 +64,8 @@ class App extends Component<{}, ConnectionCheck> {
 
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+
           <AppStack />
-
-
           {/* <AuthStack /> */}
 
         </NavigationContainer>

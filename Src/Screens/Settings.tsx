@@ -40,14 +40,15 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
         this.setState({ Developing: true });
     }
     navigateToTermsnPolicies = () => {
-        this.setState({ Developing: true });
+
+        // this.setState({ Developing: true });
+        this.props.navigation.navigate('Termpolicies')
     }
-    navigateToFreeSpace = () => {
-        this.setState({ Developing: true });
+    navigatetoRating = () => {
+        // this.setState({ Developing: true });
+        this.props.navigation.navigate('Ratings')
     }
-    navigatetoDataSaver = () => {
-        this.setState({ Developing: true });
-    }
+
     navigateToReportProblem = () => {
         Alert.alert('Confirmation', 'Report a Problem?', [
             {
@@ -83,9 +84,9 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
 
     ];
 
-    cacheandcellularItems = [
-        { icon: "delete-outline", text: 'Free Up Space', action: this.navigateToFreeSpace },
-        { icon: "save-alt", text: 'Data Saver', action: this.navigatetoDataSaver },
+    ratingandreviews = [
+        { icon: "star", text: 'Rate us', action: this.navigatetoRating },
+
     ];
 
     actionItems = [
@@ -97,9 +98,9 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
 
 
     renderSettingsItem = ({ icon, text, action }: { icon: string, text: string, action: () => void }) => (
-        <TouchableOpacity onPress={action} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8, paddingLeft: 12 }}>
+        <TouchableOpacity onPress={action} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8, paddingLeft: 12, borderBottomColor: COLORS.black, borderBottomWidth: 1 }}>
             <MaterialIcons name={icon} size={24} color={'black'} />
-            <Text style={{ marginLeft: 36, fontWeight: '600', fontSize: 16 }}>{text}</Text>
+            <Text style={{ marginLeft: 36, fontWeight: '600', fontSize: 16, color: COLORS.black }}>{text}</Text>
         </TouchableOpacity>
     );
 
@@ -162,83 +163,84 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
             //     </ScrollView>
             //     {/* </ImageBackground> */}
             // </SafeAreaView>
-            <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-                <View style={{
-                    marginHorizontal: 13,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+            <SafeAreaView style={{ flex: 1, backgroundColor: colorTheme == 'dark' ? COLORS.black : COLORS.white }}>
+                <ScrollView style={{ marginBottom: '30%' }}>
+                    <View style={{
+                        marginHorizontal: 13,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
 
-                }}>
-                    <TouchableOpacity onPress={() => { this.props.navigation.goBack() }} style={{ position: 'absolute', left: 0 }}>
-                        <MaterialIcons name="keyboard-arrow-left" size={26} color={COLORS.black} />
-                    </TouchableOpacity>
-                    <Text style={{ fontSize: 22, color: COLORS.black, textAlign: 'center' }}>Settings</Text>
-                </View>
-
-                {/* Account Settings */}
-
-                <View style={{ marginBottom: 12 }}>
-                    <Text style={{ marginVertical: 10 }}> Account</Text>
-
-                    <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
-                        {
-                            this.accountItems.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    {this.renderSettingsItem(item)}
-                                </React.Fragment>
-                            ))
-                        }
+                    }}>
+                        <TouchableOpacity onPress={() => { this.props.navigation.goBack() }} style={{ position: 'absolute', left: 0 }}>
+                            <MaterialIcons name="keyboard-arrow-left" size={26} color={COLORS.black} />
+                        </TouchableOpacity>
+                        <Text style={{ fontSize: 22, color: colorTheme == 'dark' ? COLORS.white : COLORS.black, textAlign: 'center' }}>Settings</Text>
                     </View>
-                </View>
 
-                {/* Support and About Settings */}
-                <View style={{ marginBottom: 12 }}>
-                    <Text style={{ marginVertical: 10 }}> Support and About</Text>
+                    {/* Account Settings */}
 
-                    <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
-                        {
-                            this.supportItems.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    {this.renderSettingsItem(item)}
-                                </React.Fragment>
-                            ))
-                        }
+                    <View style={{ marginBottom: 12 }}>
+                        <Text style={{ marginVertical: 10, fontSize: 20, fontWeight: 'bold', color: colorTheme == 'dark' ? COLORS.white : COLORS.black }}> Account</Text>
+
+                        <View style={{ borderRadius: 12, backgroundColor: COLORS.white, }}>
+                            {
+                                this.accountItems.map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        {this.renderSettingsItem(item)}
+                                    </React.Fragment>
+                                ))
+                            }
+                        </View>
                     </View>
-                </View>
 
-                {/* Cache and Cellular */}
+                    {/* Support and About Settings */}
+                    <View style={{ marginBottom: 12 }}>
+                        <Text style={{ marginVertical: 10, color: colorTheme == 'dark' ? COLORS.white : COLORS.black, fontSize: 20, fontWeight: 'bold' }}> Support and About</Text>
 
-                <View style={{ marginBottom: 12 }}>
-                    <Text style={{ marginVertical: 10 }}> Cache and Cellular</Text>
-
-                    <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
-                        {
-                            this.cacheandcellularItems.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    {this.renderSettingsItem(item)}
-                                </React.Fragment>
-                            ))
-                        }
+                        <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
+                            {
+                                this.supportItems.map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        {this.renderSettingsItem(item)}
+                                    </React.Fragment>
+                                ))
+                            }
+                        </View>
                     </View>
-                </View>
 
-                {/* Action Settings */}
-                <View style={{ marginBottom: 12 }}>
-                    <Text style={{ marginVertical: 10 }}> Actions</Text>
+                    {/* Cache and Cellular */}
 
-                    <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
-                        {
-                            this.actionItems.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    {this.renderSettingsItem(item)}
-                                </React.Fragment>
-                            ))
-                        }
+                    <View style={{ marginBottom: 12 }}>
+                        <Text style={{ marginVertical: 10, color: colorTheme == 'dark' ? COLORS.white : COLORS.black, fontSize: 20, fontWeight: 'bold' }}>Rating and Reviews</Text>
+
+                        <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
+                            {
+                                this.ratingandreviews.map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        {this.renderSettingsItem(item)}
+                                    </React.Fragment>
+                                ))
+                            }
+                        </View>
                     </View>
-                </View>
 
-                {/* {this.state.Developing &&
+                    {/* Action Settings */}
+                    <View style={{ marginBottom: 12 }}>
+                        <Text style={{ marginVertical: 10, fontSize: 20, fontWeight: 'bold', color: colorTheme == 'dark' ? COLORS.white : COLORS.black }}> Actions</Text>
+
+                        <View style={{ borderRadius: 12, backgroundColor: COLORS.white }}>
+                            {
+                                this.actionItems.map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        {this.renderSettingsItem(item)}
+                                    </React.Fragment>
+                                ))
+                            }
+                        </View>
+                    </View>
+
+                    {/* {this.state.Developing &&
                     <View style={styles.modal}>
                         <View style={styles.body}>
                             <Image source={{ uri: "https://static.vecteezy.com/system/resources/thumbnails/011/858/556/small/green-check-mark-icon-with-circle-tick-box-check-list-circle-frame-checkbox-symbol-sign-png.png" }} style={{ width: '30%', height: '30%', alignSelf: 'center', marginTop: 15 }} />
@@ -256,21 +258,21 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
                             </View>
                         </View>
                     </View>
-
+                    
                 } */}
-                <CustomAlert
-                    visible={this.state.Developing}
-                    title="Warning"
-                    message="This Module is Under Development"
-                    onConfirm={() => {
-                        // Add any code you want to execute when the user confirms the alert
-                        this.setState({ Developing: false });
-                    }}
-                // onCancel={() => {
-                //     this.setState({ Developing: false });
-                // }}
-                />
-
+                    <CustomAlert
+                        visible={this.state.Developing}
+                        title="Warning"
+                        message="This Module is Under Development"
+                        onConfirm={() => {
+                            // Add any code you want to execute when the user confirms the alert
+                            this.setState({ Developing: false });
+                        }}
+                    // onCancel={() => {
+                    //     this.setState({ Developing: false });
+                    // }}
+                    />
+                </ScrollView>
             </SafeAreaView>
         );
     }

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { COLORS } from "../constants/color";
 
 interface CustomAlertProps {
     visible: boolean;
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
     message: {
         fontSize: 16,
         marginVertical: 10,
+        color: COLORS.black
     },
     buttonContainer: {
         flexDirection: "row",
