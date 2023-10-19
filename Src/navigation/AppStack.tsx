@@ -9,11 +9,12 @@ import CustomDrawer from '../Components/CustomDrawer';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import { COLORS } from '../constants/color';
+import Map from '../Map';
 
 
 const Drawer = createDrawerNavigator()
 
-class AppStack extends Component<{  }, { colorTheme: any }>{
+class AppStack extends Component<{}, { colorTheme: any }>{
     constructor(props: any) {
 
         super(props);
@@ -59,6 +60,12 @@ class AppStack extends Component<{  }, { colorTheme: any }>{
                 <Drawer.Screen name='Favourites' component={Favourites} options={{
                     drawerIcon: ({ color }) =>
                         (<FontAwesome5 name='star' size={22} color={color} />),
+                    headerStyle: { backgroundColor: colorTheme == 'dark' ? COLORS.black : COLORS.white },
+                    headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
+                }} />
+                <Drawer.Screen name='Map' component={Map} options={{
+                    drawerIcon: ({ color }) =>
+                        (<FontAwesome5 name='map-marked-alt' size={22} color={color} />),
                     headerStyle: { backgroundColor: colorTheme == 'dark' ? COLORS.black : COLORS.white },
                     headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
