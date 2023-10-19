@@ -16,7 +16,7 @@ class Map extends Component<{}, Maps>{
         super(props);
         this.state = {
             MLat: 23.07813,
-            MLong: 72.50786     
+            MLong: 72.50786 
         }
     }
 

@@ -1,6 +1,6 @@
 import { Modal } from 'native-base';
 import React, { Component } from 'react';
-import { Button, Dimensions, FlatList, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, BackHandler, Button, Dimensions, FlatList, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -16,6 +16,14 @@ interface Item {
 
 }
 
+interface API {
+    albumId: number;
+    id: number;
+    title: string;
+    url: string;
+    thumbnailUrl: string
+}
+
 
 interface Pageone {
     refreshing: boolean
@@ -25,7 +33,8 @@ interface Pageone {
     itemWidth: number;
     data: Item[];
     isEnabled: boolean,
-    text: string
+    text: string,
+    Apidata: API[]
 }
 
 class Home extends Component<{ route: any }, Pageone>{
@@ -39,6 +48,7 @@ class Home extends Component<{ route: any }, Pageone>{
             itemWidth: 1,
             isEnabled: false,
             text: 'Cricket Mode Off',
+            Apidata: [],
             data: [
                 {
                     title: 'Shikhar Dhawan',
@@ -84,7 +94,8 @@ class Home extends Component<{ route: any }, Pageone>{
         // console.log(
         //     "Email :", this.props.route.params.email, ",",
         //     "Password : ", this.props.route.params.pass,);
-
+        this.APIData()
+        BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
 
         const sliderWidth = this.state.screenWidth;
         const itemWidth = this.state.screenWidth * 0.8;
@@ -93,7 +104,33 @@ class Home extends Component<{ route: any }, Pageone>{
         this.setState({ sliderWidth, itemWidth });
     }
 
+    componentWillUnmount() {
+        // Remove the event listener when the component unmounts
+        BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
+    }
 
+    handleBackPress = () => {
+        // Display an alert before exiting the app
+        Alert.alert(
+            "Exit App",
+            "Are you sure you want to exit?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => { },
+                    style: "cancel",
+                },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        BackHandler.exitApp(); // Close the app
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
+        return true; // Prevent default behavior (e.g., navigating back)
+    }
 
 
 
@@ -140,6 +177,22 @@ class Home extends Component<{ route: any }, Pageone>{
         );
     };
 
+    APIData = async () => {
+        const url = 'https://jsonplaceholder.typicode.com/photos'
+        try {
+            let response = await fetch(url);
+            if (response.ok) {
+                let result = await response.json();
+                this.setState({ Apidata: result });
+            } else {
+                console.error("API request failed");
+            }
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
+    }
+
+
 
     render() {
 
@@ -182,9 +235,29 @@ class Home extends Component<{ route: any }, Pageone>{
 
                     </View >
                     :
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 25, color: COLORS.black }}>Toggle Mode Off</Text>
+                    <View style={{ flex: 1 }}>
 
+                        {this.state.Apidata.length > 0 ?
+
+
+                            <FlatList
+                                data={this.state.Apidata}
+                                renderItem={({ item }) =>
+                                    <View style={{ flex: 1, marginTop: '10%' }}>
+                                        <Text style={{ fontSize: 30, color: COLORS.black }}>{item.id}</Text>
+                                        <Text style={{ fontSize: 30, color: COLORS.black }}>{item.title}</Text>
+                                        <Image source={require('./assets/banners/food-1.jpg')} style={{ height: 200, width: '80%', alignSelf: 'center' }} />
+                                        {/* <Text style={{ fontSize: 30 }}>{item.url}</Text>
+                                            <Text style={{ fontSize: 30 }}>{item.thumbnailUrl}</Text> */}
+                                    </View>
+                                }
+                            />
+
+
+                            :
+
+                            <Text style={{ fontSize: 25, color: COLORS.black }}>FlatList Data</Text>
+                        }
                     </View>
                 }
             </LinearGradient >
