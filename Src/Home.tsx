@@ -252,8 +252,6 @@ class Home extends Component<{ route: any }, Pageone>{
                                     </View>
                                 }
                             />
-
-
                             :
 
                             <Text style={{ fontSize: 25, color: COLORS.black }}>FlatList Data</Text>

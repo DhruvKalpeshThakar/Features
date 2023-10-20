@@ -30,8 +30,9 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
     navigateToNotifications = () => {
         this.setState({ Developing: true });
     }
-    navigateToPrivacy = () => {
-        this.setState({ Developing: true });
+    navigateToScanner = () => {
+        // this.setState({ Developing: true });
+        this.props.navigation.navigate('Privacy');
     }
     navigateToSubscription = () => {
         this.setState({ Developing: true });
@@ -61,6 +62,9 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
     navigateToAddAccount = () => {
         this.setState({ Developing: true });
     }
+    navigateToPrivacy = () => {
+        this.setState({ Developing: true });
+    }
     navigateTologout = () => {
         // this.props.navigation.navigate('SignUp')
         this.setState({ Developing: true });
@@ -75,6 +79,7 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
         { icon: "person-outline", text: 'Edit Profile', action: this.navigateToEditProfile },
         { icon: "security", text: 'Security', action: this.navigateToSecurity },
         { icon: "notifications-none", text: 'Notifications', action: this.navigateToNotifications },
+        { icon: "qr-code-scanner", text: 'Scanner', action: this.navigateToScanner },
         { icon: "lock-outline", text: 'Privacy', action: this.navigateToPrivacy },
     ];
 
@@ -87,7 +92,7 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
 
     ratingandreviews = [
         { icon: "star", text: 'Rate us', action: this.navigatetoRating },
-        
+
 
     ];
 
