@@ -18,7 +18,9 @@ class CustomDrawer extends Component<{ props: any }, { colorTheme: any }>{
         try {
             const result = await Share.share({
                 title: 'Hello',
-                url: 'https://youtu.be/TGTNBxbFHRY?si=zLwctur8_ZHpO1MN',
+                message: 'Subscribe to Channel: https://youtube.com/@KnowledgeWorld22?si=TxK5CprQwQRSEKHv'
+
+                // url: 'https://youtu.be/TGTNBxbFHRY?si=zLwctur8_ZHpO1MN',
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {

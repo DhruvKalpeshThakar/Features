@@ -204,7 +204,7 @@ class Home extends Component<{ route: any }, Pageone>{
                     justifyContent: 'center',
 
                 }}>
-                    <Text style={{ fontWeight: 'bold', margin: 20, color: COLORS.black }}>{this.state.text}</Text>
+                    <Text style={{ fontWeight: 'bold', margin: 10, color: COLORS.red, fontSize: 20, }}>{this.state.text}</Text>
                     <Switch
                         trackColor={{ false: COLORS.grey, true: COLORS.blue }}
                         thumbColor={this.state.isEnabled ? COLORS.white : COLORS.white}
@@ -243,10 +243,12 @@ class Home extends Component<{ route: any }, Pageone>{
                             <FlatList
                                 data={this.state.Apidata}
                                 renderItem={({ item }) =>
-                                    <View style={{ flex: 1, marginTop: '10%' }}>
-                                        <Text style={{ fontSize: 30, color: COLORS.black }}>{item.id}</Text>
-                                        <Text style={{ fontSize: 30, color: COLORS.black }}>{item.title}</Text>
-                                        <Image source={require('./assets/banners/food-1.jpg')} style={{ height: 200, width: '80%', alignSelf: 'center' }} />
+                                    <View style={{ flex: 1, marginTop: '10%', borderBottomColor: COLORS.black, borderBottomWidth: 2 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                                            <Text style={{ fontSize: 25, color: COLORS.black, textAlign: 'center', fontWeight: 'bold', }}>{item.id})</Text>
+                                            <Image source={require('./assets/banners/food-1.jpg')} style={{ height: 200, width: '90%', alignSelf: 'center' }} />
+                                        </View>
+                                        <Text style={{ fontSize: 25, color: COLORS.black, textAlign: 'center', fontFamily: 'YoungSerif-Regular' }}>{item.title}</Text>
                                         {/* <Text style={{ fontSize: 30 }}>{item.url}</Text>
                                             <Text style={{ fontSize: 30 }}>{item.thumbnailUrl}</Text> */}
                                     </View>
