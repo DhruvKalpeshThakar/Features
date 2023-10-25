@@ -1,11 +1,10 @@
-import { Modal } from 'native-base';
 import React, { Component } from 'react';
-import { Alert, BackHandler, Button, Dimensions, FlatList, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import { Alert, BackHandler, Dimensions, FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Switch, Text, View, ActivityIndicator } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Carousel from 'react-native-snap-carousel';
 import { COLORS } from './constants/color';
-import { Switch } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -17,11 +16,14 @@ interface Item {
 }
 
 interface API {
-    albumId: number;
     id: number;
+    category: string;
+    description: string;
     title: string;
     url: string;
-    thumbnailUrl: string
+    image: string;
+    price: number;
+
 }
 
 
@@ -34,10 +36,14 @@ interface Pageone {
     data: Item[];
     isEnabled: boolean,
     text: string,
-    Apidata: API[]
+    Apidata: API[],
+    tooltipText: string,
+    isTooltipVisible: boolean;
+    isLoading: boolean;
+
 }
 
-class Home extends Component<{ route: any }, Pageone>{
+class Home extends Component<{ route: any, }, Pageone>{
     constructor(props: any) {
         super(props);
         this.state = {
@@ -47,7 +53,10 @@ class Home extends Component<{ route: any }, Pageone>{
             sliderWidth: 1,
             itemWidth: 1,
             isEnabled: false,
+            isTooltipVisible: false,
             text: 'Cricket Mode Off',
+            tooltipText: 'Tap to Change',
+            isLoading: false,
             Apidata: [],
             data: [
                 {
@@ -177,22 +186,84 @@ class Home extends Component<{ route: any }, Pageone>{
         );
     };
 
-    APIData = async () => {
-        const url = 'https://jsonplaceholder.typicode.com/photos'
-        try {
-            let response = await fetch(url);
-            if (response.ok) {
-                let result = await response.json();
-                this.setState({ Apidata: result });
-            } else {
-                console.error("API request failed");
-            }
-        } catch (error) {
-            console.error("An error occurred:", error);
-        }
+    APIData = () => {
+        this.setState({ isLoading: true })
+        fetch('https://fakestoreapi.com/products')
+            .then(res => res.json())
+            .then(json => {
+                this.setState({ Apidata: json });
+                this.setState({ isLoading: false });
+            })
+            .catch(error => {
+                console.error(error);
+
+            })
+
+    }
+    // APIData = async () => {
+    //     const url = 'https://fakestoreapi.com/products'
+    //     try {
+    //         let response = await fetch(url);
+    //         if (response.ok) {
+    //             let result = await response.json();
+    //             this.setState({ Apidata: result });
+    //         } else {
+    //             console.error("API request failed");
+    //         }
+    //     } catch (error) {
+    //         console.error("An error occurred:", error);
+    //     }
+    // }
+
+    leftSwipe = () => {
+        return (
+            <View style={{ backgroundColor: COLORS.white, height: 100, flexDirection: 'row' }}>
+                {/* <Text>Delete</Text> */}
+                <TouchableOpacity style={{ width: 100, height: 100, backgroundColor: COLORS.red, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('../Src/assets/Delete.png')} style={{ width: 30, height: 30, tintColor: COLORS.white }} />
+
+                </TouchableOpacity>
+                <TouchableOpacity style={{ width: 100, height: 100, backgroundColor: COLORS.blue, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('../Src/assets/Edit.png')} style={{ width: 30, height: 30, tintColor: COLORS.white }} />
+
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    rightSwipe = () => {
+        return (
+            <View style={{ backgroundColor: COLORS.white, height: 100, }}>
+                {/* <Text>Delete</Text> */}
+                <TouchableOpacity style={{ width: 100, height: 100, backgroundColor: COLORS.green, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('../Src/assets/fav.png')} style={{ width: 30, height: 30, tintColor: COLORS.white }} />
+
+                </TouchableOpacity>
+
+            </View>
+        )
     }
 
 
+    toggleTooltip = () => {
+        this.setState({ isTooltipVisible: !this.state.isTooltipVisible });
+    }
+
+    ItemView = ({ item }) => {
+
+        return (
+            <Swipeable renderLeftActions={this.leftSwipe} renderRightActions={this.rightSwipe} containerStyle={{ marginTop: 10 }} >
+                <View style={styles.ItemView}>
+                    <Image source={{ uri: item.image }} style={styles.productImage} />
+                    <View style={styles.nameview}>
+                        <Text style={{ color: COLORS.black, fontFamily: 'YoungSerif-Regular' }}>{item.title.length > 30 ? item.title.substring(0, 20) + '...' : item.title}</Text>
+                        <Text style={{ color: COLORS.black }}>{item.description.length > 30 ? item.description.substring(0, 20) + '...' : item.description}</Text>
+                        <Text style={styles.price}>{'$' + item.price}</Text>
+                    </View>
+                </View>
+            </Swipeable>
+        )
+    }
 
     render() {
 
@@ -202,9 +273,20 @@ class Home extends Component<{ route: any }, Pageone>{
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
-
                 }}>
-                    <Text style={{ fontWeight: 'bold', margin: 10, color: COLORS.red, fontSize: 20, }}>{this.state.text}</Text>
+                    {/* <View style={{flex:1}}>
+                        <TouchableOpacity onPress={this.toggleTooltip}>
+                            <Text>Show Tooltip</Text>
+                        </TouchableOpacity>
+
+                        <Tooltip
+                            isVisible={this.state.isTooltipVisible}
+                            content={<Text>{this.props.tooltipText}</Text>}
+                            onBackdropPress={this.toggleTooltip}
+                        />
+                    </View> */}
+
+                    <Text style={{ fontWeight: 'bold', margin: 10, color: this.state.isEnabled ? COLORS.red : COLORS.grey, fontSize: 20, }}>{this.state.text}</Text>
                     <Switch
                         trackColor={{ false: COLORS.grey, true: COLORS.blue }}
                         thumbColor={this.state.isEnabled ? COLORS.white : COLORS.white}
@@ -212,6 +294,7 @@ class Home extends Component<{ route: any }, Pageone>{
                         value={this.state.isEnabled}
 
                     />
+
                 </View>
                 {this.state.isEnabled ?
 
@@ -239,26 +322,23 @@ class Home extends Component<{ route: any }, Pageone>{
 
                         {this.state.Apidata.length > 0 ?
 
+                            <View style={{ marginBottom: '30%' }}>
+                                <FlatList
+                                    data={this.state.Apidata}
+                                    renderItem={this.ItemView}
+                                    keyExtractor={(item) => item.id.toString()}
+                                />
+                            </View>
 
-                            <FlatList
-                                data={this.state.Apidata}
-                                renderItem={({ item }) =>
-                                    <View style={{ flex: 1, marginTop: '10%', borderBottomColor: COLORS.black, borderBottomWidth: 2 }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                                            <Text style={{ fontSize: 25, color: COLORS.black, textAlign: 'center', fontWeight: 'bold', }}>{item.id})</Text>
-                                            <Image source={require('./assets/banners/food-1.jpg')} style={{ height: 200, width: '90%', alignSelf: 'center' }} />
-                                        </View>
-                                        <Text style={{ fontSize: 25, color: COLORS.black, textAlign: 'center', fontFamily: 'YoungSerif-Regular' }}>{item.title}</Text>
-                                        {/* <Text style={{ fontSize: 30 }}>{item.url}</Text>
-                                            <Text style={{ fontSize: 30 }}>{item.thumbnailUrl}</Text> */}
-                                    </View>
-                                }
-                            />
                             :
 
                             <Text style={{ fontSize: 25, color: COLORS.black }}>FlatList Data</Text>
                         }
                     </View>
+                }
+                {this.state.isLoading ?
+                    <ActivityIndicator color={COLORS.white} style={{ marginLeft: 8 }} />
+                    : null
                 }
             </LinearGradient >
 
@@ -303,6 +383,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%', // Adjust the image height as needed
         resizeMode: 'cover',
+    },
+    productImage: {
+        width: 100,
+        height: 100
     },
     button: {
         borderRadius: 20,
@@ -356,6 +440,24 @@ const styles = StyleSheet.create({
         width: '70%',
         height: '18%'
 
+    },
+    ItemView: {
+        width: '100%',
+        height: 100,
+        backgroundColor: '#fff',
+        alignSelf: 'center',
+        // marginTop: 10,
+        flexDirection: 'row'
+    },
+    nameview: {
+        paddingLeft: 20,
+        paddingRight: 10
+    },
+    price: {
+        fontSize: 20,
+        color: COLORS.green,
+        fontWeight: '800',
+        marginTop: 10
     }
 })
 

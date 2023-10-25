@@ -10,5 +10,6 @@ export const COLORS = {
     blue: '#0080ff',
     Orange: '#d2610d',
     pink: "#f194ff",
-    lightpink: '#f9c2ff'
+    lightpink: '#f9c2ff',
+    green: '#00b000'
 }
