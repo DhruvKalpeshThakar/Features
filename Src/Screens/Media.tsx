@@ -25,6 +25,7 @@ class Media extends Component<{}, MediaState> {
 
     async componentDidMount() {
         LogBox.ignoreLogs(['No task registered for key TrackPlayer']);
+        LogBox.ignoreLogs(['Possible Unhandled Promise Rejection']);
         // Set up the player
         await TrackPlayer.setupPlayer();
 
@@ -104,7 +105,8 @@ class Media extends Component<{}, MediaState> {
     };
 
 
-    async onDisplayNotification() {
+    async displayNotification() {
+
         // Request permissions (required for iOS)
         await notifee.requestPermission();
 
@@ -116,16 +118,20 @@ class Media extends Component<{}, MediaState> {
 
         // Display a notification
         await notifee.displayNotification({
-            title: 'Demo Notification Title',
-            body: 'Main body content of the notification',
+
+            title: 'Hey Cricket Lover',
+            body: 'These duo are the Mighties in the World.',
             android: {
                 channelId,
-                smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+                style: { type: AndroidStyle.BIGPICTURE, picture: 'https://imgk.timesnownews.com/story/Kohli-Dhoni-PTI_2.jpg' },
+                // autoCancel: false,
+                showTimestamp: true,
+                // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
                 // pressAction is needed if you want the notification to open the app when pressed
                 pressAction: {
                     id: 'default',
+
                 },
-                style: { type: AndroidStyle.BIGPICTURE, picture: 'https://cdn.mos.cms.futurecdn.net/ntFmJUZ8tw3ULD3tkBaAtf.jpg' },
             },
         });
     }
@@ -151,7 +157,7 @@ class Media extends Component<{}, MediaState> {
                     <Button title="Previous" onPress={this.prevTrack} /> */}
                     </View>
                     <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: '3%' }}>
-                        <Button title="Display Notification" onPress={() => this.onDisplayNotification()} />
+                        <Button title="Display Notification" onPress={() => this.displayNotification()} />
                     </View>
                 </ImageBackground>
             </SafeAreaView>
