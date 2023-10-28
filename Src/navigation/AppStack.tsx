@@ -10,6 +10,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import { COLORS } from '../constants/color';
 import Map from '../Map';
+import ChatWithUs from '../Screens/ChatWithUs';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 
 const Drawer = createDrawerNavigator()
@@ -68,6 +70,13 @@ class AppStack extends Component<{}, { colorTheme: any }>{
                         (<FontAwesome5 name='map-marked-alt' size={22} color={color} />),
                     headerStyle: { backgroundColor: colorTheme == 'dark' ? COLORS.black : COLORS.white },
                     headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
+                }} />
+                <Drawer.Screen name='Chat with us' component={ChatWithUs} options={{
+                    drawerIcon: ({ color }) =>
+                        (<Entypo name='chat' size={22} color={color} />),
+                    headerStyle: { backgroundColor: colorTheme == 'dark' ? COLORS.black : COLORS.white },
+                    headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black,
+                    headerShown: false
                 }} />
             </Drawer.Navigator>
         )

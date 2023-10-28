@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { Appearance, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Appearance, Dimensions, FlatList, LogBox, StyleSheet, Text, View, Image } from "react-native";
 import { COLORS } from "../constants/color";
-import { Dimensions } from "react-native";
-import { FlatList } from "react-native";
-import { LogBox } from "react-native";
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import { ScrollView } from "react-native-gesture-handler";
+
 const { height, width } = Dimensions.get('window');
 
 interface Favourites {
     colorTheme: any,
-    data: any,
-    currentIndex: any,
+    carouselData: any[]
 }
 
 class Favourites extends Component<{}, Favourites>{
@@ -18,85 +17,59 @@ class Favourites extends Component<{}, Favourites>{
         super(props);
         this.state = {
             colorTheme: Appearance.getColorScheme(),
-            data: [1, 1, 1, 1, 1],
-            currentIndex: 0
+            carouselData: [
+                {
+                    id: "01",
+                    image: require("../assets/Slider1.jpg"),
+                },
+                {
+                    id: "02",
+                    image: require("../assets/Slider2.jpg"),
+                },
+                {
+                    id: "03",
+                    image: require("../assets/slider3.jpg"),
+                },
+                {
+                    id: "04",
+                    image: require("../assets/slider4.jpg"),
+                },
+                {
+                    id: "04",
+                    image: require("../assets/slider5.jpg"),
+                },
+            ]
         }
-
-
-
     }
-
 
     componentDidMount(): void {
         LogBox.ignoreAllLogs();
     }
 
+    screenWidth = Dimensions.get("window").width
+
 
     render() {
-        console.log("Current Index-----------------------------", this.state.currentIndex);
-        
+
         const { colorTheme } = this.state;
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View
-                    style={{
-                        height: height / 2 + 100,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-                    <FlatList
-                        data={this.state.data}
-                        showsHorizontalScrollIndicator={false}
-                        pagingEnabled
-                        onScroll={e => {
-                            const x = e.nativeEvent.contentOffset.x;
-                            this.setState({ currentIndex: ((x / width).toFixed(0)) });
-                        }}
-                        horizontal
-                        renderItem={({ item, index }) => {
-                            return (
-                                <View
-                                    style={{
-                                        width: width - 50,
-                                        height: height / 2,
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}>
-                                    <TouchableOpacity
-                                        disabled={true}
-                                        style={{
-                                            width: '90%',
-                                            height: '90%',
-                                            backgroundColor: 'green',
-                                            borderRadius: 10,
-                                        }}></TouchableOpacity>
-                                </View>
-                            );
-                        }}
-                    />
-                </View>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        width: width,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-                    {
-                        this.state.data.map((item: any, index: any) => {
-                            console.log(" Index-----------------------------", index);
-                            return (
-                                <View
-                                    style={{
-                                        width: this.currentIndex == index ? 30 : 8,
-                                        height: this.currentIndex == index ? 10 : 8,
-                                        borderRadius: this.currentIndex == index ? 5 : 4,
-                                        backgroundColor: this.currentIndex == index ? 'green' : COLORS.grey,
-                                        marginLeft: 5,
-                                    }}></View>
-                            );
-                        })}
-                </View>
+            <View>
+                <Text style={styles.carouseltext}> React Native Swiper Carousel</Text>
+                <SwiperFlatList
+                    autoplay
+                    autoplayDelay={5}
+                    autoplayLoop
+                    index={2}
+                    showPagination
+                    // paginationActiveColor={COLORS.Orange}
+                    data={this.state.carouselData}
+                    renderItem={({ item }) => (
+                        <View style={[styles.child, { backgroundColor: item }]}>
+                            <Image source={item.image} style={{ height: 300, width: this.screenWidth }} />
+                        </View>
+                    )}
+                />
+
             </View>
         )
     }
@@ -108,7 +81,26 @@ const styles = StyleSheet.create({
     },
     lightheme: {
         color: COLORS.black
-    }
+    },
+    carouseltext: {
+        fontWeight: 'bold',
+        color: COLORS.black,
+        fontSize: 20,
+        textAlign: 'center',
+        marginBottom: 10
+    },
+    container: {
+        flex: 1,
+        backgroundColor: 'white'
+    },
+    child: {
+        width,
+        justifyContent: 'center'
+    },
+    text: {
+        fontSize: width * 0.5,
+        textAlign: 'center'
+    },
 })
 
 export default Favourites;

@@ -329,7 +329,6 @@ class Home extends Component<{ route: any, }, Pageone>{
                                     keyExtractor={(item) => item.id.toString()}
                                 />
                             </View>
-
                             :
 
                             <Text style={{ fontSize: 25, color: COLORS.black }}>FlatList Data</Text>
