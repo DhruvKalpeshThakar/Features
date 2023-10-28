@@ -70,8 +70,8 @@ class App extends Component<{}, ConnectionCheck> {
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
 
-          <AppStack />
-          {/* <AuthStack /> */}
+          {/* <AppStack /> */}
+          <AuthStack />
 
         </NavigationContainer>
         {this.state.showOnline ? (

@@ -5,7 +5,7 @@ import Facebook from '../Src/assets/misc/facebook.svg';
 import Google from '../Src/assets/misc/google.svg';
 import Twitter from '../Src/assets/misc/twitter.svg';
 import { COLORS } from "./constants/color";
-// import auth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 
 
 
@@ -17,6 +17,8 @@ interface State {
     person: [string, number] //Tuple - of fixed Length
     showPassword: boolean
     colorTheme: any
+    initializing: boolean
+    user: any
 }
 
 
@@ -35,6 +37,8 @@ class Signup extends React.Component<{ navigation: any }, State> {
             person: ["John", 35],
             showPassword: false,
             colorTheme: Appearance.getColorScheme(),
+            initializing: true,
+            user: null
         };
     }
 
@@ -61,10 +65,14 @@ class Signup extends React.Component<{ navigation: any }, State> {
     componentDidMount(): void {
         LogBox.ignoreLogs(['In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.']);
         console.log("Hello Class Component")
+        this.subscriber = auth().onAuthStateChanged(this.onAuthStateChanged);
     }
 
     componentWillUnmount(): void {
         console.log("Bye Bye Class Component")
+        if (this.subscriber) {
+            this.subscriber();
+        }
     }
 
     togglePasswordVisibility = () => {
@@ -72,6 +80,14 @@ class Signup extends React.Component<{ navigation: any }, State> {
             showPassword: !prevState.showPassword,
         }));
     };
+
+    onAuthStateChanged = (user) => {
+        this.setState({ user });
+
+        if (this.state.initializing) {
+            this.setState({ initializing: false });
+        }
+    }
 
     submithandler = () => {
         // if (this.state.email && this.state.cemail && this.state.pass && this.state.cpass != "") {
@@ -120,6 +136,22 @@ class Signup extends React.Component<{ navigation: any }, State> {
 
     render() {
         const { colorTheme } = this.state;
+        const { initializing, user } = this.state;
+
+        if (initializing) {
+            return null;
+        }
+
+        // if (!user) {
+        //     return (
+        //         <View>
+        //             <Text>Login</Text>
+        //         </View>
+        //     );
+        // }
+
+
+
         return (
             <SafeAreaView style={styles.container}>
                 {/* <ImageBackground source={require('../assets/bg.jpg')} style={styles.image} > */}
