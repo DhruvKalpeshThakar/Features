@@ -16,7 +16,6 @@ export const AuthProvider = ({children}) => {
                     await auth().signInWithEmailAndPassword(email, password)
                 } catch (error) {
                     console.log(error);
-
                 }
             },
             register: async (email: string, password: string) => {

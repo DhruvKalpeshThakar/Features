@@ -16,7 +16,10 @@ import WelcomeScreen from "./Src/Screens/WelcomeScreen";
 import { View } from "react-native";
 import { Text } from "react-native";
 import Ratings from "./Src/Screens/settings/Ratings";
+import { AuthContext } from "./Src/navigation/AuthProvider";
+import auth from '@react-native-firebase/auth'
 
+  
 interface ConnectionCheck {
   isConnected: boolean;
   showOnline: boolean;
@@ -32,10 +35,6 @@ class App extends Component<{}, ConnectionCheck> {
     };
   }
 
-
-
-
-  
   componentDidMount() {
     const unsubscribe = NetInfo.addEventListener((state) => {
       console.log("Connect Type:", state.type);
@@ -70,8 +69,8 @@ class App extends Component<{}, ConnectionCheck> {
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
 
-          {/* <AppStack /> */}
-          <AuthStack />
+          <AppStack />
+          {/* <AuthStack /> */}
 
         </NavigationContainer>
         {this.state.showOnline ? (

@@ -196,7 +196,7 @@ class Signup extends React.Component<{ navigation: any }, State> {
                             </TouchableOpacity>
                         </View>
                         <Text style={{ textAlign: 'center', color: COLORS.black, marginBottom: 30, fontSize: 15 }}>
-                            Or, Regsiter with ...
+                            Or, Register with ...
                         </Text>
 
                         <View

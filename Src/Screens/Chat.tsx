@@ -67,11 +67,7 @@ class Chat extends Component<{}, Gallery>{
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <ImageBackground source={require('../assets/chatscreen.jpg')} style={{ flex: 1 }}>
-
-
                     <View style={{ flex: 1 }}>
-
-
                         <TouchableOpacity style={styles.button} onPress={() => this.opengallery()} activeOpacity={0.8}>
                             <Text style={styles.buttonText}>Open Gallery</Text>
                         </TouchableOpacity>

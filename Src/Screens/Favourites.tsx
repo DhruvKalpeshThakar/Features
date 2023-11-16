@@ -1,14 +1,16 @@
 import React, { Component } from "react";
-import { Appearance, Dimensions, FlatList, LogBox, StyleSheet, Text, View, Image } from "react-native";
+import { Appearance, Dimensions, FlatList, LogBox, StyleSheet, Text, View, Image, Button } from "react-native";
 import { COLORS } from "../constants/color";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { ScrollView } from "react-native-gesture-handler";
+import { black } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 
 const { height, width } = Dimensions.get('window');
 
 interface Favourites {
     colorTheme: any,
     carouselData: any[]
+    generatedOTP: number | null;
 }
 
 class Favourites extends Component<{}, Favourites>{
@@ -38,7 +40,8 @@ class Favourites extends Component<{}, Favourites>{
                     id: "04",
                     image: require("../assets/slider5.jpg"),
                 },
-            ]
+            ],
+            generatedOTP: null,
         }
     }
 
@@ -49,27 +52,39 @@ class Favourites extends Component<{}, Favourites>{
     screenWidth = Dimensions.get("window").width
 
 
+    generateOTP = () => {
+        const randomOTP = Math.floor(Math.random() * 9000) + 1000;
+        this.setState({ generatedOTP: randomOTP });
+        return randomOTP;
+    };
     render() {
+
 
         const { colorTheme } = this.state;
         return (
             <View>
-                <Text style={styles.carouseltext}> React Native Swiper Carousel</Text>
-                <SwiperFlatList
-                    autoplay
-                    autoplayDelay={5}
-                    autoplayLoop
-                    index={2}
-                    showPagination
-                    // paginationActiveColor={COLORS.Orange}
-                    data={this.state.carouselData}
-                    renderItem={({ item }) => (
-                        <View style={[styles.child, { backgroundColor: item }]}>
-                            <Image source={item.image} style={{ height: 300, width: this.screenWidth }} />
-                        </View>
-                    )}
-                />
-
+                <View>
+                    <Text style={styles.carouseltext}> React Native Swiper Carousel</Text>
+                    <SwiperFlatList
+                        autoplay
+                        autoplayDelay={5}
+                        autoplayLoop
+                        index={2}
+                        showPagination
+                        // paginationActiveColor={COLORS.Orange}
+                        data={this.state.carouselData}
+                        renderItem={({ item }) => (
+                            <View style={[styles.child, { backgroundColor: item }]}>
+                                <Image source={item.image} style={{ height: 300, width: this.screenWidth }} />
+                            </View>
+                        )}
+                    />
+                </View>
+                <View style={{ marginTop: '25%', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ color: COLORS.red, fontSize: 30 }}>Random OTP Generator</Text>
+                    <Text style={{ fontSize: 25, fontWeight: 'bold', color: COLORS.black }}>{this.state.generatedOTP}</Text>
+                    <Button onPress={() =>  this.generateOTP() } title="Generate" />
+                </View>
             </View>
         )
     }
