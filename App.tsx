@@ -13,13 +13,15 @@ import AuthStack from "./Src/navigation/AuthStack";
 import SplashScreen from "./Src/SplashScreen";
 import AppStack from "./Src/navigation/AppStack";
 import WelcomeScreen from "./Src/Screens/WelcomeScreen";
-import { View } from "react-native";
+import { View, Modal, TouchableOpacity } from "react-native";
 import { Text } from "react-native";
 import Ratings from "./Src/Screens/settings/Ratings";
 import { AuthContext } from "./Src/navigation/AuthProvider";
 import auth from '@react-native-firebase/auth'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { COLORS } from "./Src/constants/color";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
-  
 interface ConnectionCheck {
   isConnected: boolean;
   showOnline: boolean;
@@ -73,6 +75,31 @@ class App extends Component<{}, ConnectionCheck> {
           {/* <AuthStack /> */}
 
         </NavigationContainer>
+
+
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={this.state.isConnected}
+
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <MaterialIcons name="wifi-off" size={60} color={COLORS.red} />
+              <Text style={styles.title}>No Internet</Text>
+              {/* <Text style={styles.message}>No Internet</Text> */}
+              <View style={styles.buttonContainer}>
+                {/* <TouchableOpacity onPress={onCancel} style={styles.button}>
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableOpacity> */}
+                {/* <TouchableOpacity style={styles.button} onPress={() => { this.setState({ isConnected: false }) }}>
+                  <Text style={styles.buttonText}>OK</Text>
+                </TouchableOpacity> */}
+              </View>
+            </View>
+          </View>
+        </Modal>
+
         {this.state.showOnline ? (
           <View
             style={{
@@ -108,6 +135,43 @@ class App extends Component<{}, ConnectionCheck> {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: hp(5),
+    borderRadius: wp(5),
+    alignItems: "center",
+  },
+  title: {
+    fontSize: hp(3),
+    fontFamily:'YoungSerif-Regular',
+    marginTop: 10,
+    color: '#000',
+  },
+  message: {
+    fontSize: 16,
+    marginVertical: 10,
+    color: COLORS.black
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    // justifyContent: "space-around",
+    width: "100%",
+  },
+  button: {
+    padding: 10,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: "blue",
+    fontWeight: 'bold',
+  },
+});
 
 export default App;

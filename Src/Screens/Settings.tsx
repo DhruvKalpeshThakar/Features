@@ -35,7 +35,8 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
         this.props.navigation.navigate('Privacy');
     }
     navigateToSubscription = () => {
-        this.setState({ Developing: true });
+        this.props.navigation.navigate('Subscription')
+        // this.setState({ Developing: true });
     }
     navigateToSupport = () => {
         this.setState({ Developing: true });
