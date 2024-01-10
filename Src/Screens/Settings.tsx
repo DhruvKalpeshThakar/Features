@@ -22,7 +22,8 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
     }
 
     navigateToEditProfile = () => {
-        this.setState({ Developing: true });
+        this.props.navigation.navigate('EditProfile')
+        // this.setState({ Developing: true });
     }
     navigateToSecurity = () => {
         this.setState({ Developing: true });
