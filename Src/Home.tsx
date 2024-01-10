@@ -252,7 +252,8 @@ class Home extends Component<{ route: any, }, Pageone>{
     ItemView = ({ item }) => {
 
         return (
-            <Swipeable renderLeftActions={this.leftSwipe} renderRightActions={this.rightSwipe} containerStyle={{ marginTop: 10 }} >
+            // <Swipeable renderLeftActions={this.leftSwipe} renderRightActions={this.rightSwipe} containerStyle={{ marginTop: 10 }} >
+            <Swipeable  containerStyle={{ marginTop: 10 }} >
                 <View style={styles.ItemView}>
                     <Image source={{ uri: item.image }} style={styles.productImage} />
                     <View style={styles.nameview}>
