@@ -3,13 +3,15 @@ import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { COLORS } from "../../constants/color";
 import { AirbnbRating, Rating } from "react-native-ratings";
 import { ToastAndroid } from "react-native";
-import { Tabs,Tab } from "marschattha-swipeable-tabs/dist";
+import { Tabs, Tab } from "marschattha-swipeable-tabs/dist";
+import { usersdata } from "../../constants/dummydata";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 interface Ratin {
-    ratingCompleted:any
+    ratingCompleted: any
     selectedTab: any
 }
-class Ratings extends Component<{ navigation: any }, Ratin> {
+class Ratings extends Component<{ navigation: any, route: any }, Ratin> {
     ratingCompleted: ((number: any) => void) | undefined;
     constructor(props: any) {
         super(props);
@@ -38,9 +40,9 @@ class Ratings extends Component<{ navigation: any }, Ratin> {
 
         return (
             <View style={{ flex: 1 }}>
-                <Text style={{ color: COLORS.black, fontSize: 25, textAlign: 'center', marginVertical: 30, fontFamily: 'YoungSerif-Regular' }} >Provide us a Rating</Text>
+                <Text style={{ color: COLORS.black, fontSize: 30, textAlign: 'center', marginVertical: 30, fontFamily: 'YoungSerif-Regular' }} >Selected Users List</Text>
 
-                <AirbnbRating
+                {/* <AirbnbRating
                     reviews={['Poor', 'Very Bad', 'Bad', 'Ok', 'Good', 'Very Good', 'Excellent']}
                     count={7}
                     // defaultRating={this.ratingCompleted.toString}
@@ -69,9 +71,22 @@ class Ratings extends Component<{ navigation: any }, Ratin> {
                     <Tab label="Tab 4" key={3}>
                         <div>Tab 4 content</div>
                     </Tab>
-                </Tabs>
+                </Tabs> */}
 
-            </View>
+                <View style={{ marginHorizontal: heightPercentageToDP(5) }}>
+                    {/* <Text style={{ fontSize: 25, color: '#000' }}>Selected Users List</Text> */}
+                    {this.props.route.params.UsersListData.length > 0 &&
+
+                        this.props.route.params.UsersListData.map((user: any, index: any) => {
+                            return (
+                                <Text style={{ color: '#086661', fontSize: 18, padding: widthPercentageToDP(1) }}>{user}</Text>
+                            )
+                        })
+
+                    }
+                    {/* // <Text style={{ color: '#086661' }}>{this.props.route.params.UsersListData + </Text> */}
+                </View>
+            </View >
         )
     }
 }

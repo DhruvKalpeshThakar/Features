@@ -40,7 +40,8 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
         // this.setState({ Developing: true });
     }
     navigateToSupport = () => {
-        this.setState({ Developing: true });
+        // this.setState({ Developing: true });
+        this.props.navigation.navigate('HelpnSupport')
     }
     navigateToTermsnPolicies = () => {
 

@@ -15,6 +15,7 @@ import Map from "../Map";
 import Privacy from "../Privacy";
 import Subscription from "../Subscription";
 import EditProfile from "../EditProfile";
+import HelpnSupport from "../Screens/settings/HelpnSupport";
 
 
 const Tab = createBottomTabNavigator();
@@ -153,6 +154,7 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                             <Stack.Screen name="Privacy" component={Privacy} options={{ headerShown: false }} />
                             <Stack.Screen name="Subscription" component={Subscription} options={{ headerShown: false }} />
                             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+                            <Stack.Screen name="HelpnSupport" component={HelpnSupport} options={{ headerShown: false }} />
                             {/* <Stack.Screen name="Map" component={Map} options={{ headerShown: false }} /> */}
                             {/* Add other screens for Settings here */}
                         </Stack.Navigator>
