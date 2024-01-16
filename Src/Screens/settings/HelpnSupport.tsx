@@ -1035,6 +1035,21 @@ class HelpnSupport extends Component<{ navigation: any }, Users>{
 
     );
 
+    handleDelete = (index: any) => {
+        
+        const deletedUser = this.state.selectedArray[index];
+
+        const updatedSelectedArray = [...this.state.selectedArray];
+        updatedSelectedArray.splice(index, 1);
+
+        const updatedRepliUser = [...this.state.RepliUsers, deletedUser];
+
+        this.setState({
+            selectedArray: updatedSelectedArray,
+            RepliUsers: updatedRepliUser,
+        });
+    };
+
 
     render() {
         // console.log("logggggggggggggggggggggggggggggggggggggggggggggggggggg", this.state.users);
@@ -1064,9 +1079,15 @@ class HelpnSupport extends Component<{ navigation: any }, Users>{
                     <View style={{}}>
                         <Text style={{ color: '#000', fontSize: 20, fontWeight: 'bold' }}>Selected Users</Text>
                         {this.state.selectedArray.map((user, index) => {
-                            console.log("users", user);
+                            // console.log("users", user);
                             return (
-                                <Text key={index} style={{ color: '#087' }}> ~ {user} </Text>
+                                <TouchableOpacity onLongPress={() => {
+                                    this.handleDelete(index)
+
+                                }}>
+                                    <Text key={index} style={{ color: '#087', fontSize: 22 }}> ~ {user} </Text>
+                                </TouchableOpacity>
+                                // <Text key={index} style={{ color: '#087' }}> ~ {user} </Text>
                             );
                         })}
                     </View>
