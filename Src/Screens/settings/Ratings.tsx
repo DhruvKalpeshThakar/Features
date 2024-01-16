@@ -79,7 +79,10 @@ class Ratings extends Component<{ navigation: any, route: any }, Ratin> {
 
                         this.props.route.params.UsersListData.map((user: any, index: any) => {
                             return (
-                                <Text style={{ color: '#086661', fontSize: 18, padding: widthPercentageToDP(1) }}>{user}</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ color: '#086661', fontSize: 20, padding: widthPercentageToDP(1) }}>{index + 1}</Text>
+                                    <Text style={{ color: '#086661', fontSize: 20, padding: widthPercentageToDP(1) }}>{user}</Text>
+                                </View>
                             )
                         })
 

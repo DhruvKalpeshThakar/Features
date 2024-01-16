@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { BackHandler, FlatList, LogBox, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { usersdata } from "../../constants/dummydata";
 
@@ -7,7 +7,7 @@ interface Users {
     users: any[],
     searchText: any,
     RepliUsers: any[],
-    selectedArray: any[]
+    selectedArray: any[],
 }
 
 class HelpnSupport extends Component<{ navigation: any }, Users>{
@@ -971,7 +971,15 @@ class HelpnSupport extends Component<{ navigation: any }, Users>{
 
     componentDidMount(): void {
         // this.setState({ RepliUsers: [...this.state.users] })
+        LogBox.ignoreAllLogs()
+        BackHandler.addEventListener('hardwareBackPress', this.handleback)
 
+    }
+
+    handleback = () => {
+        this.props.navigation.goBack()
+        this.setState({ selectedArray: [] })
+        return true
     }
 
 
@@ -1006,8 +1014,10 @@ class HelpnSupport extends Component<{ navigation: any }, Users>{
                 <TouchableOpacity onPress={() => {
                     console.log("Touchable Render Item===================================>>>>", item.name)
                     let Name = item.name;
+                    const updatedRepliUsers = this.state.RepliUsers.filter((userItem) => userItem.name !== Name);
+                    this.setState({ RepliUsers: updatedRepliUsers });
                     this.setState((prevState) => ({
-                        selectedArray: [...prevState.selectedArray, Name],
+                        selectedArray: [...prevState.selectedArray, Name,],
                     }));
                 }}>
                     <Text style={{ color: '#000' }}>{item.name}</Text>
