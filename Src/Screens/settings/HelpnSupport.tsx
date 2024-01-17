@@ -8,6 +8,8 @@ interface Users {
     searchText: any,
     RepliUsers: any[],
     selectedArray: any[],
+    remove: boolean,
+    add: boolean
 }
 
 class HelpnSupport extends Component<{ navigation: any }, Users>{
@@ -965,7 +967,9 @@ class HelpnSupport extends Component<{ navigation: any }, Users>{
             ],
             RepliUsers: [],
             searchText: '',
-            selectedArray: []
+            selectedArray: [],
+            remove: false,
+            add: true
         }
     }
 
@@ -1006,22 +1010,69 @@ class HelpnSupport extends Component<{ navigation: any }, Users>{
         }
     }
 
-    renderUserItem = ({ item }: any) => {
+    renderUserItem = ({ item, index }: any) => {
         // console.log('Render User Item-----------------', item);
-
+        const isSelected = this.state.selectedArray.includes(item.name);
         return (
-            <View style={{ marginVertical: 10 }}>
+            <View style={{ marginVertical: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <TouchableOpacity onPress={() => {
                     console.log("Touchable Render Item===================================>>>>", item.name)
-                    let Name = item.name;
-                    const updatedRepliUsers = this.state.RepliUsers.filter((userItem) => userItem.name !== Name);
-                    this.setState({ RepliUsers: updatedRepliUsers });
-                    this.setState((prevState) => ({
-                        selectedArray: [...prevState.selectedArray, Name,],
-                    }));
-                }}>
-                    <Text style={{ color: '#000' }}>{item.name}</Text>
+                }} disabled>
+                    <Text style={{ color: '#000', fontSize: 20, textAlign: 'center' }}>{item.name}</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => {
+                    if (!isSelected) {
+                        let Name = item.name;
+                        this.setState((prevState) => ({
+                            selectedArray: [...prevState.selectedArray, Name],
+                            add: false,
+                            remove: true
+                        }));
+                    } else {
+                        let Name = item.name;
+                        const updateSelectedArray = this.state.selectedArray.filter((userItem) => userItem !== Name);
+                        this.setState({
+                            selectedArray: updateSelectedArray,
+                            remove: false,
+                            add: true
+                        });
+                    }
+                }} style={{ backgroundColor: isSelected ? '#ff0000' : '#008' }}>
+                    <Text style={{ color: '#fff', padding: wp(3) }}>{isSelected ? 'Remove' : 'Add'}</Text>
+                </TouchableOpacity>
+
+
+                {/* {this.state.add &&
+                    <TouchableOpacity onPress={() => {
+                        let Name = item.name;
+                        this.setState((prevState) => ({
+                            selectedArray: [...prevState.selectedArray, Name],
+                            add: false,
+                            remove: true
+                        }));
+
+                    }} style={{ backgroundColor: '#008', borderRadius: wp(2) }} key={index}>
+                        <Text style={{ color: '#fff', padding: wp(3) }}>Add</Text>
+                    </TouchableOpacity>
+                }
+
+                {this.state.remove &&
+                    <TouchableOpacity onPress={() => {
+                        let Name = item.name;
+                        const updateSelectedArray = this.state.selectedArray.filter((userItem) => userItem !== Name);
+                        this.setState({
+                            selectedArray: updateSelectedArray,
+                            remove: false,
+                            add: true
+                        });
+
+                    }} style={{ backgroundColor: '#ff0000', marginLeft: wp(5), borderRadius: wp(2) }} key={index}>
+                        <Text style={{ color: '#fff', padding: wp(3) }}>Remove</Text>
+                    </TouchableOpacity>
+                } */}
+
+
             </View >
         )
     };
@@ -1036,7 +1087,7 @@ class HelpnSupport extends Component<{ navigation: any }, Users>{
     );
 
     handleDelete = (index: any) => {
-        
+
         const deletedUser = this.state.selectedArray[index];
 
         const updatedSelectedArray = [...this.state.selectedArray];
@@ -1075,7 +1126,7 @@ class HelpnSupport extends Component<{ navigation: any }, Users>{
                     placeholderTextColor={'#ccc'}
                     onChangeText={(text) => { this.searchHandler(text) }}
                 />
-                {this.state.selectedArray.length > 0 &&
+                {/* {this.state.selectedArray.length > 0 &&
                     <View style={{}}>
                         <Text style={{ color: '#000', fontSize: 20, fontWeight: 'bold' }}>Selected Users</Text>
                         {this.state.selectedArray.map((user, index) => {
@@ -1091,7 +1142,7 @@ class HelpnSupport extends Component<{ navigation: any }, Users>{
                             );
                         })}
                     </View>
-                }
+                } */}
                 <FlatList
                     style={{ flex: 1, marginBottom: hp(15) }}
                     data={this.state.RepliUsers}
