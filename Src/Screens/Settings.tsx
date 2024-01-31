@@ -73,7 +73,9 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
         this.setState({ Developing: true });
     }
 
-
+    navigatetoexperience = () => {
+        this.props.navigation.navigate('CreateExperienceForm')
+    }
 
 
 
@@ -90,6 +92,7 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
         { icon: "credit-card", text: 'My Subscription', action: this.navigateToSubscription },
         { icon: "help-outline", text: 'Help & Support', action: this.navigateToSupport },
         { icon: "info-outline", text: 'Terms & Policies', action: this.navigateToTermsnPolicies },
+        { icon: "dynamic-form", text: 'Create Experience', action: this.navigatetoexperience },
 
     ];
 

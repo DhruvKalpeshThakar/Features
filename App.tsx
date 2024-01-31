@@ -23,6 +23,14 @@ import { COLORS } from "./Src/constants/color";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Entypo from 'react-native-vector-icons/Entypo'
 import NestedFlatList from "./Src/NestedFlatList";
+import Settings from "./Src/Screens/Settings";
+import Termpolicies from "./Src/Screens/settings/TermPolicies";
+import Privacy from "./Src/Privacy";
+import Subscription from "./Src/Subscription";
+import EditProfile from "./Src/EditProfile";
+import HelpnSupport from "./Src/Screens/settings/HelpnSupport";
+import CreateExperienceForm from "./Src/Screens/settings/CreateExperienceForm";
+
 
 
 interface ConnectionCheck {
@@ -70,16 +78,25 @@ class App extends Component<{}, ConnectionCheck> {
     return (
       <NativeBaseProvider>
         <NavigationContainer >
+        {/* <AppStack /> */}
+          <Stack.Navigator>
+            {/* <Stack.Screen name="SplashScreen" component={SplashScreen} />
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+            <Stack.Screen name="Bottomtabs" component={AppStack} options={{ headerShown: false }} />
+            <Stack.Screen name="Ratings" component={Ratings} options={{ headerShown: false }} />
+            <Stack.Screen name="Termpolicies" component={Termpolicies} options={{ headerShown: false }} />
+            <Stack.Screen name="Privacy" component={Privacy} options={{ headerShown: false }} />
+            <Stack.Screen name="Subscription" component={Subscription} options={{ headerShown: false }} />
+            <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+            <Stack.Screen name="HelpnSupport" component={HelpnSupport} options={{ headerShown: false }} /> */}
+            <Stack.Screen name="CreateExperienceForm" component={CreateExperienceForm} options={{ headerShown: false }} />
 
-          <Stack.Screen name="SplashScreen" component={SplashScreen} />
-          <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-          
-
-
-          <AppStack />
+            
           {/* <AuthStack /> */}
 
+          </Stack.Navigator>
         </NavigationContainer>
+          
 
 
         <Modal
@@ -92,7 +109,7 @@ class App extends Component<{}, ConnectionCheck> {
             <View style={styles.modalContent}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
                 <Text style={[styles.title]}>No Internet Available !</Text>
-                <Entypo name='cross'   />
+                <Entypo name='cross' />
               </View>
               <View style={{ marginTop: hp(2) }}>
                 <Text> Please check your connection and come back again!</Text>

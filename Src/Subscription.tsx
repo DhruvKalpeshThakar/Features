@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, FlatList } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, FlatList, BackHandler } from "react-native";
 import { COLORS } from "./constants/color";
 import MapView from 'react-native-maps';
 
@@ -7,7 +7,7 @@ interface Data {
     digitsarray: any[]
 }
 
-class Subscription extends Component<{}, Data>{
+class Subscription extends Component<{navigation:any}, Data>{
     constructor(props: any) {
 
         super(props);
@@ -54,7 +54,20 @@ class Subscription extends Component<{}, Data>{
                 },
             ]
         }
+        // this.backaction = this.backaction().bind(this)
+    }
 
+    componentDidMount(): void {
+        BackHandler.addEventListener('hardwareBackPress',this.backaction)
+    }
+
+    componentWillUnmount(): void {
+        BackHandler.removeEventListener('hardwareBackPress',this.backaction)
+    }
+
+    backaction = () => {
+        this.props.navigation.goBack()
+        return true
     }
 
     renderdata = ({ item }: any) => {

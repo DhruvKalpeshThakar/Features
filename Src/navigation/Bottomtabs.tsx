@@ -16,6 +16,7 @@ import Privacy from "../Privacy";
 import Subscription from "../Subscription";
 import EditProfile from "../EditProfile";
 import HelpnSupport from "../Screens/settings/HelpnSupport";
+import CreateExperienceForm from "../Screens/settings/CreateExperienceForm";
 
 
 const Tab = createBottomTabNavigator();
@@ -131,7 +132,7 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                         </View>
                     ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black
                 }} />
-                <Tab.Screen name="Settings" options={{
+                <Tab.Screen name="Settings" component={Settings} options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center', top: 10 }}>
                             <Image source={require('../assets/settings.png')}
@@ -146,7 +147,7 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                         </View>
                     ), headerStyle: colorTheme === 'dark' ? styles.darktheme : styles.lighttheme, headerTintColor: colorTheme == 'dark' ? COLORS.white : COLORS.black, headerShown: false
                 }}>
-                    {() => (
+                    {/* {() => (
                         <Stack.Navigator>
                             <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
                             <Stack.Screen name="Ratings" component={Ratings} options={{ headerShown: false }} />
@@ -155,10 +156,9 @@ class Bottomtabs extends Component<{ navigation: any }, { colorTheme: any }>{
                             <Stack.Screen name="Subscription" component={Subscription} options={{ headerShown: false }} />
                             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
                             <Stack.Screen name="HelpnSupport" component={HelpnSupport} options={{ headerShown: false }} />
-                            {/* <Stack.Screen name="Map" component={Map} options={{ headerShown: false }} /> */}
-                            {/* Add other screens for Settings here */}
+                            <Stack.Screen name="CreateExperienceForm" component={CreateExperienceForm} options={{ headerShown: false }} />
                         </Stack.Navigator>
-                    )}
+                    )} */}
                 </Tab.Screen>
             </Tab.Navigator>
         )
