@@ -437,7 +437,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
 
 
                                     this.setState({ expdate: day.dateString })
-                                    this.setState({ expdate2: dayName.substring(0, 3) + "," + " " + day.day + " " + MonthName, iscalendar: false })
+                                    this.setState({ expdate2: dayName.substring(0, 3) + "," + " " + day.day + " " + MonthName, })
                                 }}
                                 markedDates={{
                                     [this.state.expdate]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
