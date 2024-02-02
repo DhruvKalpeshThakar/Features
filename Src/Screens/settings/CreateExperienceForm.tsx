@@ -8,6 +8,9 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import LinearGradient from "react-native-linear-gradient";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import DatePicker from 'react-native-date-picker'
+import { MD2LightTheme } from "react-native-paper";
+import { PERMISSIONS, RESULTS, check, request } from "react-native-permissions";
+import ImagePicker from 'react-native-image-crop-picker';
 
 interface Experience {
     exptitle: any
@@ -19,7 +22,7 @@ interface Experience {
     mealtype: any
     noofseats: any
     mealcategories: any
-    dietaryoptions: any
+    // dietaryoptions: any
     expdesc: any
     droomdesc: any
     activeindex: any
@@ -32,10 +35,25 @@ interface Experience {
     selectedTime: any
     mealcatdata: any
     selectedMeals: any
+    mealcatlimit: boolean
+    selectedDietary: any
+    isCameraModal: boolean
+    photosindex: any
+    photosone: any
+    photostwo: any
+    photosthree: any
+    photosfour: any
+    dietaryoptions: dietaryoptions[]
+}
+
+interface dietaryoptions {
+    id: number
+    title: string
+    image: any
 }
 
 
-class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
+class CreateExperienceForm extends Component<{ navigation: any }, Experience, dietaryoptions> {
     constructor(props: any) {
 
         super(props);
@@ -48,7 +66,8 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
             mealtype: '',
             noofseats: '',
             mealcategories: '',
-            dietaryoptions: '',
+            isCameraModal: false,
+            selectedDietary: [],
             expdesc: '',
             droomdesc: '',
             activeindex: null,
@@ -59,6 +78,12 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
             isdietaryoptions: false,
             selectedTime: null,
             selectedMeals: [],
+            photosindex: 0,
+            mealcatlimit: false,
+            photosone: '',
+            photostwo: '',
+            photosthree: '',
+            photosfour: '',
             mealcatdata: [
                 { id: 1, title: 'Chinese' },
                 { id: 2, title: 'Sushi' },
@@ -99,6 +124,13 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                 { id: 37, title: 'Pakistani' },
                 { id: 38, title: 'Vegetarian' },
             ],
+            dietaryoptions: [
+                { id: 1, title: 'Gluten Free', image: require('../../assets/gluten-free.png') },
+                { id: 2, title: 'Vegetarian', image: require('../../assets/vegetarian.png') },
+                { id: 3, title: 'Halal', image: require('../../assets/lamb.png') },
+                { id: 4, title: 'Vegan', image: require('../../assets/vegan.png') },
+                { id: 5, title: 'Organic', image: require('../../assets/salad.png') },
+            ],
             mealdata: [
                 {
                     id: 1,
@@ -120,30 +152,56 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
             photosdata: [
                 {
                     id: 1,
-                    image: require('../../assets/noimage.png')
+                    image: require('../../assets/noimage.png'),
+
                 },
                 {
                     id: 2,
-                    image: require('../../assets/noimage.png')
+                    image: require('../../assets/noimage.png'),
+
                 },
                 {
                     id: 3,
-                    image: require('../../assets/noimage.png')
+                    image: require('../../assets/noimage.png'),
+
                 },
                 {
                     id: 4,
-                    image: require('../../assets/noimage.png')
+                    image: require('../../assets/noimage.png'),
+
                 },
             ]
         }
 
     }
 
-    renderphotosdata = (item: any) => {
+    renderphotosdata = (item: any, index: any) => {
+        const isSelected = this.state.photosindex === item.id
         return (
-            <View style={{ width: wp(30), height: hp(12), backgroundColor: '#ffffff', marginHorizontal: wp(1), borderRadius: wp(3), alignItems: 'center', justifyContent: 'center', borderColor: '#eaeaea', }}>
-                <Image source={item.image} style={{ width: wp(15), height: hp(6) }} resizeMode="contain" />
-            </View>
+            <TouchableOpacity style={{
+                width: wp(30),
+                height: hp(12),
+                backgroundColor: '#ffffff',
+                marginHorizontal: wp(1),
+                borderRadius: wp(3),
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderColor: '#eaeaea',
+            }}
+                onPress={() => {
+                    this.setState({ isCameraModal: true })
+                    // console.log("Index of Add Photos----", index)
+                    this.setState({ photosindex: item.id })
+                }}
+            >
+                {isSelected &&
+                    <AntDesign name="delete" size={25} color={'#fff'} onPress={() => { this.deletephotoImage(item.id) }} style={{ position: 'absolute', zIndex: 1, bottom: hp(8), left: wp(20) }} />
+                }
+                <Image source={this.photoImage(item.id)} style={{
+                    width: wp(30),
+                    height: hp(12), opacity: 0.5
+                }} resizeMode="cover" />
+            </TouchableOpacity>
         )
     }
 
@@ -197,32 +255,199 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
     };
 
     timeDisplayhandler = () => {
-        console.log("Timer in Timehandler", this.state.exptime);
+        // console.log("Timer in Timehandler", this.state.exptime);
 
         const timestamp = new Date(this.state.exptime);
         const options = { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'Asia/Kolkata' };
         const formattedTime = timestamp.toLocaleTimeString('en-US', options);
-        console.log("formattedTime", formattedTime);
+        // console.log("formattedTime", formattedTime);
 
         return formattedTime
     }
 
-    categoriesdata = (item: any, index: any) => {
-        // console.log(item.title);
 
-        const isSelected = this.state.selectedMeals.includes(item.title);
-        return (
-            <TouchableOpacity key={index} onPress={() => { }} activeOpacity={0.6} style={[styles.interestselection, {
-                backgroundColor: '#400',
-                // borderColor: isSelected ? 'transparent' : 'black',
-            }]}  >
-                <Text style={[styles.interestname, { color: '#000' }]}>{item.title}</Text>
-            </TouchableOpacity>
-        )
+    photoImage = (id: any) => {
+        if (id === 1 && this.state.photosone != "") {
+            return { uri: this.state.photosone }
+        }
+        else if (id === 2 && this.state.photostwo != "") {
+            return { uri: this.state.photostwo }
+        }
+        else if (id === 3 && this.state.photosthree != "") {
+            return { uri: this.state.photosthree }
+        }
+        else if (id === 4 && this.state.photosfour != "") {
+            return { uri: this.state.photosfour }
+        }
+        else {
+            // console.log('gjkhgsdjkghdjgkhu');
+            return require('../../assets/noimage.png')
+        }
     }
+
+    deletephotoImage = (id: any) => {
+        if (id === 1 && this.state.photosone != "") {
+            console.log("Delete PhotoImage 1------>>>");
+            this.setState({ photosone: '' })
+            return require('../../assets/noimage.png')
+        }
+        else if (id === 2 && this.state.photostwo != "") {
+            this.setState({ photostwo: '' })
+            return require('../../assets/noimage.png')
+        }
+        else if (id === 3 && this.state.photosthree != "") {
+            this.setState({ photosthree: '' })
+            return require('../../assets/noimage.png')
+        }
+        else if (id === 4 && this.state.photosfour != "") {
+            this.setState({ photosfour: '' })
+            return require('../../assets/noimage.png')
+        }
+        else {
+            // console.log('gjkhgsdjkghdjgkhu');
+            return require('../../assets/noimage.png')
+        }
+    }
+
 
     isCancelMealCat = () => {
         this.setState({ ismealcategories: false })
+    }
+
+
+    toggleInterestSelection = (interestValue: any) => {
+
+        const isSelected = this.state.selectedMeals.includes(interestValue);
+
+        if (isSelected) {
+            this.setState((prevState) => ({
+                selectedMeals: prevState.selectedMeals.filter(
+                    (interest: any) => interest !== interestValue
+                )
+            }));
+        } else {
+            this.setState((prevState) => ({
+                selectedMeals: [...prevState.selectedMeals, interestValue]
+            }));
+        }
+    };
+    
+    toggleDietaryoptions = (interestValue: any) => {
+        console.log("Interest-----Value------", interestValue);
+
+        const isSelected = this.state.selectedDietary.includes(interestValue);
+
+        if (isSelected) {
+            this.setState((prevState) => ({
+                selectedDietary: prevState.selectedDietary.filter(
+                    (interest: any) => interest !== interestValue
+                )
+            }));
+
+        } else {
+            this.setState((prevState) => ({
+                selectedDietary: [...prevState.selectedDietary, interestValue]
+            }));
+
+            setTimeout(() => {
+                console.log("Dietary Loghhhhhhhhhhhhhhhhhhhhhh", this.state.selectedDietary);
+
+            }, 500);
+        }
+    };
+
+    isCanceldietary = () => {
+        this.setState({ isdietaryoptions: false })
+    }
+
+    openImagePicker = (index: any) => {
+        ImagePicker.openCamera({
+            width: 800,
+            height: 800,
+            cropping: true,
+        }).then(image => {
+            console.log(image);
+
+            if (this.state.photosindex === 1) {
+                this.setState({ photosone: image.path })
+            }
+            else if (this.state.photosindex === 2) {
+                this.setState({ photostwo: image.path })
+            }
+            else if (this.state.photosindex === 3) {
+                this.setState({ photosthree: image.path })
+            }
+            else if (this.state.photosindex === 4) {
+                this.setState({ photosfour: image.path })
+            } else {
+                console.log('gjkhgsdjkghdjgkhu');
+            }
+            // const updatedData = this.state.photosdata.map((item: any) => {
+            //     if (item.id === index) {
+            //         return [...item, { uri: image.path }]
+            //     } else {
+            //         return [...item]
+            //     }
+            // })
+            // console.log("Updated Data----++==", updatedData);
+
+            // this.setState({ photosdata: updatedData })
+            this.setState({ isCameraModal: false })
+        });
+    }
+
+    pickImage = () => {
+        ImagePicker.openPicker({
+            multiple: false,
+            mediaType: 'photo'
+        }).then(images => {
+            console.log(images);
+            console.log("Image Paths-------------------->>>>>>>>>>>>>>", images.path);
+            this.setState({ isCameraModal: false })
+            if (this.state.photosindex === 1) {
+                this.setState({ photosone: images.path })
+            }
+            else if (this.state.photosindex === 2) {
+                this.setState({ photostwo: images.path })
+            }
+            else if (this.state.photosindex === 3) {
+                this.setState({ photosthree: images.path })
+            }
+            else if (this.state.photosindex === 4) {
+                this.setState({ photosfour: images.path })
+            } else {
+                console.log('gjkhgsdjkghdjgkhu');
+            }
+        });
+    }
+
+    opengallery = async () => {
+        console.log("called in gallery");
+
+        // Check if permission is already granted
+        const permissionStatus = await check(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
+        console.log("permisssion Status--------->>>>>>>", permissionStatus);
+
+
+        if (permissionStatus === RESULTS.GRANTED) {
+            // Permission already granted, proceed with image picking
+            this.pickImage();
+        } else {
+            // Permission not granted, request it
+            const result = await request(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
+
+            if (result === RESULTS.GRANTED) {
+                // Permission granted, proceed with image picking
+                this.pickImage();
+            } else {
+                // Permission denied, handle accordingly (show a message, etc.)
+                console.log("Read external storage permission denied");
+            }
+        }
+    }
+
+    isCancelCamera = () => {
+        this.setState({ isCameraModal: false })
     }
 
     render() {
@@ -235,7 +460,6 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} >
                     <ScrollView showsVerticalScrollIndicator={false} >
                         <View style={{ flex: 1, marginBottom: hp(2), backgroundColor: '#F3F2F3 ' }}>
-
                             <View style={{ flexDirection: 'row', marginTop: hp(3) }}>
                                 <View style={{ marginLeft: wp(3) }}>
                                     <Entypo name="cross" color={'#000'} size={30} />
@@ -247,6 +471,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                     <AntDesign name="delete" color={'#000'} size={25} />
                                 </View>
                             </View>
+
 
                             <View style={{ marginHorizontal: wp(1), flex: 1, marginTop: hp(2) }}>
 
@@ -273,6 +498,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                                 backgroundColor: color,
                                                 marginTop: hp(2),
                                                 alignItems: 'center',
+                                                margin: wp(2),
                                                 justifyContent: 'center'
                                             }]}
                                                 onPress={() => this.setState({ activeindex: index })}>
@@ -308,7 +534,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                         <View>
                                             <Text style={styles.text}>Date</Text>
                                         </View>
-                                        <TouchableOpacity style={{ flexDirection: 'row', }} onPress={() => { this.setState({ iscalendar: true }) }}>
+                                        <TouchableOpacity style={{ flexDirection: 'row', }} onPress={() => { this.setState({ iscalendar: !this.state.iscalendar }) }}>
                                             <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8) }]}>
                                                 {this.state.expdate != "" ?
                                                     <Text style={{ color: '#747688' }}>{this.state.expdate2}</Text>
@@ -316,7 +542,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                                     <Text style={{ color: '#747688' }}>Sat, 4 Aug</Text>
                                                 }
                                             </View>
-                                            <Entypo name="chevron-down" color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
+                                            <Entypo name={this.state.iscalendar ? "chevron-up" : "chevron-down"} color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
                                         </TouchableOpacity>
                                     </View>
 
@@ -331,14 +557,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                                     <Text style={{ color: '#747688' }}>11:00 am</Text>
                                                 }
                                             </View>
-                                            {/* <TextInput
-                                                style={[styles.textinput, { paddingHorizontal: wp(3), marginVertical: hp(1), width: wp(35), color: '#000' }]}
-                                                value={this.state.exptime}
-                                                editable={false}
-                                                placeholderTextColor={'#747688'}
-                                                placeholder="11:00 am"
-                                                onChangeText={(text) => this.setState({ exptitle: text })}
-                                            /> */}
+
                                             <Entypo name="chevron-down" color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
                                         </TouchableOpacity>
                                     </View>
@@ -369,7 +588,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                         <Text style={styles.text}>Meal type</Text>
                                     </View>
 
-                                    <TouchableOpacity onPress={() => { this.setState({ isMealtype: true }) }}>
+                                    <TouchableOpacity onPress={() => { this.setState({ isMealtype: !this.state.isMealtype }) }}>
                                         <TextInput
                                             style={[styles.textinput, { paddingHorizontal: wp(3), marginVertical: hp(1), color: '#000' }]}
                                             value={this.state.mealtype}
@@ -378,7 +597,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                             placeholder="e.g. My Brunch"
                                             onChangeText={(text) => this.setState({ exptitle: text })}
                                         />
-                                        <Entypo name="chevron-down" color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
+                                        <Entypo name={this.state.isMealtype ? "chevron-up" : "chevron-down"} color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
                                     </TouchableOpacity>
 
                                     {this.state.isMealtype &&
@@ -459,6 +678,24 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                             onChangeText={(text) => this.setState({ exptitle: text })}
                                         />
                                     </TouchableOpacity>
+                                    <View style={{
+                                        flexWrap: 'wrap',
+                                        flexDirection: 'row',
+
+                                    }}>
+                                        {this.state.selectedMeals?.map((item: any, index: any) => {
+                                            console.log("This.state.Selected-----Meals", item);
+                                            return (
+                                                <View key={index} style={[styles.interestselection, {
+                                                    backgroundColor: "#000000",
+                                                    borderColor: "#000000",
+                                                    marginLeft: wp(2)
+                                                }]}>
+                                                    <Text style={[styles.interestname, { color: "#ffffff", padding: wp(1) }]}>{item}</Text>
+                                                </View>
+                                            )
+                                        })}
+                                    </View>
                                 </View>
 
                                 <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
@@ -472,13 +709,35 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                         </View>
                                         <TextInput
                                             style={[styles.textinput, { paddingLeft: wp(15), marginVertical: hp(1), color: '#000' }]}
-                                            value={this.state.dietaryoptions}
+                                            // value={this.state.dietaryoptions}
                                             editable={false}
                                             placeholderTextColor={'#747688'}
                                             placeholder="e.g. French"
-                                            onChangeText={(text) => this.setState({ exptitle: text })}
                                         />
                                     </TouchableOpacity>
+
+                                    <View style={{
+                                        flexWrap: 'wrap',
+                                        flexDirection: 'row',
+                                    }}>
+                                        {this.state.selectedDietary?.map((item: any, index: any) => {
+                                            console.log("This.state.Selected-----Dietary", item);
+                                            return (
+                                                <View key={index} style={[styles.interestselection, {
+                                                    backgroundColor: "#000000",
+                                                    borderColor: "#000000",
+                                                    marginLeft: wp(2),
+                                                    marginVertical: 0,
+                                                    marginBottom: hp(1.2),
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'space-between',
+                                                }]}>
+                                                    <Image source={item.image} style={{ height: hp(2.95), width: wp(6.4), alignSelf: 'center', marginLeft: wp(1.25) }} />
+                                                    <Text style={[styles.interestname, { color: "#ffffff", padding: wp(1) }]}>{item.title}</Text>
+                                                </View>
+                                            )
+                                        })}
+                                    </View>
                                 </View>
 
                                 <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
@@ -489,8 +748,9 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                     <View style={{ marginVertical: hp(1) }}>
                                         <FlatList
                                             data={this.state.photosdata}
-                                            renderItem={({ item }) => this.renderphotosdata(item)}
+                                            renderItem={({ item, index }) => this.renderphotosdata(item, index)}
                                             horizontal
+                                            showsHorizontalScrollIndicator={false}
                                             keyExtractor={(item) => item.id.toString()}
                                         />
                                     </View>
@@ -536,7 +796,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                                     <Text style={{ color: '#475569', fontSize: 25, fontWeight: '600' }}>Menu</Text>
                                 </View>
 
-                                <TouchableOpacity style={{ marginHorizontal: wp(4), borderColor: '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5), marginTop: hp(1) }}>
+                                <TouchableOpacity style={{ marginHorizontal: wp(4), borderColor: '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5), marginTop: hp(1) }} onPress={() => { this.props.navigation.navigate('AddMenu') }}>
                                     <Text style={{ color: '#6F6F70', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>+ Add Menu</Text>
                                 </TouchableOpacity>
 
@@ -642,52 +902,136 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience> {
                     visible={this.state.ismealcategories}
                     onRequestClose={() => this.isCancelMealCat()}
                 >
-                    <View style={[styles.modalContainer, { marginTop: 0, flex: 1 }]}>
-                        <View style={{ backgroundColor: '#fff', flex: 1 }}>
-                            <View style={{ marginRight: wp(9), marginLeft: wp(2), borderRadius: wp(2), overflow: 'hidden' }}>
-                                {this.state.mealcatdata?.map((item: any, index: any) => {
-                                    return (
-                                        <TouchableOpacity key={index} onPress={() => { }} activeOpacity={0.6} style={[styles.interestselection, {
-                                            backgroundColor: '#64748B',
-                                            // borderColor: isSelected ? 'transparent' : 'black',
-                                        }]}  >
-                                            <Text style={[styles.interestname, { color: '#ccc' }]}>{item.title}</Text>
-                                        </TouchableOpacity>
-                                    )
-                                })}
+                    <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0 }]}>
+                        <View style={styles.modalContent}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: hp(2), overflow: 'hidden' }}>
+                                <Image source={require('../../assets/Rec.jpg')} style={{ height: hp(0.8), width: wp(9), borderRadius: wp(10), }} tintColor={'#D9D9D9'} />
+                            </View>
+                            <View style={{ backgroundColor: '#fff', }}>
+                                <View style={{ marginLeft: wp(8), marginVertical: hp(2) }}>
+                                    <Text style={{ color: '#000000', fontSize: 25, fontWeight: 'bold' }}>Meal Categories</Text>
+                                </View>
+                                <View style={{ flexWrap: 'wrap', flexDirection: 'row', marginLeft: wp(7), marginRight: wp(2), }}>
+                                    {this.state.mealcatdata?.map((item: any, index: any) => {
+                                        const isSelected = this.state.selectedMeals.includes(item.title);
+                                        return (
+                                            <TouchableOpacity key={index} onPress={() => { this.toggleInterestSelection(item.title) }} activeOpacity={0.6} style={[styles.interestselection, {
+                                                backgroundColor: isSelected ? "#000000" : '#E2E8F0',
+                                                marginLeft: wp(2),
+                                                marginVertical: 0,
+                                                marginBottom: hp(1.2),
+                                                borderColor: isSelected ? "#000000" : '#E2E8F0',
+                                            }]}  >
+                                                <Text style={[styles.interestname, { color: isSelected ? "#ffffff" : '#64748B', fontSize: 16 }]}>{item.title}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    })}
+                                </View>
+                                {/* <View>
+                                    {this.state.mealcatlimit &&
+                                        <View style={{ backgroundColor: 'rgba(255,0,0,0.1)', flexDirection: 'row' }}>
+                                            <View style={{ backgroundColor: 'rgba(255,0,0,1)', width: wp(3), height: hp(100) }}></View>
+                                            <Text style={{ color: 'rgba(255,0,0,0.6)' }}>Maximum 4 categories</Text>
+                                        </View>
+                                    }
+                                </View> */}
+
+                                <TouchableOpacity onPress={() => {
+                                    this.setState({ ismealcategories: false })
+                                    console.log("Selected Meal Categories--->>>", this.state.selectedMeals)
+                                }} style={{ backgroundColor: '#F3E344', marginHorizontal: wp(6), marginVertical: hp(2), borderRadius: wp(5) }}>
+                                    <Text style={{ fontSize: 20, color: '#000', padding: wp(2), fontWeight: 'bold', textAlign: 'center' }}>Done</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                        </View>
+
+                    </View>
+                </Modal>
+
+                <Modal
+                    transparent={true}
+                    animationType="slide"
+                    visible={this.state.isdietaryoptions}
+                    onRequestClose={() => this.isCanceldietary()}
+                >
+                    <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0 }]}>
+                        <View style={styles.modalContent}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: hp(2), overflow: 'hidden' }}>
+                                <Image source={require('../../assets/Rec.jpg')} style={{ height: hp(0.8), width: wp(9), borderRadius: wp(10), }} tintColor={'#D9D9D9'} />
+                            </View>
+                            <View style={{ backgroundColor: '#fff', }}>
+                                <View style={{ marginLeft: wp(8), marginVertical: hp(2) }}>
+                                    <Text style={{ color: '#000000', fontSize: 28, }}>Dietary Options</Text>
+                                </View>
+                                <View style={{ flexWrap: 'wrap', flexDirection: 'row', marginLeft: wp(7), marginRight: wp(2), marginBottom: hp(50) }}>
+                                    {this.state.dietaryoptions?.map((item: any, index: any) => {
+                                        console.log("Dietary Options--------", item);
+
+                                        const isSelected = this.state.selectedDietary.includes(item);
+                                        return (
+                                            <TouchableOpacity key={index} onPress={() => { this.toggleDietaryoptions(item) }} activeOpacity={0.6} style={[styles.interestselection, {
+                                                backgroundColor: isSelected ? "#000000" : '#E2E8F0',
+                                                marginLeft: wp(2),
+                                                marginVertical: 0,
+                                                marginBottom: hp(1.2),
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                borderColor: isSelected ? "#000000" : '#E2E8F0',
+                                            }]}  >
+                                                <Image source={item.image} style={{ height: hp(2.95), width: wp(6.4), alignSelf: 'center', marginLeft: wp(1.25) }} />
+                                                <Text style={[styles.interestname, { color: isSelected ? "#ffffff" : '#64748B', fontSize: 16 }]}>{item.title}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    })}
+                                </View>
+                                {/* <View>
+                                    {this.state.mealcatlimit &&
+                                        <View style={{ backgroundColor: 'rgba(255,0,0,0.1)', flexDirection: 'row' }}>
+                                            <View style={{ backgroundColor: 'rgba(255,0,0,1)', width: wp(3), height: hp(100) }}></View>
+                                            <Text style={{ color: 'rgba(255,0,0,0.6)' }}>Maximum 4 categories</Text>
+                                        </View>
+                                    }
+                                </View> */}
+
+                                <TouchableOpacity onPress={() => {
+                                    this.setState({ isdietaryoptions: false })
+                                    console.log("Selected Dietary Options--->>>", this.state.selectedDietary)
+                                }} style={{ backgroundColor: '#F3E344', marginHorizontal: wp(6), marginVertical: hp(2), borderRadius: wp(5) }}>
+                                    <Text style={{ fontSize: 20, color: '#000', padding: wp(2), fontWeight: 'bold', textAlign: 'center' }}>Done</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                        </View>
+
+                    </View>
+                </Modal>
+
+
+                <Modal
+                    transparent={true}
+                    animationType="slide"
+                    visible={this.state.isCameraModal}
+                    onRequestClose={() => this.isCancelCamera()}
+                >
+                    <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0, marginTop: hp(40), alignItems: 'center', justifyContent: 'center' }]}>
+                        <View style={{ backgroundColor: '#ffffff', borderRadius: wp(5), borderColor: "#747688", borderWidth: 0.8 }}>
+                            <View>
+                                <Text style={{ color: '#747688', fontSize: 30, padding: wp(2), paddingHorizontal: wp(5), textAlign: 'center', fontWeight: 'bold' }}>Choose one</Text>
+                            </View>
+                            <View style={{ borderColor: '#F3E344', borderWidth: 1, backgroundColor: '#747688' }}></View>
+                            <View style={{}}>
+                                <TouchableOpacity style={{}} onPress={() => { this.openImagePicker(this.state.activeindex) }}>
+                                    <Text style={{ color: '#000000', fontSize: 25, paddingHorizontal: wp(20), marginTop: hp(3), }}>Open Camera</Text>
+                                </TouchableOpacity>
+                                <View style={{ borderColor: '#747688', borderWidth: 1, backgroundColor: '#000000', marginTop: hp(2) }}></View>
+                                <TouchableOpacity style={{ marginTop: hp(3), marginBottom: hp(3) }} onPress={() => { this.opengallery() }}>
+                                    <Text style={{ color: '#000000', fontSize: 25, paddingHorizontal: wp(20) }}>Open Gallery</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                 </Modal>
-
-                {/* <Modal
-                    transparent={true}
-                    animationType="slide"
-                    visible={this.state.isdietaryoptions}
-                    onRequestClose={() => this.isCanceltime()}
-                >
-                    <View style={[styles.modalContainer, { backgroundColor: '#ff0000', flex: 1, elevation: 5 }]}>
-
-                        <View style={{ marginRight: wp(9), marginLeft: wp(2), borderRadius: wp(5), width: wp(77.6) }}>
-
-
-                            <DatePicker
-                                date={new Date(this.state.exptime)}
-                                onDateChange={(timer) => console.log(timer)}
-                                mode="time"
-                                onConfirm={(time) => {
-                                    console.log("Time-----------------", time);
-                                }}
-                                onCancel={() => {
-                                    console.log("TimePicker Cancelled---");
-                                }}
-                            />
-
-                        </View>
-
-                    </View>
-                </Modal>  */}
-
             </SafeAreaView >
         )
     }
@@ -733,17 +1077,17 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     interestselection: {
-        margin: 4,
+        margin: wp(0.5),
         borderWidth: 1,
-        borderRadius: 25,
-        marginVertical: 10,
+        borderRadius: wp(6.66),
+        marginVertical: hp(1.23),
     },
     interestname: {
         fontWeight: 'bold',
         fontSize: 14,
         textAlign: 'center',
-        paddingHorizontal: 10,
-        paddingVertical: 5
+        paddingHorizontal: wp(2.66),
+        paddingVertical: hp(0.61)
     }
 
 })

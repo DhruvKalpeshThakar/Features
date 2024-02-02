@@ -30,6 +30,7 @@ import Subscription from "./Src/Subscription";
 import EditProfile from "./Src/EditProfile";
 import HelpnSupport from "./Src/Screens/settings/HelpnSupport";
 import CreateExperienceForm from "./Src/Screens/settings/CreateExperienceForm";
+import AddMenu from "./Src/Screens/settings/AddMenu";
 
 
 
@@ -78,7 +79,7 @@ class App extends Component<{}, ConnectionCheck> {
     return (
       <NativeBaseProvider>
         <NavigationContainer >
-        {/* <AppStack /> */}
+          {/* <AppStack /> */}
           <Stack.Navigator>
             {/* <Stack.Screen name="SplashScreen" component={SplashScreen} />
             <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
@@ -90,13 +91,14 @@ class App extends Component<{}, ConnectionCheck> {
             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
             <Stack.Screen name="HelpnSupport" component={HelpnSupport} options={{ headerShown: false }} /> */}
             <Stack.Screen name="CreateExperienceForm" component={CreateExperienceForm} options={{ headerShown: false }} />
+            <Stack.Screen name="AddMenu" component={AddMenu} options={{ headerShown: false }} />
 
-            
-          {/* <AuthStack /> */}
+
+            {/* <AuthStack /> */}
 
           </Stack.Navigator>
         </NavigationContainer>
-          
+
 
 
         <Modal
