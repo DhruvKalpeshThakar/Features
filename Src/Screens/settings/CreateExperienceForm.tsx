@@ -11,6 +11,7 @@ import DatePicker from 'react-native-date-picker'
 import { MD2LightTheme } from "react-native-paper";
 import { PERMISSIONS, RESULTS, check, request } from "react-native-permissions";
 import ImagePicker from 'react-native-image-crop-picker';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Experience {
     exptitle: any
@@ -44,6 +45,20 @@ interface Experience {
     photosthree: any
     photosfour: any
     dietaryoptions: dietaryoptions[]
+    exptitlealert: boolean
+    expdatealert: boolean
+    exptimealert: boolean
+    mealtypealert: boolean
+    childfriendlyalert: boolean
+    noofseatsalert: boolean
+    mealcatalert: boolean
+    dietaryoptionsalert: boolean
+    expdescalert: boolean
+    droomdescalert: boolean,
+    photosalert: boolean
+    addmenuslist: any
+    addmenualert: boolean
+    photoimagerender: boolean
 }
 
 interface dietaryoptions {
@@ -53,7 +68,7 @@ interface dietaryoptions {
 }
 
 
-class CreateExperienceForm extends Component<{ navigation: any }, Experience, dietaryoptions> {
+class CreateExperienceForm extends Component<{ navigation: any, route: any }, Experience, dietaryoptions> {
     constructor(props: any) {
 
         super(props);
@@ -62,7 +77,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
             childfriendly: false,
             expdate: '',
             expdate2: {},
-            exptime: new Date(),
+            exptime: "",
             mealtype: '',
             noofseats: '',
             mealcategories: '',
@@ -76,6 +91,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
             isMealtype: false,
             ismealcategories: false,
             isdietaryoptions: false,
+            photosalert: false,
             selectedTime: null,
             selectedMeals: [],
             photosindex: 0,
@@ -84,6 +100,19 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
             photostwo: '',
             photosthree: '',
             photosfour: '',
+            exptitlealert: false,
+            expdatealert: false,
+            exptimealert: false,
+            mealtypealert: false,
+            childfriendlyalert: false,
+            noofseatsalert: false,
+            mealcatalert: false,
+            dietaryoptionsalert: false,
+            expdescalert: false,
+            droomdescalert: false,
+            addmenualert: false,
+            photoimagerender: false,
+            addmenuslist: '',
             mealcatdata: [
                 { id: 1, title: 'Chinese' },
                 { id: 2, title: 'Sushi' },
@@ -186,9 +215,11 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
                 borderRadius: wp(3),
                 alignItems: 'center',
                 justifyContent: 'center',
-                borderColor: '#eaeaea',
+                borderColor: this.state.photosalert ? "#DC2626" : '#E4DFDF',
+                borderWidth: 1,
             }}
                 onPress={() => {
+                    console.log("Photo Image Render----->>>", this.state.photoimagerender);
                     this.setState({ isCameraModal: true })
                     // console.log("Index of Add Photos----", index)
                     this.setState({ photosindex: item.id })
@@ -198,8 +229,9 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
                     <AntDesign name="delete" size={25} color={'#fff'} onPress={() => { this.deletephotoImage(item.id) }} style={{ position: 'absolute', zIndex: 1, bottom: hp(8), left: wp(20) }} />
                 }
                 <Image source={this.photoImage(item.id)} style={{
-                    width: wp(30),
-                    height: hp(12), opacity: 0.5
+                    width: this.state.photoimagerender ? wp(30) : wp(10),
+                    height: this.state.photoimagerender ? hp(12) : hp(5),
+                    opacity: 0.5
                 }} resizeMode="cover" />
             </TouchableOpacity>
         )
@@ -207,10 +239,17 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
 
     componentDidMount(): void {
         BackHandler.addEventListener('hardwareBackPress', this.backaction)
+        // this.menudatahandler()
     }
 
     componentWillUnmount(): void {
         BackHandler.removeEventListener('hardwareBackPress', this.backaction)
+    }
+
+    menudatahandler = () => {
+
+        console.log("Add Menu Items------>>>", this.props.route.params.Title, this.props.route.params.Description, this.props.route.params.Price);
+
     }
 
     backaction = () => {
@@ -236,15 +275,20 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
 
     numberofseats = (numbersOfseats: any) => {
         // console.log("Number of Seats---------", numbersOfseats)
-        if (numbersOfseats === '.') {
+        if (numbersOfseats === '.' || numbersOfseats == "") {
             this.setState({ noofseats: '' })
-            //Turn on alertstate
+            this.setState({ noofseatsalert: true })
             Keyboard.dismiss()
-        } else if (numbersOfseats > 99) {
+        } else if (numbersOfseats != "") {
+            this.setState({ noofseatsalert: false })
+            this.setState({ noofseats: numbersOfseats })
+        }
+        else if (numbersOfseats > 99) {
             Alert.alert("Limit", "Max number reached")
-            //Can enable state instead and display the same in red
+            this.setState({ noofseatsalert: false })
         }
         else {
+
             this.setState({ noofseats: numbersOfseats })
         }
     }
@@ -267,20 +311,24 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
 
 
     photoImage = (id: any) => {
+
         if (id === 1 && this.state.photosone != "") {
             return { uri: this.state.photosone }
         }
         else if (id === 2 && this.state.photostwo != "") {
+
             return { uri: this.state.photostwo }
         }
         else if (id === 3 && this.state.photosthree != "") {
+
             return { uri: this.state.photosthree }
         }
         else if (id === 4 && this.state.photosfour != "") {
+
             return { uri: this.state.photosfour }
         }
         else {
-            // console.log('gjkhgsdjkghdjgkhu');
+
             return require('../../assets/noimage.png')
         }
     }
@@ -331,7 +379,7 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
             }));
         }
     };
-    
+
     toggleDietaryoptions = (interestValue: any) => {
         console.log("Interest-----Value------", interestValue);
 
@@ -450,59 +498,152 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
         this.setState({ isCameraModal: false })
     }
 
+    createhandler = () => {
+        if (this.state.exptitle == "") {
+            this.setState({ exptitlealert: true })
+        } else {
+            this.setState({ exptitlealert: false })
+        }
+
+        if (this.state.expdate == "") {
+            this.setState({ expdatealert: true })
+        } else {
+            this.setState({ expdatealert: false })
+        }
+
+        if (this.state.exptime == "") {
+            this.setState({ exptimealert: true })
+        } else {
+            this.setState({ exptimealert: false })
+        }
+
+        if (this.state.mealtype == "") {
+            this.setState({ mealtypealert: true })
+        } else {
+            this.setState({ mealtypealert: false })
+        }
+
+
+        if (this.state.noofseats == "") {
+            this.setState({ noofseatsalert: true })
+        } else {
+            this.setState({ noofseatsalert: false })
+        }
+
+
+        if (this.state.mealcategories == "") {
+            this.setState({ mealcatalert: true })
+        } else {
+            this.setState({ mealcatalert: false })
+        }
+
+        if (this.state.dietaryoptions.length > 0) {
+            this.setState({ dietaryoptionsalert: true })
+        } else {
+            this.setState({ dietaryoptionsalert: false })
+        }
+
+        if (this.state.photosone === "" || this.state.photostwo === "" || this.state.photosthree === "" || this.state.photosfour === "") {
+            this.setState({ photosalert: true })
+        } else {
+            this.setState({ photosalert: false })
+        }
+
+        if (this.state.expdesc == "") {
+            this.setState({ expdescalert: true })
+        } else {
+            this.setState({ expdescalert: false })
+        }
+
+        if (this.state.droomdesc == "") {
+            this.setState({ droomdescalert: true })
+        } else {
+            this.setState({ droomdescalert: false })
+        }
+
+        if (this.state.addmenuslist == "") {
+            this.setState({ addmenualert: true })
+        } else {
+            this.setState({ addmenualert: false })
+        }
+
+
+    }
+
     render() {
 
         const colors = ['#087064', '#ff0000', '#37B5B6', '#A94438', '#DC84F3',];
 
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: '#ebebeb' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor={'#ebebeb'} />
-                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} >
-                    <ScrollView showsVerticalScrollIndicator={false} >
-                        <View style={{ flex: 1, marginBottom: hp(2), backgroundColor: '#F3F2F3 ' }}>
-                            <View style={{ flexDirection: 'row', marginTop: hp(3) }}>
-                                <View style={{ marginLeft: wp(3) }}>
-                                    <Entypo name="cross" color={'#000'} size={30} />
-                                </View>
+                <View style={{ flex: 1 }}>
+                    <StatusBar barStyle={"dark-content"} backgroundColor={'#ebebeb'} />
 
-                                <Text style={{ color: '#000', textAlign: 'center', fontSize: 20, marginLeft: wp(3), fontWeight: 'bold' }}>Create experience</Text>
+                    <View style={{ flexDirection: 'row', marginTop: hp(3) }}>
+                        <View style={{ marginLeft: wp(3) }}>
+                            <Entypo name="cross" color={'#000'} size={30} />
+                        </View>
 
-                                <View style={{ marginLeft: 'auto', marginRight: wp(4), marginTop: hp(0.2) }}>
-                                    <AntDesign name="delete" color={'#000'} size={25} />
-                                </View>
-                            </View>
+                        <Text style={{ color: '#000', textAlign: 'center', fontSize: 20, marginLeft: wp(3), fontWeight: 'bold' }}>Create experience</Text>
+
+                        <View style={{ marginLeft: 'auto', marginRight: wp(4), marginTop: hp(0.2) }}>
+                            <AntDesign name="delete" color={'#000'} size={25} />
+                        </View>
+                    </View>
+                    <View style={{ flex: 1, }}>
+                        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
+                            <ScrollView showsVerticalScrollIndicator={false} >
+                                <View style={{ flex: 1, marginBottom: hp(2), backgroundColor: '#F3F2F3 ' }}>
 
 
-                            <View style={{ marginHorizontal: wp(1), flex: 1, marginTop: hp(2) }}>
+                                    <View style={{ marginHorizontal: wp(1), flex: 1, marginTop: hp(2) }}>
 
-                                <View style={{ marginHorizontal: wp(4), }}>
-                                    <View>
-                                        <Text style={styles.text}>Experience title</Text>
-                                    </View>
-                                    <TextInput
-                                        style={[styles.textinput, { padding: wp(4), marginTop: hp(1), marginBottom: hp(3) }]}
-                                        value={this.state.exptitle}
-                                        placeholderTextColor={'#747688'}
-                                        placeholder="e.g. My Tasty Experience"
-                                        onChangeText={(text) => this.setState({ exptitle: text })}
-                                    />
-                                </View>
-                                <View style={{ marginHorizontal: wp(4), }}>
-                                    <View>
-                                        <Text style={styles.text}>Select experience colour</Text>
-                                    </View>
+                                        <View style={{ marginHorizontal: wp(4), }}>
+                                            <View>
+                                                <Text style={styles.text}>Experience title</Text>
+                                            </View>
+                                            <TextInput
+                                                style={[styles.textinput, { padding: wp(4), marginTop: hp(1), marginBottom: hp(2), borderColor: this.state.exptitlealert ? "#DC2626" : '#E4DFDF', }]}
+                                                value={this.state.exptitle}
+                                                placeholderTextColor={'#747688'}
+                                                placeholder="e.g. My Tasty Experience"
+                                                onChangeText={
+                                                    (text) => {
+                                                        if (this.state.exptitle == "") {
+                                                            this.setState({ exptitlealert: true })
+                                                        } else {
 
-                                    <View style={{ flexDirection: 'row', }}>
-                                        {colors.map((color: any, index: any) => (
-                                            <TouchableOpacity key={index} style={[styles.colorBox, {
-                                                backgroundColor: color,
-                                                marginTop: hp(2),
-                                                alignItems: 'center',
-                                                margin: wp(2),
-                                                justifyContent: 'center'
-                                            }]}
-                                                onPress={() => this.setState({ activeindex: index })}>
-                                                {/* <LinearGradient colors={this.state.activeindex === index ? ['orange', 'orange'] : ['transparent', 'transparent']}  style={{ paddingVertical: hp(2.5),
+                                                            this.setState({ exptitlealert: false })
+                                                        }
+                                                        this.setState({ exptitle: text })
+                                                    }
+                                                }
+                                            />
+
+                                            {this.state.exptitlealert &&
+                                                <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
+                                                    <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                                    <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please add experience title</Text>
+                                                </View>
+                                            }
+
+                                        </View>
+                                        <View style={{ marginHorizontal: wp(4), }}>
+                                            <View>
+                                                <Text style={styles.text}>Select experience colour</Text>
+                                            </View>
+
+                                            <View style={{ flexDirection: 'row', }}>
+                                                {colors.map((color: any, index: any) => (
+                                                    <TouchableOpacity key={index} style={[styles.colorBox, {
+                                                        backgroundColor: color,
+                                                        marginTop: hp(2),
+                                                        alignItems: 'center',
+                                                        margin: wp(2),
+                                                        justifyContent: 'center'
+                                                    }]}
+                                                        onPress={() => this.setState({ activeindex: index })}>
+                                                        {/* <LinearGradient colors={this.state.activeindex === index ? ['orange', 'orange'] : ['transparent', 'transparent']}  style={{ paddingVertical: hp(2.5),
                                                     paddingHorizontal: wp(5),
                                                     width: wp(9),
                                                     height: hp(4.5),
@@ -513,57 +654,64 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
                                                     >
 
                                                 </LinearGradient> */}
-                                                <View style={{
-                                                    paddingVertical: hp(2.5),
-                                                    paddingHorizontal: wp(5),
-                                                    width: wp(9),
-                                                    height: hp(4.5),
-                                                    borderRadius: wp(3),
-                                                    borderColor: this.state.activeindex === index ? 'orange' : 'transparent',
-                                                    borderWidth: this.state.activeindex === index ? 3 : 1
-                                                }}>
+                                                        <View style={{
+                                                            paddingVertical: hp(2.5),
+                                                            paddingHorizontal: wp(5),
+                                                            width: wp(9),
+                                                            height: hp(4.5),
+                                                            borderRadius: wp(3),
+                                                            borderColor: this.state.activeindex === index ? 'orange' : 'transparent',
+                                                            borderWidth: this.state.activeindex === index ? 3 : 1
+                                                        }}>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                ))}
+                                            </View>
+
+                                        </View>
+                                        <View style={{ marginHorizontal: wp(4), flexDirection: 'row', justifyContent: 'space-between', marginTop: hp(3) }}>
+
+                                            <View>
+                                                <View>
+                                                    <Text style={styles.text}>Date</Text>
                                                 </View>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </View>
-
-                                </View>
-                                <View style={{ marginHorizontal: wp(4), flexDirection: 'row', justifyContent: 'space-between', marginTop: hp(3) }}>
-
-                                    <View>
-                                        <View>
-                                            <Text style={styles.text}>Date</Text>
-                                        </View>
-                                        <TouchableOpacity style={{ flexDirection: 'row', }} onPress={() => { this.setState({ iscalendar: !this.state.iscalendar }) }}>
-                                            <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8) }]}>
-                                                {this.state.expdate != "" ?
-                                                    <Text style={{ color: '#747688' }}>{this.state.expdate2}</Text>
-                                                    :
-                                                    <Text style={{ color: '#747688' }}>Sat, 4 Aug</Text>
-                                                }
-                                            </View>
-                                            <Entypo name={this.state.iscalendar ? "chevron-up" : "chevron-down"} color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
-                                        </TouchableOpacity>
-                                    </View>
-
-                                    <View style={{ marginRight: wp(5) }}>
-                                        <View>
-                                            <Text style={styles.text}>Time</Text>
-                                        </View>
-                                        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { this.setState({ isTime: true }) }}>
-                                            <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8) }]}>
-                                                {this.state.exptime != "" ?
-                                                    <Text style={{ color: '#747688' }}>{this.timeDisplayhandler()}</Text> :
-                                                    <Text style={{ color: '#747688' }}>11:00 am</Text>
-                                                }
+                                                <TouchableOpacity style={{ flexDirection: 'row', }} onPress={() => { this.setState({ iscalendar: !this.state.iscalendar }) }}>
+                                                    <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8), borderColor: this.state.expdatealert ? "#DC2626" : '#E4DFDF' }]}>
+                                                        {this.state.expdate != "" ?
+                                                            <Text style={{ color: '#747688' }}>{this.state.expdate2}</Text>
+                                                            :
+                                                            <Text style={{ color: '#747688' }}>Sat, 4 Aug</Text>
+                                                        }
+                                                    </View>
+                                                    <Entypo name={this.state.iscalendar ? "chevron-up" : "chevron-down"} color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
+                                                </TouchableOpacity>
                                             </View>
 
-                                            <Entypo name="chevron-down" color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
+                                            <View style={{ marginRight: wp(5) }}>
+                                                <View>
+                                                    <Text style={styles.text}>Time</Text>
+                                                </View>
+                                                <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { this.setState({ isTime: true }) }}>
+                                                    <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8), borderColor: this.state.exptimealert ? "#DC2626" : '#E4DFDF' }]}>
+                                                        {this.state.exptime != "" ?
+                                                            <Text style={{ color: '#747688' }}>{this.timeDisplayhandler()}</Text> :
+                                                            <Text style={{ color: '#747688' }}>11:00 am</Text>
+                                                        }
+                                                    </View>
 
-                                {/* {this.state.iscalendar &&
+                                                    <Entypo name="chevron-down" color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
+                                                </TouchableOpacity>
+                                            </View>
+
+                                            {/* {this.state.exp &&
+                                        <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
+                                            <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                            <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please add experience title</Text>
+                                        </View>
+                                    } */}
+                                        </View>
+
+                                        {/* {this.state.iscalendar &&
                                     <View style={{ marginHorizontal: wp(3), borderRadius: wp(2), overflow: 'hidden' }}>
                                         <Calendar
                                             onDayPress={day => {
@@ -578,460 +726,569 @@ class CreateExperienceForm extends Component<{ navigation: any }, Experience, di
 
                                 } */}
 
-                                <TouchableOpacity style={{ marginHorizontal: wp(4), borderColor: '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5) }}>
-                                    <Text style={{ color: '#6F6F70', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>+ Add more</Text>
-                                </TouchableOpacity>
+                                        <TouchableOpacity style={{ marginHorizontal: wp(4), borderColor: '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5) }}>
+                                            <Text style={{ color: '#6F6F70', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>+ Add more</Text>
+                                        </TouchableOpacity>
 
 
-                                <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
-                                    <View>
-                                        <Text style={styles.text}>Meal type</Text>
-                                    </View>
+                                        <View style={{ marginHorizontal: wp(4), marginTop: hp(3), }}>
+                                            <View>
+                                                <Text style={styles.text}>Meal type</Text>
+                                            </View>
 
-                                    <TouchableOpacity onPress={() => { this.setState({ isMealtype: !this.state.isMealtype }) }}>
-                                        <TextInput
-                                            style={[styles.textinput, { paddingHorizontal: wp(3), marginVertical: hp(1), color: '#000' }]}
-                                            value={this.state.mealtype}
-                                            editable={false}
-                                            placeholderTextColor={'#747688'}
-                                            placeholder="e.g. My Brunch"
-                                            onChangeText={(text) => this.setState({ exptitle: text })}
-                                        />
-                                        <Entypo name={this.state.isMealtype ? "chevron-up" : "chevron-down"} color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
-                                    </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => { this.setState({ isMealtype: !this.state.isMealtype }) }}>
+                                                <TextInput
+                                                    style={[styles.textinput, { paddingHorizontal: wp(3), marginVertical: hp(1), color: '#000', borderColor: this.state.mealtypealert ? "#DC2626" : '#E4DFDF' }]}
+                                                    value={this.state.mealtype}
+                                                    editable={false}
+                                                    placeholderTextColor={'#747688'}
+                                                    placeholder="e.g. My Brunch"
+                                                    onChangeText={(text) => this.setState({ mealtype: text })}
+                                                />
+                                                <Entypo name={this.state.isMealtype ? "chevron-up" : "chevron-down"} color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
+                                            </TouchableOpacity>
 
-                                    {this.state.isMealtype &&
-                                        <View style={{ backgroundColor: '#ffffff', borderRadius: wp(3), borderColor: '#E4DFDF', borderWidth: 1 }}>
-                                            {this.state.mealdata.map((meal: any, index: any) => (
-                                                <TouchableOpacity key={meal.id} onPress={() => { this.setState({ mealtype: meal.title, isMealtype: false }) }}>
-                                                    <Text style={{ color: '#747688', padding: wp(3) }}>{meal.title}</Text>
-                                                </TouchableOpacity>
-                                            ))}
+                                            {this.state.isMealtype &&
+                                                <View style={{ backgroundColor: '#ffffff', borderRadius: wp(3), borderColor: '#E4DFDF', borderWidth: 1 }}>
+                                                    {this.state.mealdata.map((meal: any, index: any) => (
+                                                        <TouchableOpacity key={meal.id} onPress={() => { this.setState({ mealtype: meal.title, isMealtype: false }) }}>
+                                                            <Text style={{ color: '#747688', padding: wp(3) }}>{meal.title}</Text>
+                                                        </TouchableOpacity>
+                                                    ))}
+                                                </View>
+                                            }
+
+                                            {this.state.mealtypealert &&
+                                                <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
+                                                    <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                                    <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please choose meal type</Text>
+                                                </View>
+                                            }
+
                                         </View>
-                                    }
 
-                                </View>
+                                        <View style={{ marginHorizontal: wp(4), marginTop: hp(2) }}>
+                                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}
+                                                onPress={() => {
+                                                    this.setState({ childfriendly: !this.state.childfriendly })
+                                                    // console.log("Child Friendly----------", this.state.childfriendly);
+                                                }}>
+                                                <View style={{
+                                                    borderColor: '#000',
+                                                    backgroundColor: this.state.childfriendly ? 'purple' : '#ebebeb',
+                                                    borderWidth: 1,
+                                                    borderRadius: wp(2),
+                                                    padding: wp(3),
+                                                    width: wp(2),
+                                                    height: hp(2),
+                                                    marginVertical: hp(1),
+                                                    marginHorizontal: wp(2),
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    {this.state.childfriendly &&
+                                                        <Image source={require('../../assets/check.png')} style={{ height: wp(4.2), width: wp(4.2) }} tintColor={'#fff'} />
+                                                    }
+                                                </View>
+                                                <Text style={{ color: '#000000', fontSize: 15, }}>Child Friendly ?</Text>
+                                            </TouchableOpacity>
+                                        </View>
 
-                                <View style={{ marginHorizontal: wp(4), marginTop: hp(2) }}>
-                                    <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}
-                                        onPress={() => {
-                                            this.setState({ childfriendly: !this.state.childfriendly })
-                                            // console.log("Child Friendly----------", this.state.childfriendly);
-                                        }}>
-                                        <View style={{
-                                            borderColor: '#000',
-                                            backgroundColor: this.state.childfriendly ? 'purple' : '#ebebeb',
-                                            borderWidth: 1,
-                                            borderRadius: wp(2),
-                                            padding: wp(3),
-                                            width: wp(2),
-                                            height: hp(2),
-                                            marginVertical: hp(1),
-                                            marginHorizontal: wp(2),
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            {this.state.childfriendly &&
-                                                <Image source={require('../../assets/check.png')} style={{ height: wp(4.2), width: wp(4.2) }} tintColor={'#fff'} />
+                                        <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
+                                            <View>
+                                                <Text style={styles.text}>Number of seats available</Text>
+                                            </View>
+
+                                            <View>
+                                                <View style={{ position: 'absolute', zIndex: 1, top: hp(2.5), left: wp(5) }}>
+                                                    <FontAwesome6 name="people-roof" color={'#000'} size={20} style={{}} />
+                                                </View>
+                                                <TextInput
+                                                    style={[styles.textinput, { paddingLeft: wp(15), marginVertical: hp(1), color: '#000', borderColor: this.state.noofseatsalert ? "#DC2626" : '#E4DFDF' }]}
+                                                    value={this.state.noofseats}
+                                                    placeholderTextColor={'#747688'}
+                                                    keyboardType="number-pad"
+                                                    placeholder="Type a number"
+                                                    onChangeText={(text) => this.numberofseats(text)}
+                                                />
+
+                                            </View>
+
+                                            {this.state.noofseatsalert &&
+                                                <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
+                                                    <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                                    <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Maximum no. of seats you can host is 99</Text>
+                                                </View>
+                                            }
+
+                                        </View>
+
+                                        <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
+                                            <View>
+                                                <Text style={styles.text}>Meal categories</Text>
+                                            </View>
+
+                                            <TouchableOpacity onPress={() => { this.setState({ ismealcategories: true }) }}>
+                                                <View style={{ position: 'absolute', zIndex: 1, top: hp(2.5), left: wp(5) }}>
+                                                    <Fontisto name="search" color={'#000'} size={20} />
+                                                </View>
+                                                <TextInput
+                                                    style={[styles.textinput, { paddingLeft: wp(15), marginVertical: hp(1), color: '#000', borderColor: this.state.mealcatalert ? "#DC2626" : '#E4DFDF' }]}
+                                                    value={this.state.mealcategories}
+                                                    editable={false}
+                                                    placeholderTextColor={'#747688'}
+                                                    placeholder="e.g. French"
+                                                    onChangeText={(text) => this.setState({ exptitle: text })}
+                                                />
+                                            </TouchableOpacity>
+
+                                            {this.state.mealcatalert &&
+                                                <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
+                                                    <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                                    <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please choose meal categories</Text>
+                                                </View>
+                                            }
+
+
+                                            <View style={{
+                                                flexWrap: 'wrap',
+                                                flexDirection: 'row',
+
+                                            }}>
+                                                {this.state.selectedMeals?.map((item: any, index: any) => {
+                                                    console.log("This.state.Selected-----Meals", item);
+                                                    return (
+                                                        <View key={index} style={[styles.interestselection, {
+                                                            backgroundColor: "#000000",
+                                                            borderColor: "#000000",
+                                                            marginLeft: wp(2)
+                                                        }]}>
+                                                            <Text style={[styles.interestname, { color: "#ffffff", padding: wp(1) }]}>{item}</Text>
+                                                        </View>
+                                                    )
+                                                })}
+                                            </View>
+                                        </View>
+
+                                        <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
+                                            <View>
+                                                <Text style={styles.text}>Dietary options available</Text>
+                                            </View>
+
+                                            <TouchableOpacity onPress={() => { this.setState({ isdietaryoptions: true }) }}>
+                                                <View style={{ position: 'absolute', zIndex: 1, top: hp(2.5), left: wp(5) }}>
+                                                    <Fontisto name="search" color={'#000'} size={20} />
+                                                </View>
+                                                <TextInput
+                                                    style={[styles.textinput, { paddingLeft: wp(15), marginVertical: hp(1), color: '#000', borderColor: this.state.dietaryoptionsalert ? "#DC2626" : '#E4DFDF' }]}
+                                                    // value={this.state.dietaryoptions}
+                                                    editable={false}
+                                                    placeholderTextColor={'#747688'}
+                                                    placeholder="e.g. French"
+                                                />
+                                            </TouchableOpacity>
+
+                                            {this.state.dietaryoptionsalert &&
+                                                <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
+                                                    <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                                    <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please choose dietary options</Text>
+                                                </View>
+                                            }
+
+
+                                            <View style={{
+                                                flexWrap: 'wrap',
+                                                flexDirection: 'row',
+                                            }}>
+                                                {this.state.selectedDietary?.map((item: any, index: any) => {
+                                                    console.log("This.state.Selected-----Dietary", item);
+                                                    return (
+                                                        <View key={index} style={[styles.interestselection, {
+                                                            backgroundColor: "#000000",
+                                                            borderColor: "#000000",
+                                                            marginLeft: wp(2),
+                                                            marginVertical: 0,
+                                                            marginBottom: hp(1.2),
+                                                            flexDirection: 'row',
+                                                            justifyContent: 'space-between',
+                                                        }]}>
+                                                            <Image source={item.image} style={{ height: hp(2.95), width: wp(6.4), alignSelf: 'center', marginLeft: wp(1.25) }} />
+                                                            <Text style={[styles.interestname, { color: "#ffffff", padding: wp(1) }]}>{item.title}</Text>
+                                                        </View>
+                                                    )
+                                                })}
+                                            </View>
+                                        </View>
+
+                                        <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
+                                            <View>
+                                                <Text style={styles.text}>Add photos</Text>
+                                            </View>
+
+                                            <View style={{ marginVertical: hp(1), }}>
+                                                <FlatList
+                                                    data={this.state.photosdata}
+                                                    renderItem={({ item, index }) => this.renderphotosdata(item, index)}
+                                                    horizontal
+                                                    showsHorizontalScrollIndicator={false}
+                                                    keyExtractor={(item) => item.id.toString()}
+                                                />
+                                            </View>
+
+                                            {this.state.photosalert &&
+                                                <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
+                                                    <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                                    <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please add photos of the dishes</Text>
+                                                </View>
+                                            }
+
+
+                                        </View>
+
+
+                                        <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
+                                            <View>
+                                                <Text style={styles.text}>Experience description</Text>
+                                            </View>
+
+                                            <View>
+                                                <TextInput
+                                                    style={[styles.textinput, styles.textinputdescription, { borderColor: this.state.expdescalert ? "#DC2626" : '#E4DFDF' }]}
+                                                    value={this.state.expdesc}
+                                                    multiline
+                                                    numberOfLines={5}
+                                                    placeholderTextColor={'#747688'}
+                                                    placeholder="Search typing here"
+                                                    onChangeText={(text) => {
+                                                        if (this.state.expdesc == "") {
+                                                            this.setState({ expdescalert: true })
+                                                        } else {
+                                                            this.setState({ expdescalert: false })
+                                                        }
+                                                        this.setState({ expdesc: text })
+
+                                                    }
+                                                    }
+                                                />
+                                            </View>
+
+                                            {this.state.expdescalert &&
+                                                <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
+                                                    <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                                    <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please enter description for your experience</Text>
+                                                </View>
+                                            }
+
+                                        </View>
+
+                                        <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
+                                            <View>
+                                                <Text style={styles.text}>Dining room description</Text>
+                                            </View>
+
+                                            <View>
+                                                <TextInput
+                                                    style={[styles.textinput, styles.textinputdescription, { borderColor: this.state.droomdescalert ? "#DC2626" : '#E4DFDF' }]}
+                                                    value={this.state.droomdesc}
+                                                    numberOfLines={5}
+                                                    multiline
+                                                    placeholderTextColor={'#747688'}
+                                                    placeholder="Search typing here"
+                                                    onChangeText={(text) => {
+                                                        if (this.state.droomdesc == "") {
+                                                            this.setState({ droomdescalert: true })
+                                                        } else {
+                                                            this.setState({ droomdescalert: false })
+
+                                                        }
+                                                        this.setState({ droomdesc: text })
+                                                    }
+                                                    }
+                                                />
+                                            </View>
+
+                                            {this.state.droomdescalert &&
+                                                <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
+                                                    <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                                    <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please enter description for dining room</Text>
+                                                </View>
                                             }
                                         </View>
-                                        <Text style={{ color: '#000000', fontSize: 15, }}>Child Friendly ?</Text>
-                                    </TouchableOpacity>
-                                </View>
 
-                                <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
-                                    <View>
-                                        <Text style={styles.text}>Number of seats available</Text>
-                                    </View>
-
-                                    <View>
-                                        <View style={{ position: 'absolute', zIndex: 1, top: hp(2.5), left: wp(5) }}>
-                                            <FontAwesome6 name="people-roof" color={'#000'} size={20} style={{}} />
+                                        <View style={{ marginHorizontal: wp(4), marginTop: hp(1) }}>
+                                            <Text style={{ color: '#475569', fontSize: 25, fontWeight: '600' }}>Menu</Text>
                                         </View>
-                                        <TextInput
-                                            style={[styles.textinput, { paddingLeft: wp(15), marginVertical: hp(1), color: '#000' }]}
-                                            value={this.state.noofseats}
-                                            placeholderTextColor={'#747688'}
-                                            keyboardType="number-pad"
-                                            placeholder="Type a number"
-                                            onChangeText={(text) => this.numberofseats(text)}
-                                        />
+
+
+
+                                        <TouchableOpacity style={{
+                                            marginHorizontal: wp(4), borderColor: this.state.addmenualert ? "#DC2626" : '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5), marginTop: hp(1)
+                                        }} onPress={() => { this.props.navigation.navigate('AddMenu') }}>
+                                            <Text style={{ color: '#6F6F70', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>+ Add Menu</Text>
+                                        </TouchableOpacity>
+
+                                        {this.state.addmenualert &&
+                                            <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2), marginHorizontal: wp(4), marginTop: hp(1) }}>
+                                                <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                                <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please add menu to your experience</Text>
+                                            </View>
+                                        }
+
 
                                     </View>
                                 </View>
+                            </ScrollView>
 
-                                <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
-                                    <View>
-                                        <Text style={styles.text}>Meal categories</Text>
+                        </KeyboardAvoidingView >
+                        <TouchableOpacity style={{ marginHorizontal: wp(4), borderColor: '#ffffff', borderWidth: 2, backgroundColor: '#334155', borderRadius: wp(5), marginBottom: hp(1.97) }} onPress={() => { this.createhandler() }}>
+                            <Text style={{ color: '#ffffff', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>Create experience</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <Modal
+
+                        transparent={true}
+                        animationType="slide"
+                        visible={this.state.iscalendar}
+                        onRequestClose={() => this.isCancelcalendar()}
+                    >
+                        <View style={styles.modalContainer}>
+
+                            <View style={{ marginRight: wp(9), marginLeft: wp(2), borderRadius: wp(2), overflow: 'hidden', width: wp(77.6), }}>
+
+                                <Calendar
+                                    style={{ height: hp(38), width: wp(77.6), }}
+                                    theme={{
+                                        // textDayHeaderFontSize:10,
+                                        // todayButtonFontSize:10,
+                                        // textDayFontSize: 10,
+                                        // textMonthFontSize:10,
+                                        selectedDayBackgroundColor: '#F0E5FF',
+                                        selectedDayTextColor: '#6200EA',
+                                        // selectedDotColor:'#6200EA'
+                                    }}
+                                    onDayPress={day => {
+                                        console.log(day);
+                                        const tempdate = new Date(day.timestamp)
+                                        const Day = tempdate.getDay()
+                                        const Month = tempdate.getMonth()
+                                        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                                        const dayName = daysOfWeek[Day];
+                                        const Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                                        const MonthName = Months[Month]
+                                        console.log("Day-----", dayName, MonthName);
+                                        this.setState({ expdate: day.dateString })
+                                        this.setState({ expdate2: dayName.substring(0, 3) + "," + " " + day.day + " " + MonthName, iscalendar: false })
+                                    }}
+                                    markedDates={{
+                                        [this.state.expdate]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
+                                    }}
+                                />
+                            </View>
+
+                        </View>
+                    </Modal>
+
+                    <Modal
+                        transparent={true}
+                        animationType="slide"
+                        visible={this.state.isTime}
+                        onRequestClose={() => this.isCanceltime()}
+                    >
+                        <View style={[styles.modalContainer, { marginLeft: 0, marginBottom: 0 }]}>
+                            <View style={styles.modalContent}>
+                                <View style={{ borderRadius: wp(2), overflow: 'hidden', }}>
+                                    <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: hp(2), overflow: 'hidden' }}>
+                                        <Image source={require('../../assets/Rec.jpg')} style={{ height: hp(0.8), width: wp(9), borderRadius: wp(10), }} tintColor={'#D9D9D9'} />
                                     </View>
 
-                                    <TouchableOpacity onPress={() => { this.setState({ ismealcategories: true }) }}>
-                                        <View style={{ position: 'absolute', zIndex: 1, top: hp(2.5), left: wp(5) }}>
-                                            <Fontisto name="search" color={'#000'} size={20} />
-                                        </View>
-                                        <TextInput
-                                            style={[styles.textinput, { paddingLeft: wp(15), marginVertical: hp(1), color: '#000' }]}
-                                            value={this.state.mealcategories}
-                                            editable={false}
-                                            placeholderTextColor={'#747688'}
-                                            placeholder="e.g. French"
-                                            onChangeText={(text) => this.setState({ exptitle: text })}
-                                        />
-                                    </TouchableOpacity>
-                                    <View style={{
-                                        flexWrap: 'wrap',
-                                        flexDirection: 'row',
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: hp(5), marginTop: hp(3), marginHorizontal: wp(6) }}>
+                                        <Text style={{ color: '#000', fontSize: 25 }}>Choose Time</Text>
 
-                                    }}>
-                                        {this.state.selectedMeals?.map((item: any, index: any) => {
-                                            console.log("This.state.Selected-----Meals", item);
+                                        <TouchableOpacity onPress={() => {
+                                            console.log("Selected time: ", this.state.selectedTime);
+                                            this.setState({ isTime: false, exptime: this.state.selectedTime });
+                                        }}
+                                            style={{ backgroundColor: '#F3E344', borderRadius: wp(5) }} >
+                                            <Text style={{ color: '#000', fontWeight: '600', paddingHorizontal: wp(4), paddingVertical: hp(1), fontSize: 18 }}>Done</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{ marginBottom: hp(6) }}>
+                                        <DatePicker
+                                            theme="auto"
+                                            style={{
+                                                alignSelf: 'center', width: wp(55), height: hp(10),
+                                                transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }],
+                                            }}
+                                            date={this.state.exptime}
+                                            onDateChange={(timer) => {
+                                                this.timehandler(timer)
+                                            }}
+                                            mode="time"
+                                        />
+                                    </View>
+
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+
+                    <Modal
+                        transparent={true}
+                        animationType="slide"
+                        visible={this.state.ismealcategories}
+                        onRequestClose={() => this.isCancelMealCat()}
+                    >
+                        <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0 }]}>
+                            <View style={styles.modalContent}>
+                                <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: hp(2), overflow: 'hidden' }}>
+                                    <Image source={require('../../assets/Rec.jpg')} style={{ height: hp(0.8), width: wp(9), borderRadius: wp(10), }} tintColor={'#D9D9D9'} />
+                                </View>
+                                <View style={{ backgroundColor: '#fff', }}>
+                                    <View style={{ marginLeft: wp(8), marginVertical: hp(2) }}>
+                                        <Text style={{ color: '#000000', fontSize: 25, fontWeight: 'bold' }}>Meal Categories</Text>
+                                    </View>
+                                    <View style={{ flexWrap: 'wrap', flexDirection: 'row', marginLeft: wp(7), marginRight: wp(2), }}>
+                                        {this.state.mealcatdata?.map((item: any, index: any) => {
+                                            const isSelected = this.state.selectedMeals.includes(item.title);
                                             return (
-                                                <View key={index} style={[styles.interestselection, {
-                                                    backgroundColor: "#000000",
-                                                    borderColor: "#000000",
-                                                    marginLeft: wp(2)
-                                                }]}>
-                                                    <Text style={[styles.interestname, { color: "#ffffff", padding: wp(1) }]}>{item}</Text>
-                                                </View>
+                                                <TouchableOpacity key={index} onPress={() => { this.toggleInterestSelection(item.title) }} activeOpacity={0.6} style={[styles.interestselection, {
+                                                    backgroundColor: isSelected ? "#000000" : '#E2E8F0',
+                                                    marginLeft: wp(2),
+                                                    marginVertical: 0,
+                                                    marginBottom: hp(1.2),
+                                                    borderColor: isSelected ? "#000000" : '#E2E8F0',
+                                                }]}  >
+                                                    <Text style={[styles.interestname, { color: isSelected ? "#ffffff" : '#64748B', fontSize: 16 }]}>{item.title}</Text>
+                                                </TouchableOpacity>
                                             )
                                         })}
                                     </View>
+                                    {/* <View>
+                                    {this.state.mealcatlimit &&
+                                        <View style={{ backgroundColor: 'rgba(255,0,0,0.1)', flexDirection: 'row' }}>
+                                            <View style={{ backgroundColor: 'rgba(255,0,0,1)', width: wp(3), height: hp(100) }}></View>
+                                            <Text style={{ color: 'rgba(255,0,0,0.6)' }}>Maximum 4 categories</Text>
+                                        </View>
+                                    }
+                                </View> */}
+
+                                    <TouchableOpacity onPress={() => {
+                                        this.setState({ ismealcategories: false })
+                                        console.log("Selected Meal Categories--->>>", this.state.selectedMeals)
+                                    }} style={{ backgroundColor: '#F3E344', marginHorizontal: wp(6), marginVertical: hp(2), borderRadius: wp(5) }}>
+                                        <Text style={{ fontSize: 20, color: '#000', padding: wp(2), fontWeight: 'bold', textAlign: 'center' }}>Done</Text>
+                                    </TouchableOpacity>
                                 </View>
 
-                                <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
-                                    <View>
-                                        <Text style={styles.text}>Dietary options available</Text>
+                            </View>
+
+                        </View>
+                    </Modal>
+
+                    <Modal
+                        transparent={true}
+                        animationType="slide"
+                        visible={this.state.isdietaryoptions}
+                        onRequestClose={() => this.isCanceldietary()}
+                    >
+                        <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0 }]}>
+                            <View style={styles.modalContent}>
+                                <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: hp(2), overflow: 'hidden' }}>
+                                    <Image source={require('../../assets/Rec.jpg')} style={{ height: hp(0.8), width: wp(9), borderRadius: wp(10), }} tintColor={'#D9D9D9'} />
+                                </View>
+                                <View style={{ backgroundColor: '#fff', }}>
+                                    <View style={{ marginLeft: wp(8), marginVertical: hp(2) }}>
+                                        <Text style={{ color: '#000000', fontSize: 28, }}>Dietary Options</Text>
                                     </View>
+                                    <View style={{ flexWrap: 'wrap', flexDirection: 'row', marginLeft: wp(7), marginRight: wp(2), marginBottom: hp(50) }}>
+                                        {this.state.dietaryoptions?.map((item: any, index: any) => {
+                                            console.log("Dietary Options--------", item);
 
-                                    <TouchableOpacity onPress={() => { this.setState({ isdietaryoptions: true }) }}>
-                                        <View style={{ position: 'absolute', zIndex: 1, top: hp(2.5), left: wp(5) }}>
-                                            <Fontisto name="search" color={'#000'} size={20} />
-                                        </View>
-                                        <TextInput
-                                            style={[styles.textinput, { paddingLeft: wp(15), marginVertical: hp(1), color: '#000' }]}
-                                            // value={this.state.dietaryoptions}
-                                            editable={false}
-                                            placeholderTextColor={'#747688'}
-                                            placeholder="e.g. French"
-                                        />
-                                    </TouchableOpacity>
-
-                                    <View style={{
-                                        flexWrap: 'wrap',
-                                        flexDirection: 'row',
-                                    }}>
-                                        {this.state.selectedDietary?.map((item: any, index: any) => {
-                                            console.log("This.state.Selected-----Dietary", item);
+                                            const isSelected = this.state.selectedDietary.includes(item);
                                             return (
-                                                <View key={index} style={[styles.interestselection, {
-                                                    backgroundColor: "#000000",
-                                                    borderColor: "#000000",
+                                                <TouchableOpacity key={index} onPress={() => { this.toggleDietaryoptions(item) }} activeOpacity={0.6} style={[styles.interestselection, {
+                                                    backgroundColor: isSelected ? "#000000" : '#E2E8F0',
                                                     marginLeft: wp(2),
                                                     marginVertical: 0,
                                                     marginBottom: hp(1.2),
                                                     flexDirection: 'row',
                                                     justifyContent: 'space-between',
-                                                }]}>
+                                                    borderColor: isSelected ? "#000000" : '#E2E8F0',
+                                                }]}  >
                                                     <Image source={item.image} style={{ height: hp(2.95), width: wp(6.4), alignSelf: 'center', marginLeft: wp(1.25) }} />
-                                                    <Text style={[styles.interestname, { color: "#ffffff", padding: wp(1) }]}>{item.title}</Text>
-                                                </View>
+                                                    <Text style={[styles.interestname, { color: isSelected ? "#ffffff" : '#64748B', fontSize: 16 }]}>{item.title}</Text>
+                                                </TouchableOpacity>
                                             )
                                         })}
                                     </View>
-                                </View>
-
-                                <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
-                                    <View>
-                                        <Text style={styles.text}>Add photos</Text>
-                                    </View>
-
-                                    <View style={{ marginVertical: hp(1) }}>
-                                        <FlatList
-                                            data={this.state.photosdata}
-                                            renderItem={({ item, index }) => this.renderphotosdata(item, index)}
-                                            horizontal
-                                            showsHorizontalScrollIndicator={false}
-                                            keyExtractor={(item) => item.id.toString()}
-                                        />
-                                    </View>
-
-                                </View>
-
-
-                                <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
-                                    <View>
-                                        <Text style={styles.text}>Experience description</Text>
-                                    </View>
-
-                                    <View>
-                                        <TextInput
-                                            style={[styles.textinput, styles.textinputdescription]}
-                                            value={this.state.expdesc}
-                                            numberOfLines={5}
-                                            placeholderTextColor={'#747688'}
-                                            placeholder="Search typing here"
-                                            onChangeText={(text) => this.setState({ exptitle: text })}
-                                        />
-                                    </View>
-                                </View>
-
-                                <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }}>
-                                    <View>
-                                        <Text style={styles.text}>Dining room description</Text>
-                                    </View>
-
-                                    <View>
-                                        <TextInput
-                                            style={[styles.textinput, styles.textinputdescription]}
-                                            value={this.state.droomdesc}
-                                            numberOfLines={5}
-                                            placeholderTextColor={'#747688'}
-                                            placeholder="Search typing here"
-                                            onChangeText={(text) => this.setState({ exptitle: text })}
-                                        />
-                                    </View>
-                                </View>
-
-                                <View style={{ marginHorizontal: wp(4), marginTop: hp(1) }}>
-                                    <Text style={{ color: '#475569', fontSize: 25, fontWeight: '600' }}>Menu</Text>
-                                </View>
-
-                                <TouchableOpacity style={{ marginHorizontal: wp(4), borderColor: '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5), marginTop: hp(1) }} onPress={() => { this.props.navigation.navigate('AddMenu') }}>
-                                    <Text style={{ color: '#6F6F70', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>+ Add Menu</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={{ marginHorizontal: wp(4), borderColor: '#ffffff', borderWidth: 2, backgroundColor: '#334155', borderRadius: wp(5), marginTop: hp(5) }}>
-                                    <Text style={{ color: '#ffffff', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>Create experience</Text>
-                                </TouchableOpacity>
-
-                            </View>
-                        </View>
-                    </ScrollView>
-                </KeyboardAvoidingView>
-
-                <Modal
-                    transparent={true}
-                    animationType="slide"
-                    visible={this.state.iscalendar}
-                    onRequestClose={() => this.isCancelcalendar()}
-                >
-                    <View style={styles.modalContainer}>
-
-                        <View style={{ marginRight: wp(9), marginLeft: wp(2), borderRadius: wp(2), overflow: 'hidden', width: wp(77.6), }}>
-
-                            <Calendar
-                                style={{ height: hp(38), width: wp(77.6), }}
-                                theme={{
-                                    // textDayHeaderFontSize:10,
-                                    // todayButtonFontSize:10,
-                                    // textDayFontSize: 10,
-                                    // textMonthFontSize:10,
-                                    selectedDayBackgroundColor: '#F0E5FF',
-                                    selectedDayTextColor: '#6200EA',
-                                    // selectedDotColor:'#6200EA'
-                                }}
-                                onDayPress={day => {
-                                    console.log(day);
-                                    const tempdate = new Date(day.timestamp)
-                                    const Day = tempdate.getDay()
-                                    const Month = tempdate.getMonth()
-                                    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                                    const dayName = daysOfWeek[Day];
-                                    const Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-                                    const MonthName = Months[Month]
-                                    console.log("Day-----", dayName, MonthName);
-                                    this.setState({ expdate: day.dateString })
-                                    this.setState({ expdate2: dayName.substring(0, 3) + "," + " " + day.day + " " + MonthName, iscalendar: false })
-                                }}
-                                markedDates={{
-                                    [this.state.expdate]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
-                                }}
-                            />
-                        </View>
-
-                    </View>
-                </Modal>
-
-                <Modal
-                    transparent={true}
-                    animationType="slide"
-                    visible={this.state.isTime}
-                    onRequestClose={() => this.isCanceltime()}
-                >
-                    <View style={[styles.modalContainer, { marginLeft: 0, marginBottom: 0 }]}>
-                        <View style={styles.modalContent}>
-                            <View style={{ borderRadius: wp(2), overflow: 'hidden', }}>
-                                <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: hp(2), overflow: 'hidden' }}>
-                                    <Image source={require('../../assets/Rec.jpg')} style={{ height: hp(0.8), width: wp(9), borderRadius: wp(10), }} tintColor={'#D9D9D9'} />
-                                </View>
-
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: hp(5), marginTop: hp(3), marginHorizontal: wp(6) }}>
-                                    <Text style={{ color: '#000', fontSize: 25 }}>Choose Time</Text>
+                                    {/* <View>
+                                    {this.state.mealcatlimit &&
+                                        <View style={{ backgroundColor: 'rgba(255,0,0,0.1)', flexDirection: 'row' }}>
+                                            <View style={{ backgroundColor: 'rgba(255,0,0,1)', width: wp(3), height: hp(100) }}></View>
+                                            <Text style={{ color: 'rgba(255,0,0,0.6)' }}>Maximum 4 categories</Text>
+                                        </View>
+                                    }
+                                </View> */}
 
                                     <TouchableOpacity onPress={() => {
-                                        console.log("Selected time: ", this.state.selectedTime);
-                                        this.setState({ isTime: false, exptime: this.state.selectedTime });
-                                    }}
-                                        style={{ backgroundColor: '#F3E344', borderRadius: wp(5) }} >
-                                        <Text style={{ color: '#000', fontWeight: '600', paddingHorizontal: wp(4), paddingVertical: hp(1), fontSize: 18 }}>Done</Text>
+                                        this.setState({ isdietaryoptions: false })
+                                        console.log("Selected Dietary Options--->>>", this.state.selectedDietary)
+                                    }} style={{ backgroundColor: '#F3E344', marginHorizontal: wp(6), marginVertical: hp(2), borderRadius: wp(5) }}>
+                                        <Text style={{ fontSize: 20, color: '#000', padding: wp(2), fontWeight: 'bold', textAlign: 'center' }}>Done</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <View style={{ marginBottom: hp(6) }}>
-                                    <DatePicker
-                                        theme="auto"
-                                        style={{
-                                            alignSelf: 'center', width: wp(55), height: hp(10),
-                                            transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }],
-                                        }}
-                                        date={this.state.exptime}
-                                        onDateChange={(timer) => {
-                                            this.timehandler(timer)
-                                        }}
-                                        mode="time"
-                                    />
-                                </View>
 
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
-
-                <Modal
-                    transparent={true}
-                    animationType="slide"
-                    visible={this.state.ismealcategories}
-                    onRequestClose={() => this.isCancelMealCat()}
-                >
-                    <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0 }]}>
-                        <View style={styles.modalContent}>
-                            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: hp(2), overflow: 'hidden' }}>
-                                <Image source={require('../../assets/Rec.jpg')} style={{ height: hp(0.8), width: wp(9), borderRadius: wp(10), }} tintColor={'#D9D9D9'} />
-                            </View>
-                            <View style={{ backgroundColor: '#fff', }}>
-                                <View style={{ marginLeft: wp(8), marginVertical: hp(2) }}>
-                                    <Text style={{ color: '#000000', fontSize: 25, fontWeight: 'bold' }}>Meal Categories</Text>
-                                </View>
-                                <View style={{ flexWrap: 'wrap', flexDirection: 'row', marginLeft: wp(7), marginRight: wp(2), }}>
-                                    {this.state.mealcatdata?.map((item: any, index: any) => {
-                                        const isSelected = this.state.selectedMeals.includes(item.title);
-                                        return (
-                                            <TouchableOpacity key={index} onPress={() => { this.toggleInterestSelection(item.title) }} activeOpacity={0.6} style={[styles.interestselection, {
-                                                backgroundColor: isSelected ? "#000000" : '#E2E8F0',
-                                                marginLeft: wp(2),
-                                                marginVertical: 0,
-                                                marginBottom: hp(1.2),
-                                                borderColor: isSelected ? "#000000" : '#E2E8F0',
-                                            }]}  >
-                                                <Text style={[styles.interestname, { color: isSelected ? "#ffffff" : '#64748B', fontSize: 16 }]}>{item.title}</Text>
-                                            </TouchableOpacity>
-                                        )
-                                    })}
-                                </View>
-                                {/* <View>
-                                    {this.state.mealcatlimit &&
-                                        <View style={{ backgroundColor: 'rgba(255,0,0,0.1)', flexDirection: 'row' }}>
-                                            <View style={{ backgroundColor: 'rgba(255,0,0,1)', width: wp(3), height: hp(100) }}></View>
-                                            <Text style={{ color: 'rgba(255,0,0,0.6)' }}>Maximum 4 categories</Text>
-                                        </View>
-                                    }
-                                </View> */}
-
-                                <TouchableOpacity onPress={() => {
-                                    this.setState({ ismealcategories: false })
-                                    console.log("Selected Meal Categories--->>>", this.state.selectedMeals)
-                                }} style={{ backgroundColor: '#F3E344', marginHorizontal: wp(6), marginVertical: hp(2), borderRadius: wp(5) }}>
-                                    <Text style={{ fontSize: 20, color: '#000', padding: wp(2), fontWeight: 'bold', textAlign: 'center' }}>Done</Text>
-                                </TouchableOpacity>
                             </View>
 
                         </View>
+                    </Modal>
 
-                    </View>
-                </Modal>
+                    <Modal
 
-                <Modal
-                    transparent={true}
-                    animationType="slide"
-                    visible={this.state.isdietaryoptions}
-                    onRequestClose={() => this.isCanceldietary()}
-                >
-                    <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0 }]}>
-                        <View style={styles.modalContent}>
-                            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: hp(2), overflow: 'hidden' }}>
-                                <Image source={require('../../assets/Rec.jpg')} style={{ height: hp(0.8), width: wp(9), borderRadius: wp(10), }} tintColor={'#D9D9D9'} />
-                            </View>
-                            <View style={{ backgroundColor: '#fff', }}>
-                                <View style={{ marginLeft: wp(8), marginVertical: hp(2) }}>
-                                    <Text style={{ color: '#000000', fontSize: 28, }}>Dietary Options</Text>
-                                </View>
-                                <View style={{ flexWrap: 'wrap', flexDirection: 'row', marginLeft: wp(7), marginRight: wp(2), marginBottom: hp(50) }}>
-                                    {this.state.dietaryoptions?.map((item: any, index: any) => {
-                                        console.log("Dietary Options--------", item);
-
-                                        const isSelected = this.state.selectedDietary.includes(item);
-                                        return (
-                                            <TouchableOpacity key={index} onPress={() => { this.toggleDietaryoptions(item) }} activeOpacity={0.6} style={[styles.interestselection, {
-                                                backgroundColor: isSelected ? "#000000" : '#E2E8F0',
-                                                marginLeft: wp(2),
-                                                marginVertical: 0,
-                                                marginBottom: hp(1.2),
-                                                flexDirection: 'row',
-                                                justifyContent: 'space-between',
-                                                borderColor: isSelected ? "#000000" : '#E2E8F0',
-                                            }]}  >
-                                                <Image source={item.image} style={{ height: hp(2.95), width: wp(6.4), alignSelf: 'center', marginLeft: wp(1.25) }} />
-                                                <Text style={[styles.interestname, { color: isSelected ? "#ffffff" : '#64748B', fontSize: 16 }]}>{item.title}</Text>
-                                            </TouchableOpacity>
-                                        )
-                                    })}
-                                </View>
-                                {/* <View>
-                                    {this.state.mealcatlimit &&
-                                        <View style={{ backgroundColor: 'rgba(255,0,0,0.1)', flexDirection: 'row' }}>
-                                            <View style={{ backgroundColor: 'rgba(255,0,0,1)', width: wp(3), height: hp(100) }}></View>
-                                            <Text style={{ color: 'rgba(255,0,0,0.6)' }}>Maximum 4 categories</Text>
-                                        </View>
-                                    }
-                                </View> */}
-
-                                <TouchableOpacity onPress={() => {
-                                    this.setState({ isdietaryoptions: false })
-                                    console.log("Selected Dietary Options--->>>", this.state.selectedDietary)
-                                }} style={{ backgroundColor: '#F3E344', marginHorizontal: wp(6), marginVertical: hp(2), borderRadius: wp(5) }}>
-                                    <Text style={{ fontSize: 20, color: '#000', padding: wp(2), fontWeight: 'bold', textAlign: 'center' }}>Done</Text>
+                        transparent={true}
+                        animationType="slide"
+                        visible={this.state.isCameraModal}
+                        onRequestClose={() => this.isCancelCamera()}
+                    >
+                        <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0, marginTop: hp(40), alignItems: 'center', justifyContent: 'center', borderColor: '#747678', }]}>
+                            <View style={[styles.modalContent, { backgroundColor: '#ffffff', borderColor: "#747688", borderWidth: 0.8, borderTopLeftRadius: wp(2), borderTopRightRadius: wp(2), borderTopWidth: 1, borderRadius: wp(2) }]}>
+                                <TouchableOpacity onPress={() => { this.openImagePicker(this.state.activeindex) }} style={{}} >
+                                    <Text style={[styles.title, { padding: wp(10), fontSize: 20, }]}>Select from Camera</Text>
                                 </TouchableOpacity>
-                            </View>
-
-                        </View>
-
-                    </View>
-                </Modal>
-
-
-                <Modal
-                    transparent={true}
-                    animationType="slide"
-                    visible={this.state.isCameraModal}
-                    onRequestClose={() => this.isCancelCamera()}
-                >
-                    <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0, marginTop: hp(40), alignItems: 'center', justifyContent: 'center' }]}>
-                        <View style={{ backgroundColor: '#ffffff', borderRadius: wp(5), borderColor: "#747688", borderWidth: 0.8 }}>
-                            <View>
-                                <Text style={{ color: '#747688', fontSize: 30, padding: wp(2), paddingHorizontal: wp(5), textAlign: 'center', fontWeight: 'bold' }}>Choose one</Text>
-                            </View>
-                            <View style={{ borderColor: '#F3E344', borderWidth: 1, backgroundColor: '#747688' }}></View>
-                            <View style={{}}>
-                                <TouchableOpacity style={{}} onPress={() => { this.openImagePicker(this.state.activeindex) }}>
-                                    <Text style={{ color: '#000000', fontSize: 25, paddingHorizontal: wp(20), marginTop: hp(3), }}>Open Camera</Text>
+                                <TouchableOpacity onPress={() => { this.opengallery() }}>
+                                    <Text style={[styles.title, { padding: wp(10), fontSize: 20, }]}>Select from Gallery</Text>
                                 </TouchableOpacity>
-                                <View style={{ borderColor: '#747688', borderWidth: 1, backgroundColor: '#000000', marginTop: hp(2) }}></View>
-                                <TouchableOpacity style={{ marginTop: hp(3), marginBottom: hp(3) }} onPress={() => { this.opengallery() }}>
-                                    <Text style={{ color: '#000000', fontSize: 25, paddingHorizontal: wp(20) }}>Open Gallery</Text>
-                                </TouchableOpacity>
+
                             </View>
                         </View>
-                    </View>
-                </Modal>
+                    </Modal>
+
+                    {/* <Modal
+                        transparent={true}
+                        animationType="slide"
+                        visible={this.state.isCameraModal}
+                        onRequestClose={() => this.isCancelCamera()}
+                    >
+                        <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0, marginTop: hp(40), alignItems: 'center', justifyContent: 'center' }]}>
+                            <View style={{ backgroundColor: '#ffffff', borderRadius: wp(5), borderColor: "#747688", borderWidth: 0.8 }}>
+                                <View>
+                                    <Text style={{ color: '#747688', fontSize: 30, padding: wp(2), paddingHorizontal: wp(5), textAlign: 'center', fontWeight: 'bold' }}>Choose one</Text>
+                                </View>
+                                <View style={{ borderColor: '#F3E344', borderWidth: 1, backgroundColor: '#747688' }}></View>
+                                <View style={{}}>
+                                    <TouchableOpacity style={{}} onPress={() => { this.openImagePicker(this.state.activeindex) }}>
+                                        <Text style={{ color: '#000000', fontSize: 25, paddingHorizontal: wp(20), marginTop: hp(3), }}>Open Camera</Text>
+                                    </TouchableOpacity>
+                                    <View style={{ borderColor: '#747688', borderWidth: 1, backgroundColor: '#000000', marginTop: hp(2) }}></View>
+                                    <TouchableOpacity style={{ marginTop: hp(3), marginBottom: hp(3) }} onPress={() => { this.opengallery() }}>
+                                        <Text style={{ color: '#000000', fontSize: 25, paddingHorizontal: wp(20) }}>Open Gallery</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal> */}
+                </View>
             </SafeAreaView >
         )
     }
