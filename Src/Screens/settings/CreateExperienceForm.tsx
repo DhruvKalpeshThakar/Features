@@ -531,13 +531,13 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
         }
 
 
-        if (this.state.mealcategories == "") {
+        if (this.state.selectedMeals == "") {
             this.setState({ mealcatalert: true })
         } else {
             this.setState({ mealcatalert: false })
         }
 
-        if (this.state.dietaryoptions.length > 0) {
+        if (this.state.selectedDietary == "") {
             this.setState({ dietaryoptionsalert: true })
         } else {
             this.setState({ dietaryoptionsalert: false })
@@ -926,6 +926,8 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
                                             </View>
 
                                             <View style={{ marginVertical: hp(1), }}>
+
+
                                                 <FlatList
                                                     data={this.state.photosdata}
                                                     renderItem={({ item, index }) => this.renderphotosdata(item, index)}
@@ -1019,7 +1021,23 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
                                             <Text style={{ color: '#475569', fontSize: 25, fontWeight: '600' }}>Menu</Text>
                                         </View>
 
-
+                                        {/* Menu View */}
+                                        <View style={{ backgroundColor: '#ffffff', borderRadius: wp(3), elevation: 1, marginHorizontal: wp(4), marginVertical: hp(3) }}>
+                                            <View style={{ marginHorizontal: wp(3) }}>
+                                                <View style={{ paddingVertical: hp(2.25) }}>
+                                                    <Text style={{ color: '#000', paddingLeft: wp(2) }}>Available Courses</Text>
+                                                </View>
+                                                <TouchableOpacity style={{ marginHorizontal: wp(2), }}>
+                                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                        <Text style={{ fontSize: 22, color: '#000', textAlign: 'center' }}>{this.props.route.params?.Title}</Text>
+                                                        <Entypo name="chevron-down" size={25} color={'#000'} style={{ textAlign: 'center' }} />
+                                                    </View>
+                                                    <View>
+                                                        <Text style={{ color: '#000' }}>{this.props.route.params?.Price}</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
 
                                         <TouchableOpacity style={{
                                             marginHorizontal: wp(4), borderColor: this.state.addmenualert ? "#DC2626" : '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5), marginTop: hp(1)

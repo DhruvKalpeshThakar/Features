@@ -9,6 +9,9 @@ interface Menufields {
     menutitle: string
     menudesc: string
     mealprice: string
+    titlealert: boolean
+    descalert: boolean
+    pricealert: boolean
 }
 
 class AddMenu extends Component<{ navigation: any }, Menufields>{
@@ -18,13 +21,41 @@ class AddMenu extends Component<{ navigation: any }, Menufields>{
         this.state = {
             menutitle: '',
             menudesc: '',
-            mealprice: ""
+            mealprice: "",
+            titlealert: false,
+            descalert: false,
+            pricealert: false,
         }
 
     }
 
 
     addmenuhandler = async () => {
+        if (this.state.menudesc == "") {
+            this.setState({ descalert: true })
+        } else {
+            this.setState({ descalert: false })
+        }
+
+        if (this.state.menutitle == "") {
+            this.setState({ titlealert: true })
+        } else {
+            this.setState({ titlealert: false })
+        }
+
+
+        if (this.state.mealprice == "") {
+            this.setState({ pricealert: true })
+        } else {
+            this.setState({ pricealert: false })
+        }
+
+        setTimeout(() => {
+
+            console.log("Price , Title , Description", this.state.pricealert, this.state.titlealert, this.state.descalert);
+        }, 500);
+
+
         if ((this.state.menutitle && this.state.menudesc && this.state.mealprice) != "") {
             // const Menu = {
             //     Title: this.state.menutitle,
@@ -60,55 +91,81 @@ class AddMenu extends Component<{ navigation: any }, Menufields>{
                         </View>
                     </View>
                 </View>
-                <View style={{ flex: 1 }}>
-                    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
 
-                        <ScrollView showsVerticalScrollIndicator={false}>
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
 
-                            <View style={{ marginHorizontal: wp(7.46) }}>
-                                <View>
-                                    <Text style={styles.text}>Menu Title</Text>
-                                    <TextInput
-                                        style={[styles.textinput]}
-                                        value={this.state.menutitle}
-                                        placeholder="My menu"
-                                        placeholderTextColor={'#747688'}
-                                        onChangeText={(text) => this.setState({ menutitle: text })}
-                                    />
-                                </View>
-                                <View>
-                                    <Text style={[styles.text, { marginTop: hp(2.46) }]}>Menu Description</Text>
-                                    <TextInput
-                                        style={[styles.textinput, { textAlignVertical: 'top', paddingHorizontal: wp(10) }]}
-                                        value={this.state.menudesc}
-                                        numberOfLines={10}
-                                        multiline
-                                        placeholder="Start Typing here"
-                                        placeholderTextColor={'#747688'}
-                                        onChangeText={(text) => this.setState({ menudesc: text })}
-                                    />
-                                </View>
-                                <View>
-                                    <Text style={[styles.text, { marginTop: hp(2.46) }]}>Menu Price</Text>
-                                    <TextInput
-                                        style={styles.textinput}
-                                        value={this.state.mealprice.toString()}
-                                        placeholder="type the amount"
-                                        keyboardType="number-pad"
-                                        placeholderTextColor={'#747688'}
-                                        onChangeText={(number) => this.setState({ mealprice: number })}
-                                    />
-                                </View>
+                    <ScrollView showsVerticalScrollIndicator={false}>
 
-
+                        <View style={{ marginHorizontal: wp(7.46) }}>
+                            <View>
+                                <Text style={styles.text}>Menu Title</Text>
+                                <TextInput
+                                    style={[styles.textinput, { borderColor: this.state.titlealert ? "#DC2626" : '#E4DFDF' }]}
+                                    value={this.state.menutitle}
+                                    placeholder="My menu"
+                                    placeholderTextColor={'#747688'}
+                                    onChangeText={(text) => {
+                                        if (this.state.menutitle == "") {
+                                            this.setState({ titlealert: true })
+                                        } else {
+                                            this.setState({ titlealert: false })
+                                        }
+                                        this.setState({ menutitle: text })
+                                    }}
+                                />
                             </View>
-                        </ScrollView>
+                            <View>
+                                <Text style={[styles.text, { marginTop: hp(2.46) }]}>Menu Description</Text>
+                                <TextInput
+                                    style={[styles.textinput, { textAlignVertical: 'top', paddingHorizontal: wp(10), borderColor: this.state.descalert ? "#DC2626" : '#E4DFDF' }]}
+                                    value={this.state.menudesc}
+                                    numberOfLines={10}
+                                    multiline
+                                    placeholder="Start Typing here"
+                                    placeholderTextColor={'#747688'}
+                                    onChangeText={(text) => {
+                                        if (this.state.menudesc == '') {
+                                            this.setState({ descalert: true })
+                                        } else {
+                                            this.setState({ descalert: false })
+                                        }
+                                        this.setState({ menudesc: text })
+                                    }}
+                                />
+                            </View>
+                            <View>
+                                <Text style={[styles.text, { marginTop: hp(2.46) }]}>Menu Price</Text>
+                                <TextInput
+                                    style={[styles.textinput, { borderColor: this.state.pricealert ? "#DC2626" : '#E4DFDF' }]}
+                                    value={this.state.mealprice.toString()}
+                                    placeholder="type the amount"
+                                    keyboardType="number-pad"
+                                    placeholderTextColor={'#747688'}
+                                    onChangeText={(number) => {
+                                        if (this.state.mealprice == "") {
+                                            this.setState({ pricealert: true })
+                                        } else {
+                                            this.setState({ pricealert: false })
+                                        }
+                                        this.setState({ mealprice: number })
+                                    }}
+                                />
+                            </View>
 
-                    </KeyboardAvoidingView>
-                    <TouchableOpacity style={{ backgroundColor: '#F3E344', borderRadius: wp(3), marginTop: hp(5) }} onPress={() => { this.addmenuhandler() }}>
-                        <Text style={{ color: '#000000', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>Add Menu</Text>
-                    </TouchableOpacity>
-                </View>
+                            {(this.state.titlealert || this.state.pricealert || this.state.descalert) &&
+                                <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2), marginTop: hp(3) }}>
+                                    <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
+                                    <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please fill all the required details</Text>
+                                </View>
+                            }
+                        </View>
+                        <TouchableOpacity style={{ backgroundColor: '#F3E344', borderRadius: wp(3), marginTop: hp(5), marginHorizontal: wp(7.46), marginBottom: hp(3) }} onPress={() => { this.addmenuhandler() }}>
+                            <Text style={{ color: '#000000', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>Add Menu</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
+
+                </KeyboardAvoidingView>
+
 
             </SafeAreaView >
         )
