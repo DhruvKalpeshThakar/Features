@@ -89,6 +89,9 @@ class App extends Component<{}, ConnectionCheck> {
             <Stack.Screen name="Privacy" component={Privacy} options={{ headerShown: false }} />
             <Stack.Screen name="Subscription" component={Subscription} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+
+
+            
             <Stack.Screen name="HelpnSupport" component={HelpnSupport} options={{ headerShown: false }} /> */}
             <Stack.Screen name="CreateExperienceForm" component={CreateExperienceForm} options={{ headerShown: false }} />
             <Stack.Screen name="AddMenu" component={AddMenu} options={{ headerShown: false }} />
