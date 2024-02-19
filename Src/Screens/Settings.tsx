@@ -53,6 +53,10 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
         this.props.navigation.navigate('Ratings')
     }
 
+    navigatetoChat = () => {
+        this.props.navigation.navigate('ChatWithUs')
+    }
+
     navigateToReportProblem = () => {
         Alert.alert('Confirmation', 'Report a Problem?', [
             {
@@ -98,8 +102,7 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
 
     ratingandreviews = [
         { icon: "star", text: 'Rate us', action: this.navigatetoRating },
-
-
+        { icon: "info-outline", text: 'Chat with us', action: this.navigatetoChat },
     ];
 
     actionItems = [
@@ -183,7 +186,6 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
-
                     }}>
                         <TouchableOpacity onPress={() => { this.props.navigation.goBack() }} style={{ position: 'absolute', left: 0 }}>
                             <MaterialIcons name="keyboard-arrow-left" size={26} color={COLORS.black} />

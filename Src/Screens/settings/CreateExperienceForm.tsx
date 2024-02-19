@@ -12,6 +12,7 @@ import { MD2LightTheme } from "react-native-paper";
 import { PERMISSIONS, RESULTS, check, request } from "react-native-permissions";
 import ImagePicker from 'react-native-image-crop-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BlurView } from "@react-native-community/blur";
 
 interface Experience {
     exptitle: any
@@ -59,6 +60,11 @@ interface Experience {
     addmenuslist: any
     addmenualert: boolean
     photoimagerender: boolean
+    expandmenu: boolean
+    renderCount: number
+    trigger: string
+    DateandtimeViews: any
+    isID: any
 }
 
 interface dietaryoptions {
@@ -112,7 +118,16 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
             droomdescalert: false,
             addmenualert: false,
             photoimagerender: false,
+            expandmenu: false,
             addmenuslist: '',
+            renderCount: 1,
+            trigger: '',
+            isID: null,
+            DateandtimeViews: [
+                { id: 1, date: 'Sat, 4 Aug', time: '11:00 am' },
+                // { id: 2, date: 'Sat, 4 Aug', time: '11:00 am' },
+                // { id: 3, date: 'Sat, 4 Aug', time: '11:00 am' }
+            ],
             mealcatdata: [
                 { id: 1, title: 'Chinese' },
                 { id: 2, title: 'Sushi' },
@@ -247,9 +262,7 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
     }
 
     menudatahandler = () => {
-
         console.log("Add Menu Items------>>>", this.props.route.params.Title, this.props.route.params.Description, this.props.route.params.Price);
-
     }
 
     backaction = () => {
@@ -416,16 +429,16 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
         }).then(image => {
             console.log(image);
 
-            if (this.state.photosindex === 1) {
+            if (this.state.trigger === 'Onephoto') {
                 this.setState({ photosone: image.path })
             }
-            else if (this.state.photosindex === 2) {
+            else if (this.state.trigger === 'Twophoto') {
                 this.setState({ photostwo: image.path })
             }
-            else if (this.state.photosindex === 3) {
+            else if (this.state.trigger === 'Threephoto') {
                 this.setState({ photosthree: image.path })
             }
-            else if (this.state.photosindex === 4) {
+            else if (this.state.trigger === 'Fourphoto') {
                 this.setState({ photosfour: image.path })
             } else {
                 console.log('gjkhgsdjkghdjgkhu');
@@ -452,16 +465,16 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
             console.log(images);
             console.log("Image Paths-------------------->>>>>>>>>>>>>>", images.path);
             this.setState({ isCameraModal: false })
-            if (this.state.photosindex === 1) {
+            if (this.state.trigger === 'Onephoto') {
                 this.setState({ photosone: images.path })
             }
-            else if (this.state.photosindex === 2) {
+            else if (this.state.trigger === 'Twophoto') {
                 this.setState({ photostwo: images.path })
             }
-            else if (this.state.photosindex === 3) {
+            else if (this.state.trigger === 'Threephoto') {
                 this.setState({ photosthree: images.path })
             }
-            else if (this.state.photosindex === 4) {
+            else if (this.state.trigger === 'Fourphoto') {
                 this.setState({ photosfour: images.path })
             } else {
                 console.log('gjkhgsdjkghdjgkhu');
@@ -570,6 +583,96 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
 
     }
 
+    addmorebutton = () => {
+     const data = this.state.DateandtimeViews.concat({
+            id: this.state.DateandtimeViews.length + 1,
+            date: 'Sat, 4 Aug', time: '11:00 am'
+        })
+        console.warn(data)
+        if(this.state.DateandtimeViews.length <=3){
+            this.setState({DateandtimeViews: data})
+        }
+    }
+
+    renderDatenadtimeview = () => {
+       
+        return(
+                <View style={{ marginHorizontal: wp(4), marginTop: hp(3) }} >
+                    <View>
+                        {this.state.DateandtimeViews.map((item: any) => {
+                            console.log("Date and View item <><><><><><", item);
+                            return (
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                                    <View>
+                                        <View>
+                                            <Text style={styles.text}>Date</Text>
+                                        </View>
+                                        <TouchableOpacity style={{ flexDirection: 'row', }} onPress={() => { this.setState({ iscalendar: !this.state.iscalendar, isID: item.id }) }}>
+                                            <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8), borderColor: this.state.expdatealert ? "#DC2626" : '#E4DFDF' }]}>
+                                                <Text style={{ color: '#000' }}>{item.date}</Text>
+                                            </View>
+                                            <Entypo name={this.state.iscalendar ? "chevron-up" : "chevron-down"} color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
+                                        </TouchableOpacity>
+                                    </View>
+
+                                    <View style={{ marginRight: wp(5) }}>
+                                        <View>
+                                            <Text style={styles.text}>Time</Text>
+                                        </View>
+                                        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { this.setState({ isTime: true }) }}>
+                                            <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8), borderColor: this.state.exptimealert ? "#DC2626" : '#E4DFDF' }]}>
+                                                <Text style={{ color: '#000' }}>{item.time}</Text>
+                                            </View>
+
+                                            <Entypo name="chevron-down" color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            )
+                        })}
+                    </View>
+
+                    {/* <View>
+                        <View>
+                            <View>
+                                <Text style={styles.text}>Date</Text>
+                            </View>
+                            <TouchableOpacity style={{ flexDirection: 'row', }} onPress={() => { this.setState({ iscalendar: !this.state.iscalendar }) }}>
+                                <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8), borderColor: this.state.expdatealert ? "#DC2626" : '#E4DFDF' }]}>
+                                    {this.state.expdate != "" ?
+                                        <Text style={{ color: '#747688' }}>{this.state.expdate2}</Text>
+                                        :
+                                        <Text style={{ color: '#747688' }}>Sat, 4 Aug</Text>
+                                    }
+                                </View>
+                                <Entypo name={this.state.iscalendar ? "chevron-up" : "chevron-down"} color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={{ marginRight: wp(5) }}>
+                            <View>
+                                <Text style={styles.text}>Time</Text>
+                            </View>
+                            <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { this.setState({ isTime: true }) }}>
+                                <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8), borderColor: this.state.exptimealert ? "#DC2626" : '#E4DFDF' }]}>
+                                    {this.state.exptime != "" ?
+                                        <Text style={{ color: '#747688' }}>{this.timeDisplayhandler()}</Text> :
+                                        <Text style={{ color: '#747688' }}>11:00 am</Text>
+                                    }
+                                </View>
+
+                                <Entypo name="chevron-down" color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
+                            </TouchableOpacity>
+                        </View>
+                    </View> */}
+
+                </View>
+        )
+            
+        }
+
+
+
     render() {
 
         const colors = ['#087064', '#ff0000', '#37B5B6', '#A94438', '#DC84F3',];
@@ -669,64 +772,10 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
                                             </View>
 
                                         </View>
-                                        <View style={{ marginHorizontal: wp(4), flexDirection: 'row', justifyContent: 'space-between', marginTop: hp(3) }}>
 
-                                            <View>
-                                                <View>
-                                                    <Text style={styles.text}>Date</Text>
-                                                </View>
-                                                <TouchableOpacity style={{ flexDirection: 'row', }} onPress={() => { this.setState({ iscalendar: !this.state.iscalendar }) }}>
-                                                    <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8), borderColor: this.state.expdatealert ? "#DC2626" : '#E4DFDF' }]}>
-                                                        {this.state.expdate != "" ?
-                                                            <Text style={{ color: '#747688' }}>{this.state.expdate2}</Text>
-                                                            :
-                                                            <Text style={{ color: '#747688' }}>Sat, 4 Aug</Text>
-                                                        }
-                                                    </View>
-                                                    <Entypo name={this.state.iscalendar ? "chevron-up" : "chevron-down"} color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
-                                                </TouchableOpacity>
-                                            </View>
 
-                                            <View style={{ marginRight: wp(5) }}>
-                                                <View>
-                                                    <Text style={styles.text}>Time</Text>
-                                                </View>
-                                                <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { this.setState({ isTime: true }) }}>
-                                                    <View style={[styles.textinput, { paddingHorizontal: wp(3), marginTop: hp(1), marginBottom: hp(3), width: wp(35), padding: wp(3.8), borderColor: this.state.exptimealert ? "#DC2626" : '#E4DFDF' }]}>
-                                                        {this.state.exptime != "" ?
-                                                            <Text style={{ color: '#747688' }}>{this.timeDisplayhandler()}</Text> :
-                                                            <Text style={{ color: '#747688' }}>11:00 am</Text>
-                                                        }
-                                                    </View>
-
-                                                    <Entypo name="chevron-down" color={'#000'} size={20} style={{ position: 'absolute', top: hp(2.7), right: wp(4) }} />
-                                                </TouchableOpacity>
-                                            </View>
-
-                                            {/* {this.state.exp &&
-                                        <View style={{ backgroundColor: '#FEE2E2', flexDirection: 'row', borderRadius: wp(2), marginBottom: hp(2) }}>
-                                            <View style={{ width: wp(2), height: hp(5), backgroundColor: '#DC2626', borderBottomStartRadius: wp(2), borderTopLeftRadius: wp(2) }}></View>
-                                            <Text style={{ color: '#DC2626', alignSelf: 'center', paddingLeft: wp(3) }}>Please add experience title</Text>
-                                        </View>
-                                    } */}
-                                        </View>
-
-                                        {/* {this.state.iscalendar &&
-                                    <View style={{ marginHorizontal: wp(3), borderRadius: wp(2), overflow: 'hidden' }}>
-                                        <Calendar
-                                            onDayPress={day => {
-
-                                                this.setState({ expdate: day.dateString })
-                                            }}
-                                            markedDates={{
-                                                [this.state.expdate]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
-                                            }}
-                                        />
-                                    </View>
-
-                                } */}
-
-                                        <TouchableOpacity style={{ marginHorizontal: wp(4), borderColor: '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5) }}>
+                                        {this.renderDatenadtimeview()}
+                                        <TouchableOpacity style={{ marginHorizontal: wp(4), borderColor: '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5) }} onPress={() => { this.addmorebutton() }}>
                                             <Text style={{ color: '#6F6F70', fontSize: 20, padding: wp(3), textAlign: 'center', fontWeight: 'bold' }}>+ Add more</Text>
                                         </TouchableOpacity>
 
@@ -926,15 +975,158 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
                                             </View>
 
                                             <View style={{ marginVertical: hp(1), }}>
+                                                <ScrollView horizontal>
 
+                                                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                                                        <TouchableOpacity style={{
+                                                            width: wp(30),
+                                                            height: hp(12),
+                                                            backgroundColor: '#ffffff',
+                                                            marginHorizontal: wp(1),
+                                                            borderRadius: wp(3),
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            borderColor: this.state.photosalert ? "#DC2626" : '#E4DFDF',
+                                                            borderWidth: 1,
+                                                        }}
+                                                            onPress={() => {
+                                                                console.log("Photo Image Render----->>>", this.state.photoimagerender);
+                                                                this.setState({ isCameraModal: true, trigger: 'Onephoto' })
+                                                            }}
+                                                        >
+                                                            {this.state.photosone != "" &&
+                                                                <AntDesign name="delete" size={25} color={'#fff'} onPress={() => { this.setState({ photosone: '' }) }} style={{ position: 'absolute', zIndex: 1, bottom: hp(8), left: wp(20) }} />
+                                                            }
+                                                            {this.state.photosone != "" ?
 
-                                                <FlatList
-                                                    data={this.state.photosdata}
-                                                    renderItem={({ item, index }) => this.renderphotosdata(item, index)}
-                                                    horizontal
-                                                    showsHorizontalScrollIndicator={false}
-                                                    keyExtractor={(item) => item.id.toString()}
-                                                />
+                                                                <Image source={{ uri: this.state.photosone }} style={{
+                                                                    width: wp(30),
+                                                                    height: hp(12),
+                                                                    opacity: 0.5
+                                                                }} resizeMode="cover" /> :
+                                                                <Image source={require('../../assets/noimage.png')} style={{
+                                                                    width: wp(10),
+                                                                    height: hp(4),
+                                                                    opacity: 0.5
+                                                                }} resizeMode="cover" />
+
+                                                            }
+                                                        </TouchableOpacity>
+
+                                                        <TouchableOpacity style={{
+                                                            width: wp(30),
+                                                            height: hp(12),
+                                                            backgroundColor: '#ffffff',
+                                                            marginHorizontal: wp(1),
+                                                            borderRadius: wp(3),
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            borderColor: this.state.photosalert ? "#DC2626" : '#E4DFDF',
+                                                            borderWidth: 1,
+                                                        }}
+                                                            onPress={() => {
+                                                                console.log("Photo Image Render----->>>", this.state.photoimagerender);
+                                                                this.setState({ isCameraModal: true, trigger: 'Twophoto' })
+                                                            }}
+                                                        >
+                                                            {this.state.photostwo != "" &&
+                                                                <AntDesign name="delete" size={25} color={'#fff'} onPress={() => { this.setState({ photostwo: '' }) }} style={{ position: 'absolute', zIndex: 1, bottom: hp(8), left: wp(20) }} />
+                                                            }
+                                                            {this.state.photostwo != "" ?
+
+                                                                <Image source={{ uri: this.state.photostwo }} style={{
+                                                                    width: wp(30),
+                                                                    height: hp(12),
+                                                                    opacity: 0.5
+                                                                }} resizeMode="cover" /> :
+                                                                <Image source={require('../../assets/noimage.png')} style={{
+                                                                    width: wp(10),
+                                                                    height: hp(4),
+                                                                    opacity: 0.5
+                                                                }} resizeMode="cover" />
+
+                                                            }
+                                                        </TouchableOpacity>
+
+                                                        <TouchableOpacity style={{
+                                                            width: wp(30),
+                                                            height: hp(12),
+                                                            backgroundColor: '#ffffff',
+                                                            marginHorizontal: wp(1),
+                                                            borderRadius: wp(3),
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            borderColor: this.state.photosalert ? "#DC2626" : '#E4DFDF',
+                                                            borderWidth: 1,
+                                                        }}
+                                                            onPress={() => {
+                                                                console.log("Photo Image Render----->>>", this.state.photoimagerender);
+                                                                this.setState({ isCameraModal: true, trigger: 'Threephoto' })
+                                                            }}
+                                                        >
+                                                            {this.state.photosthree != "" &&
+                                                                <AntDesign name="delete" size={25} color={'#fff'} onPress={() => { this.setState({ photosthree: '' }) }} style={{ position: 'absolute', zIndex: 1, bottom: hp(8), left: wp(20) }} />
+                                                            }
+                                                            {this.state.photosthree != "" ?
+
+                                                                <Image source={{ uri: this.state.photosthree }} style={{
+                                                                    width: wp(30),
+                                                                    height: hp(12),
+                                                                    opacity: 0.5
+                                                                }} resizeMode="cover" /> :
+                                                                <Image source={require('../../assets/noimage.png')} style={{
+                                                                    width: wp(10),
+                                                                    height: hp(4),
+                                                                    opacity: 0.5
+                                                                }} resizeMode="cover" />
+
+                                                            }
+                                                        </TouchableOpacity>
+
+                                                        <TouchableOpacity style={{
+                                                            width: wp(30),
+                                                            height: hp(12),
+                                                            backgroundColor: '#ffffff',
+                                                            marginHorizontal: wp(1),
+                                                            borderRadius: wp(3),
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            borderColor: this.state.photosalert ? "#DC2626" : '#E4DFDF',
+                                                            borderWidth: 1,
+                                                        }}
+                                                            onPress={() => {
+                                                                console.log("Photo Image Render----->>>", this.state.photoimagerender);
+                                                                this.setState({ isCameraModal: true, trigger: 'Fourphoto' })
+                                                            }}
+                                                        >
+                                                            {this.state.photosfour != "" &&
+                                                                <AntDesign name="delete" size={25} color={'#fff'} onPress={() => { this.setState({ photosfour: '' }) }} style={{ position: 'absolute', zIndex: 1, bottom: hp(8), left: wp(20) }} />
+                                                            }
+                                                            {this.state.photosfour != "" ?
+
+                                                                <Image source={{ uri: this.state.photosfour }} style={{
+                                                                    width: wp(30),
+                                                                    height: hp(12),
+                                                                    opacity: 0.5
+                                                                }} resizeMode="cover" /> :
+                                                                <Image source={require('../../assets/noimage.png')} style={{
+                                                                    width: wp(10),
+                                                                    height: hp(4),
+                                                                    opacity: 0.5
+                                                                }} resizeMode="cover" />
+
+                                                            }
+                                                        </TouchableOpacity>
+                                                    </View>
+
+                                                    {/* <FlatList
+                                                        data={this.state.photosdata}
+                                                        renderItem={({ item, index }) => this.renderphotosdata(item, index)}
+                                                        horizontal
+                                                        showsHorizontalScrollIndicator={false}
+                                                        keyExtractor={(item) => item.id.toString()}
+                                                    /> */}
+                                                </ScrollView>
                                             </View>
 
                                             {this.state.photosalert &&
@@ -1021,23 +1213,46 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
                                             <Text style={{ color: '#475569', fontSize: 25, fontWeight: '600' }}>Menu</Text>
                                         </View>
 
-                                        {/* Menu View */}
-                                        <View style={{ backgroundColor: '#ffffff', borderRadius: wp(3), elevation: 1, marginHorizontal: wp(4), marginVertical: hp(3) }}>
-                                            <View style={{ marginHorizontal: wp(3) }}>
-                                                <View style={{ paddingVertical: hp(2.25) }}>
-                                                    <Text style={{ color: '#000', paddingLeft: wp(2) }}>Available Courses</Text>
+                                        {this.props.route.params?.isMenuExists === "True" &&
+                                            <View style={{ backgroundColor: '#ffffff', borderRadius: wp(3), elevation: 1, marginHorizontal: wp(4), marginVertical: hp(3) }}>
+                                                <View style={{ marginHorizontal: wp(3) }}>
+                                                    <View style={{ paddingVertical: hp(2.25) }}>
+                                                        <Text style={{ color: '#000', paddingLeft: wp(2) }}>Available Courses</Text>
+                                                    </View>
+
+                                                    <TouchableOpacity style={{ marginHorizontal: wp(2), }} onPress={() => { this.setState({ expandmenu: !this.state.expandmenu }) }} >
+                                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                            <Text style={{ fontSize: 22, color: '#000', textAlign: 'center', fontWeight: 'bold' }}>{this.props.route.params?.Title}</Text>
+                                                            <Entypo name="chevron-down" size={25} color={'#000'} style={{ textAlign: 'center' }} />
+                                                        </View>
+                                                        <View style={{ marginTop: hp(1) }}>
+                                                            <Text style={{ color: '#000' }}>$ {this.props.route.params?.Price}</Text>
+                                                        </View>
+                                                        {this.state.expandmenu &&
+
+                                                            <View>
+                                                                <View style={{ marginTop: hp(2) }}>
+                                                                    <Text style={{ color: '#000' }}>{this.props.route.params?.Description}</Text>
+                                                                </View>
+
+                                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: hp(2), marginBottom: hp(2) }}>
+                                                                    <TouchableOpacity style={{ backgroundColor: '#F87171', borderRadius: wp(2), height: hp(5.66), width: wp(36.8), justifyContent: 'center' }}>
+                                                                        <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '400' }}>Delete</Text>
+                                                                    </TouchableOpacity>
+
+                                                                    <TouchableOpacity style={{ backgroundColor: '#F3E344', borderRadius: wp(2), height: hp(5.66), width: wp(36.8), justifyContent: 'center' }}>
+                                                                        <Text style={{ color: '#000', textAlign: 'center', fontWeight: '400' }}>Edit</Text>
+                                                                    </TouchableOpacity>
+                                                                </View>
+
+                                                            </View>
+                                                        }
+
+
+                                                    </TouchableOpacity>
                                                 </View>
-                                                <TouchableOpacity style={{ marginHorizontal: wp(2), }}>
-                                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                                        <Text style={{ fontSize: 22, color: '#000', textAlign: 'center' }}>{this.props.route.params?.Title}</Text>
-                                                        <Entypo name="chevron-down" size={25} color={'#000'} style={{ textAlign: 'center' }} />
-                                                    </View>
-                                                    <View>
-                                                        <Text style={{ color: '#000' }}>{this.props.route.params?.Price}</Text>
-                                                    </View>
-                                                </TouchableOpacity>
                                             </View>
-                                        </View>
+                                        }
 
                                         <TouchableOpacity style={{
                                             marginHorizontal: wp(4), borderColor: this.state.addmenualert ? "#DC2626" : '#ffffff', borderWidth: 2, backgroundColor: '#ebebeb', borderRadius: wp(5), marginTop: hp(1)
@@ -1096,7 +1311,17 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
                                         const MonthName = Months[Month]
                                         console.log("Day-----", dayName, MonthName);
                                         this.setState({ expdate: day.dateString })
-                                        this.setState({ expdate2: dayName.substring(0, 3) + "," + " " + day.day + " " + MonthName, iscalendar: false })
+                                        // this.setState({ expdate2: dayName.substring(0, 3) + "," + " " + day.day + " " + MonthName, iscalendar: false })
+                                        const date = dayName.substring(0, 3) + "," + " " + day.day + " " + MonthName
+                                        const updatedData = this.state.DateandtimeViews.map((item: any) => {
+                                            if (item.id == this.state.isID) {
+                                                return { ...item, date }
+                                            } else {
+                                                return { ...item }
+                                            }
+                                        })
+
+                                        this.setState({ DateandtimeViews: updatedData, iscalendar: false })
                                     }}
                                     markedDates={{
                                         [this.state.expdate]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
@@ -1269,6 +1494,12 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
                         visible={this.state.isCameraModal}
                         onRequestClose={() => this.isCancelCamera()}
                     >
+                        <BlurView
+                            style={styles.absolute}
+                            blurType="regular"
+                            blurAmount={1}
+                            reducedTransparencyFallbackColor="white"
+                        />
                         <View style={[styles.modalContainer, { marginBottom: 0, marginLeft: 0, marginTop: hp(40), alignItems: 'center', justifyContent: 'center', borderColor: '#747678', }]}>
                             <View style={[styles.modalContent, { backgroundColor: '#ffffff', borderColor: "#747688", borderWidth: 0.8, borderTopLeftRadius: wp(2), borderTopRightRadius: wp(2), borderTopWidth: 1, borderRadius: wp(2) }]}>
                                 <TouchableOpacity onPress={() => { this.openImagePicker(this.state.activeindex) }} style={{}} >
@@ -1327,6 +1558,13 @@ const styles = StyleSheet.create({
     },
     textinputdescription: {
         paddingLeft: wp(3), paddingTop: hp(2), marginVertical: hp(1), textAlignVertical: 'top', fontSize: 15, color: '#000'
+    },
+    absolute: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
     },
     text: { color: '#747688', fontSize: 15 },
     modalContainer: {

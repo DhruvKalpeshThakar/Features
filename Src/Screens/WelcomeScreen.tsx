@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
+import { Image, LogBox, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
 import Entypo from 'react-native-vector-icons/Entypo';
 import { COLORS } from "../constants/color";
 
@@ -9,6 +9,10 @@ class WelcomeScreen extends Component<{ navigation: any }, {}> {
         this.state = {
 
         }
+    }
+
+    componentDidMount(): void {
+        LogBox.ignoreAllLogs()
     }
 
     render() {

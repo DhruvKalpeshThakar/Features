@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, Modal, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import Entypo from 'react-native-vector-icons/Entypo'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BlurView } from "@react-native-community/blur";
 
 interface Menufields {
     menutitle: string
@@ -12,6 +13,7 @@ interface Menufields {
     titlealert: boolean
     descalert: boolean
     pricealert: boolean
+    isdeletemenu: boolean
 }
 
 class AddMenu extends Component<{ navigation: any }, Menufields>{
@@ -22,11 +24,16 @@ class AddMenu extends Component<{ navigation: any }, Menufields>{
             menutitle: '',
             menudesc: '',
             mealprice: "",
+            isdeletemenu: false,
             titlealert: false,
             descalert: false,
             pricealert: false,
         }
 
+    }
+
+    isDeletemenuhandler = () => {
+        this.setState({ isdeletemenu: false })
     }
 
 
@@ -65,7 +72,8 @@ class AddMenu extends Component<{ navigation: any }, Menufields>{
             this.props.navigation.navigate("CreateExperienceForm", {
                 Title: this.state.menutitle,
                 Description: this.state.menudesc,
-                Price: this.state.mealprice
+                Price: this.state.mealprice,
+                isMenuExists: "True"
             })
         } else {
             ToastAndroid.show("Please fill up all details", ToastAndroid.BOTTOM)
@@ -86,9 +94,9 @@ class AddMenu extends Component<{ navigation: any }, Menufields>{
 
                         <Text style={{ color: '#000', textAlign: 'center', fontSize: 20, marginLeft: wp(3), fontWeight: 'bold' }}>Add Menu</Text>
 
-                        <View style={{ marginLeft: 'auto', marginRight: wp(4), marginTop: hp(0.2) }}>
-                            <AntDesign name="delete" color={'#000'} size={25} />
-                        </View>
+                        <TouchableOpacity style={{ marginLeft: 'auto', marginRight: wp(4), marginTop: hp(0.2) }}>
+                            <AntDesign name="delete" color={'#000'} size={25} onPress={() => { this.setState({ isdeletemenu: true }) }} />
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -166,6 +174,43 @@ class AddMenu extends Component<{ navigation: any }, Menufields>{
 
                 </KeyboardAvoidingView>
 
+                <Modal
+                    transparent={true}
+                    animationType="slide"
+                    visible={this.state.isdeletemenu}
+                    onRequestClose={() => this.isDeletemenuhandler()}
+                >
+                    <View style={[styles.modalContainer]}>
+                        <BlurView
+                            style={styles.absolute}
+                            blurType="prominent"
+                            blurAmount={10}
+                            reducedTransparencyFallbackColor="white"
+                        />
+                        <View style={[styles.modalContent,]}>
+                            <View style={{ borderRadius: wp(2) }}>
+
+
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: hp(2), marginTop: hp(3), marginHorizontal: wp(6) }}>
+                                    <Text style={{ color: '#000', fontSize: 25 }}>Are you Sure ?</Text>
+                                </View>
+
+                                <View style={{ alignItems: 'center', justifyContent: 'center', marginHorizontal: wp(5) }}>
+                                    <Text style={{ color: '#000' }} numberOfLines={2}>Any bookings with this menu will be cancelled.</Text>
+                                </View>
+                                <View style={{ marginBottom: hp(3), alignItems: 'center', marginTop: hp(3) }}>
+                                    <TouchableOpacity style={{ backgroundColor: '#F87171', height: hp(6.40), width: wp(68.53), justifyContent: 'center', borderRadius: wp(2) }}>
+                                        <Text style={{ color: '#fff', textAlign: 'center' }}>Delete Menu</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{ height: hp(6.40), width: wp(68.53), justifyContent: 'center' }} onPress={() => { this.setState({ isdeletemenu: false }) }}>
+                                        <Text style={{ color: '#000', textAlign: 'center' }}>Cancel</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
 
             </SafeAreaView >
         )
@@ -177,6 +222,26 @@ const styles = StyleSheet.create({
     textinput: {
         borderColor: '#E4DFDF', borderWidth: 1, borderRadius: wp(3), backgroundColor: '#ffffff', color: '#000', marginTop: hp(1.53), paddingLeft: wp(4)
     },
+    modalContainer: {
+
+        borderRadius: wp(2),
+        borderColor: '#E4DFDF',
+        marginTop: hp(35),
+        marginHorizontal: wp(5),
+        backgroundColor: "transparent"
+    },
+    modalContent: {
+        elevation: 1,
+        borderColor: '#E4DFDF',
+        backgroundColor: '#ffffff',
+    },
+    absolute: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    }
 })
 
 export default AddMenu;
