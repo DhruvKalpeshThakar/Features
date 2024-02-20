@@ -82,18 +82,18 @@ class App extends Component<{}, ConnectionCheck> {
         <NavigationContainer >
           {/* <AppStack /> */}
           <Stack.Navigator>
-            {/* <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
             <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Bottomtabs" component={AppStack} options={{ headerShown: false }} />
             <Stack.Screen name="Ratings" component={Ratings} options={{ headerShown: false }} />
             <Stack.Screen name="Termpolicies" component={Termpolicies} options={{ headerShown: false }} />
-            <Stack.Screen name="Privacy" component={Privacy} options={{ headerShown: false }} /> */}
+            <Stack.Screen name="Privacy" component={Privacy} options={{ headerShown: false }} />
             <Stack.Screen name="Subscription" component={Subscription} options={{ headerShown: false }} />
-            {/* <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+            <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
             <Stack.Screen name="HelpnSupport" component={HelpnSupport} options={{ headerShown: false }} />
-            <Stack.Screen name="ChatWithUs" component={ChatWithUs} options={{ headerShown: false }} /> */}
-            {/* <Stack.Screen name="CreateExperienceForm" component={CreateExperienceForm} options={{ headerShown: false }} />
-            <Stack.Screen name="AddMenu" component={AddMenu} options={{ headerShown: false }} /> */}
+            <Stack.Screen name="ChatWithUs" component={ChatWithUs} options={{ headerShown: false }} />
+            <Stack.Screen name="CreateExperienceForm" component={CreateExperienceForm} options={{ headerShown: false }} />
+            <Stack.Screen name="AddMenu" component={AddMenu} options={{ headerShown: false }} />
 
 
             {/* <AuthStack /> */}

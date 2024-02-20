@@ -185,6 +185,7 @@ const CARD_WIDTH = width * 0.8
 const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
 
+
 class Subscription extends Component<{ navigation: any }, Data>{
   constructor(props: any) {
 
@@ -257,9 +258,41 @@ class Subscription extends Component<{ navigation: any }, Data>{
     // this.backaction = this.backaction().bind(this)
   }
 
-  componentDidMount(): void {
-    BackHandler.addEventListener('hardwareBackPress', this.backaction)
-  }
+  // componentDidMount(): void {
+  //   let regionTimeout: NodeJS.Timeout; // Declare regionTimeout here
+
+  //   this.mapAnimation.addListener(({ value }) => {
+  //     let index = Math.floor(value / CARD_WIDTH + 0.3);
+  //     if (index >= markers.length) {
+  //       index = markers.length - 1;
+  //     }
+  //     if (index <= 0) {
+  //       index = 0;
+  //     }
+
+  //     clearTimeout(regionTimeout);
+
+  //     regionTimeout = setTimeout(() => {
+  //       if (this.mapIndex !== index) {
+  //         this.mapIndex = index;
+  //         const { coordinate } = markers[index];
+  //         this._map.current?.animateToRegion(
+  //           {
+  //             ...coordinate,
+  //             latitudeDelta: this.Initial_Region.latitudeDelta,
+  //             longitudeDelta: this.Initial_Region.longitudeDelta
+  //           },
+  //           350
+  //         );
+  //       }
+  //     }, 10);
+  //   });
+
+  //   BackHandler.addEventListener('hardwareBackPress', this.backaction);
+  // }
+
+
+  // _map = React.useRef(null)
 
   componentWillUnmount(): void {
     BackHandler.removeEventListener('hardwareBackPress', this.backaction)
@@ -283,13 +316,14 @@ class Subscription extends Component<{ navigation: any }, Data>{
   }
 
   Initial_Region = {
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.015,
-    longitudeDelta: 0.0121
+    latitude: 22.62938671242907,
+    longitude: 88.4354486029795,
+    latitudeDelta: 0.04864195044303443,
+    longitudeDelta: 0.040142817690068,
   }
 
-
+  mapAnimation = new Animated.Value(0);
+  mapIndex = 0;
 
 
   render() {
@@ -298,13 +332,47 @@ class Subscription extends Component<{ navigation: any }, Data>{
     return (
       <View style={{ flex: 1 }}>
         <MapView
+          // ref={this._map}
+          mapType="standard"
           provider="google"
           style={styles.map}
           initialRegion={this.Initial_Region}
           showsUserLocation
           showsMyLocationButton
         >
-          <Marker
+          {markers.map((marker, index) => {
+            console.log(marker.coordinate);
+
+            return (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: marker.coordinate.latitude,
+                  longitude: marker.coordinate.longitude
+                }}
+                image={{ uri: 'https://imgs.search.brave.com/kWZIWWM535qKvH3KsFyP93tlHOX2mFZdnDz_fyZjZTo/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jZG4t/aWNvbnMtcG5nLmZy/ZWVwaWsuY29tLzI1/Ni8yNzc2LzI3NzYw/NjcucG5n' }}
+                style={{ maxHeight: 25, maxWidth: 25, height: 20, width: 20 }}
+                title="Test Title"
+                description="This is the test description"
+              >
+                {/* <Callout tooltip>
+                  <View>
+                    <View style={styles.bubble}>
+                      <Text style={styles.name}>Favourite Restaurant</Text>
+                      <Text style={styles.name}>A short Description</Text>
+                      <Image style={styles.image}
+                        source={{ uri: 'https://imgs.search.brave.com/sa61BDef-Z3HEyJUVJ_vNXvNyK3_O6yMSL9FOb1oDRc/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jZG4u/dmVjdG9yc3RvY2su/Y29tL2kvcHJldmll/dy0xeC8yMS8wOS9p/dGFsaWFuLWZvb2Qt/cmVzdGF1cmFudC1i/YW5uZXItd2l0aC1t/ZWFscy12ZWN0b3It/MzM0MTIxMDkuanBn' }}
+                      />
+                    </View>
+                    <View style={styles.arrowborder}></View>
+                    <View style={styles.arrow}></View>
+
+                  </View>
+                </Callout> */}
+              </Marker>
+            )
+          })}
+          {/* <Marker
             coordinate={{
               latitude: 37.78825,
               longitude: -122.4324
@@ -327,7 +395,7 @@ class Subscription extends Component<{ navigation: any }, Data>{
 
               </View>
             </Callout>
-          </Marker>
+          </Marker> */}
         </MapView>
         <View style={styles.searchBox}>
           <TextInput
@@ -363,10 +431,10 @@ class Subscription extends Component<{ navigation: any }, Data>{
           showsHorizontalScrollIndicator={false}
           style={styles.scrollview}
           snapToAlignment='center'
-          snapToInterval={CARD_WIDTH + 30}
-          contentContainerStyle={{
-            paddingHorizontal: Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
-          }}
+          snapToInterval={CARD_WIDTH + 20}
+        // contentContainerStyle={{
+        //   paddingHorizontal: Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
+        // }}
         >
           {markers.map((marker, index) => (
             <View style={styles.card} key={index}>
@@ -392,7 +460,7 @@ class Subscription extends Component<{ navigation: any }, Data>{
           ))
           }
         </Animated.ScrollView>
-      </View>
+      </View >
     )
   }
 }
