@@ -1279,7 +1279,6 @@ class CreateExperienceForm extends Component<{ navigation: any, route: any }, Ex
                     </View>
 
                     <Modal
-
                         transparent={true}
                         animationType="slide"
                         visible={this.state.iscalendar}

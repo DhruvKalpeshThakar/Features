@@ -82,7 +82,6 @@ class Map extends Component<{}, Maps>{
                     }}
                     onRegionChange={x => {
                         console.log(x);
-
                     }}
                 >
                     <Marker coordinate={{ latitude: this.state.MLat, longitude: this.state.MLong }} />
