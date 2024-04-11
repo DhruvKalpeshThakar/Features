@@ -26,7 +26,8 @@ class Settings extends Component<{ navigation: any }, { colorTheme: any, Develop
         // this.setState({ Developing: true });
     }
     navigateToSecurity = () => {
-        this.setState({ Developing: true });
+        this.props.navigation.navigate('Security')
+        // this.setState({ Developing: true });
     }
     navigateToNotifications = () => {
         this.setState({ Developing: true });

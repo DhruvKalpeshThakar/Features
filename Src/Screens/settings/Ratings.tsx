@@ -6,20 +6,49 @@ import { ToastAndroid } from "react-native";
 import { Tabs, Tab } from "marschattha-swipeable-tabs/dist";
 import { usersdata } from "../../constants/dummydata";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics'
 interface Ratin {
     ratingCompleted: any
     selectedTab: any
+    isradioButton: any
+    isradioButtonColor: boolean
+    label: string[]
+    biometryType: any
 }
 class Ratings extends Component<{ navigation: any, route: any }, Ratin> {
     ratingCompleted: ((number: any) => void) | undefined;
+    rnBiometrics: ReactNativeBiometrics;
     constructor(props: any) {
         super(props);
         this.state = {
             ratingCompleted: 3,
-            selectedTab: 0
+            selectedTab: 0,
+            isradioButton: null,
+            isradioButtonColor: false,
+            label: ["Number 1", "Number 2", "Number 3"],
+            biometryType: null
         }
+        this.rnBiometrics = new ReactNativeBiometrics();
     }
+
+    // async componentDidMount() {
+    //     try {
+    //         const { biometryType } = await this.rnBiometrics.isSensorAvailable();
+
+    //         if (biometryType === BiometryTypes.Biometrics) {
+    //             console.log("Biometry Type is ------- >>>>>", biometryType);
+    //             // this.setState({ biometryType });
+    //         }
+    //     } catch (error) {
+    //         console.log("Biometrics error:", error);
+    //     }
+    // }
+
+    componentDidMount(): void {
+        console.log("Component Called !!-----", this.state.biometryType);
+        
+    }
+
 
     feedback = () => {
         this.props.navigation.goBack()
@@ -35,12 +64,41 @@ class Ratings extends Component<{ navigation: any, route: any }, Ratin> {
 
     };
 
+    handleOptionChange = (value: string, color: boolean) => {
+        this.setState({ isradioButton: value, isradioButtonColor: color });
+    };
+
+    options = [
+        { label: 'Google Pay', value: 'option1', color: true },
+        { label: 'Paytm', value: 'option2', color: true },
+        { label: 'Card', value: 'option3', color: true },
+    ];
+
     render() {
 
+        // const { biometryType } = this.state;
 
         return (
             <View style={{ flex: 1 }}>
-                <Text style={{ color: COLORS.black, fontSize: 30, textAlign: 'center', marginVertical: 30, fontFamily: 'YoungSerif-Regular' }} >Selected Users List</Text>
+
+                {/* {this.options.map((option) => (
+                    <TouchableOpacity
+                        key={option.value}
+                        onPress={() => this.handleOptionChange(option.value,option.color)}
+                        style={[styles.container,{borderColor: this.state.isradioButtonColor ? "#10B981": '#64748B'}]}
+                    >
+                        <View style={styles.radioButton}>
+                            {this.state.isradioButton === option.value && (
+                                <View style={styles.radioButtonOuter}>
+                                    <View style={styles.radioButtonInner}></View>
+                                </View>
+                            )}
+                        </View>
+                        <Text>{option.label}</Text>
+                    </TouchableOpacity>
+                ))} */}
+
+                {/* <Text style={{ color: COLORS.black, fontSize: 30, textAlign: 'center', marginVertical: 30, fontFamily: 'YoungSerif-Regular' }} >Selected Users List</Text> */}
 
                 {/* <AirbnbRating
                     reviews={['Poor', 'Very Bad', 'Bad', 'Ok', 'Good', 'Very Good', 'Excellent']}
@@ -73,29 +131,45 @@ class Ratings extends Component<{ navigation: any, route: any }, Ratin> {
                     </Tab>
                 </Tabs> */}
 
-                <View style={{ marginHorizontal: heightPercentageToDP(5) }}>
-                    {/* <Text style={{ fontSize: 25, color: '#000' }}>Selected Users List</Text> */}
-                    {this.props.route.params.UsersListData.length > 0 &&
-
-                        this.props.route.params.UsersListData.map((user: any, index: any) => {
-                            return (
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ color: '#086661', fontSize: 20, padding: widthPercentageToDP(1) }}>{index + 1}</Text>
-                                    <Text style={{ color: '#086661', fontSize: 20, padding: widthPercentageToDP(1) }}>{user}</Text>
-                                </View>
-                            )
-                        })
-
-                    }
-                    {/* // <Text style={{ color: '#086661' }}>{this.props.route.params.UsersListData + </Text> */}
-                </View>
             </View >
         )
     }
 }
 
 const styles = StyleSheet.create({
-
+    container: {
+        flexDirection: 'row',
+        marginTop: heightPercentageToDP(5),
+        // alignSelf: 'center',
+        // marginBottom: 10,
+        height: 17,
+        width: 17,
+        borderRadius: 5,
+    },
+    radioButton: {
+        height: 20,
+        width: 20,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#000',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 10,
+    },
+    radioButtonInner: {
+        height: 9,
+        width: 9,
+        alignSelf: 'center',
+        marginTop: 3,
+        borderRadius: 5,
+        backgroundColor: '#ffffff',
+    },
+    radioButtonOuter: {
+        height: 18,
+        width: 18,
+        borderRadius: 5,
+        backgroundColor: '#10B981',
+    },
 })
 
 export default Ratings;

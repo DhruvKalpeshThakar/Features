@@ -32,6 +32,7 @@ import HelpnSupport from "./Src/Screens/settings/HelpnSupport";
 import CreateExperienceForm from "./Src/Screens/settings/CreateExperienceForm";
 import AddMenu from "./Src/Screens/settings/AddMenu";
 import ChatWithUs from "./Src/Screens/ChatWithUs";
+import Security from "./Src/Screens/settings/Security";
 
 
 
@@ -81,7 +82,7 @@ class App extends Component<{}, ConnectionCheck> {
       <NativeBaseProvider>
         <NavigationContainer >
           {/* <AppStack /> */}
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName="Security">
             <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
             <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Bottomtabs" component={AppStack} options={{ headerShown: false }} />
@@ -94,6 +95,7 @@ class App extends Component<{}, ConnectionCheck> {
             <Stack.Screen name="ChatWithUs" component={ChatWithUs} options={{ headerShown: false }} />
             <Stack.Screen name="CreateExperienceForm" component={CreateExperienceForm} options={{ headerShown: false }} />
             <Stack.Screen name="AddMenu" component={AddMenu} options={{ headerShown: false }} />
+            <Stack.Screen name="Security" component={Security} options={{ headerShown: false }} />
 
 
             {/* <AuthStack /> */}
